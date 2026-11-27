@@ -2623,6 +2623,46 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   #action-dock .act-btn.discard::before, #action-dock .act-btn.wonder::before { opacity: .22; }
   .dock-actions #dock-cancel { color: #624d35; }
 }
+
+/* A player's resources, science and archive read as entries on the same city ledger. */
+.age-remaining { font-family: var(--serif); }
+.age-remaining b, .brass-slider-wrap output { font-family: var(--digits); font-variant-numeric: lining-nums tabular-nums; }
+@media (orientation: landscape) and (min-aspect-ratio: 6/5) and (max-aspect-ratio: 17/10) {
+  .city-side-panel { flex-wrap: nowrap; min-height: 24px; column-gap: .25rem; }
+  .sci-panel, .sci-panel.is-threat { padding: 0; background: transparent; box-shadow: none; }
+  .science-count, .arch-title {
+    display: inline-flex; align-items: baseline; gap: .32em; white-space: nowrap;
+    color: #493a26; font: 700 clamp(9px,.95rem,14px)/1.16 var(--serif); letter-spacing: .015em;
+  }
+  .science-count, .sci-panel.is-threat .science-count {
+    position: relative; isolation: isolate; align-items: baseline; padding: .35rem .05rem;
+    min-height: 24px; border: 0; border-radius: 0; background: none; box-shadow: none;
+  }
+  .sci-panel.is-threat .science-count { color: #284b39; }
+  .sci-panel.is-threat .science-count::before {
+    content: ""; position: absolute; z-index: -1; inset: .05rem -.35rem;
+    background: #7d977652; -webkit-mask: var(--ink-wash) center / 100% 100% no-repeat;
+    mask: var(--ink-wash) center / 100% 100% no-repeat;
+  }
+  .science-fraction, .arch-title b {
+    display: inline-flex; align-items: baseline; gap: .09em; color: #44321f;
+    font: 700 1.05em/1 var(--digits); letter-spacing: 0;
+  }
+  .science-fraction b { font-weight: 700; }
+  .science-fraction i { color: #977e5e; font-style: normal; margin-inline: .04em; }
+  .science-fraction > span { color: #76624a; }
+  .city-archive-pill { justify-content: center; min-height: 24px; padding: .35rem .05rem; }
+  .age-remaining { color: #6b563d; font: 600 .88rem/1.15 var(--serif); }
+  .age-remaining b { font-weight: 700; }
+  .turn-ribbon {
+    padding: .08rem .28rem; height: auto; border: 0; border-radius: 0;
+    color: #624721; background: none; font: 700 .8rem/1 var(--serif);
+    border-bottom: 1px solid #ab915e88;
+  }
+  .dock-card-text small, .dock-idle-bar, .dock-hint { font-family: var(--serif); }
+  .stat-chip.vp svg { filter: brightness(.62) sepia(.45); }
+}
+
 </style>
 </head>
 <body>
@@ -6887,7 +6927,10 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
               <div class="res-ledger" aria-label="资源产出与贸易价">${resHtml}</div>
               <div class="city-side-panel">
                 <div class="sci-panel ${sciThreat ? 'is-threat' : ''}" aria-label="科技符号 ${sciEntries.length}/6">
-                  <span class="science-count">科技 ${sciEntries.length}/6</span><div class="sci-grid">${sciHtml}</div>
+                  <button type="button" class="science-count" data-open-city="${seat}" aria-label="查看科技，已集齐 ${sciEntries.length} 种，共需 6 种">
+                    <span>科技</span><span class="science-fraction"><b>${sciEntries.length}</b><i>/</i><span>6</span></span>
+                  </button>
+                  <div class="sci-grid">${sciHtml}</div>
                   ${sciThreat ? `<span class="sci-threat-tag">${sciEntries.length}/6</span>` : ''}
                 </div>
                 <div class="city-badges-slot">
@@ -6960,7 +7003,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       `;
       return;
     }
-    const ageRoman = ['', 'I', 'II', 'III'][state.age];
+    const ageName = ['', '第一时代', '第二时代', '第三时代'][state.age];
     const remaining = state.pyramid.filter(n => !n.taken).length;
     const aiTag = isAiTurn() ? ' · 思考中' : '';
     const wonderPips = Array.from({ length: 7 }, (_, i) =>
@@ -6968,7 +7011,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     ).join('');
     statusEl.innerHTML = `
       <div class="status-main">
-        <span class="age-pill">第 ${ageRoman} 时代</span><span class="age-remaining">${remaining} 张</span>
+        <span class="age-pill">${ageName}</span><span class="age-remaining"><b>${remaining}</b> 张</span>
         <span class="status-player"><span class="turn-dot"></span><span>${Dialogs.esc(activeName)}${aiTag}</span></span>
       </div>
       <span class="wonder-pips" data-tip="全场已建奇迹 ${state.wondersBuiltTotal}/7" aria-label="全场已建奇迹 ${state.wondersBuiltTotal}/7">${Icons.ui('wonder')}${wonderPips}</span>
