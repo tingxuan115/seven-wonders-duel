@@ -256,14 +256,6 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .ptoken:hover { transform: translateY(-2px); }
 .ptoken:hover .ptoken-disc::before { transform: rotate(8deg) scale(1.06); filter: brightness(1.08); }
 .ptoken:active { transform: translateY(0) scale(.97); }
-.ptoken.is-selectable .ptoken-disc::after {
-  content: ""; position: absolute; inset: -4px; z-index: -2;
-  background: var(--ochre);
-  -webkit-mask: var(--mask-stamp) center / 100% 100% no-repeat;
-  mask: var(--mask-stamp) center / 100% 100% no-repeat;
-  opacity: .68; transform: rotate(-14deg);
-}
-
 .ptoken-empty {
   display: inline-flex; align-items: center; justify-content: center;
   padding: .1rem; flex: none;
@@ -540,16 +532,18 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .city-dashboard {
   --label-size: clamp(9px, .93rem, 15px);
   --symbol-height: max(12px, 1.35rem);
-  display: flex; flex-direction: column; gap: .22rem; min-width: 0;
+  --ledger-step: calc(var(--symbol-height) + .16rem);
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: max-content repeat(5, minmax(0, var(--ledger-step)));
+  align-content: center; min-width: 0;
 }
 .ledger-label {
   color: var(--ink-body); font: 600 var(--label-size)/1.1 var(--serif);
   letter-spacing: .02em; white-space: nowrap;
 }
 .res-ledger {
-  --resource-rows: auto auto auto;
   display: grid; grid-template-columns: max-content repeat(5, minmax(0, 1fr));
-  grid-template-rows: var(--resource-rows); grid-auto-flow: column;
+  grid-row: 1 / span 3; grid-template-rows: subgrid; grid-auto-flow: column;
   gap: 0 .08rem; min-width: 0;
 }
 .res-ledger > .ledger-label { grid-column: 1; align-self: center; padding-inline-end: .1em; }
@@ -557,7 +551,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .price-label { grid-row: 3; }
 .res-row {
   position: relative; isolation: isolate; display: grid;
-  grid-row: 1 / -1; grid-template-rows: var(--resource-rows); grid-template-rows: subgrid; place-items: center;
+  grid-row: 1 / -1; grid-template-rows: subgrid; place-items: center;
   min-width: 0; gap: 0; padding: 0; color: var(--ink);
 }
 .res-row::before {
@@ -599,38 +593,39 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
 
 /* Shared baselines and a right-aligned set of stamp positions in all three rows. */
 .city-side-panel {
-  container-type: inline-size;
-  display: grid; grid-template-rows: repeat(3, var(--symbol-height)); gap: .12rem; min-width: 0;
+  grid-row: 4 / span 3; display: grid; grid-template-rows: subgrid;
+  grid-template-columns: minmax(max-content, 1fr) repeat(var(--stamp-columns), minmax(0, calc(var(--symbol-height) + .52rem)));
+  min-width: 0;
 }
 .ledger-line {
-  display: grid; grid-template-columns: max-content minmax(0, 1fr);
-  align-items: center; column-gap: .12rem;
+  grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center;
 }
+.ledger-line > :is(.ledger-label, .ledger-caption) {
+  grid-column: 1 / span calc(1 + var(--stamp-columns) - var(--row-slots));
+}
+.ledger-caption { display: flex; align-items: center; gap: .18rem; }
 .science-fraction {
   font: inherit; font-variant-numeric: tabular-nums; letter-spacing: 0; color: var(--ink-muted);
 }
 .science-fraction.is-threat { color: var(--ink-green-deep); font-weight: 800; }
 .ledger-symbols {
-  --count-room: .17rem;
-  display: grid; grid-auto-flow: column;
-  /* Science has a fraction after its label. Only its actual symbols need to share that shorter span. */
-  grid-auto-columns: min(calc((100cqi - 2.55 * var(--label-size) - .4rem) / var(--stamp-columns)),
-    calc((100cqi - 4.45 * var(--label-size) - .4rem) / var(--science-columns)), calc(var(--symbol-height) + .5rem));
-  align-items: center; justify-content: end; min-width: 0; height: 100%; padding-inline-end: .22rem;
+  --count-room: max(4px, .39rem);
+  grid-column: span var(--row-slots) / -1; display: grid; grid-template-columns: subgrid;
+  align-items: center; min-width: 0; height: 100%;
 }
 .ledger-symbols:empty::after {
-  content: "—"; justify-self: end; margin-inline-end: var(--count-room);
+  content: "—"; justify-self: center;
   color: var(--ink-muted); opacity: .58; font: 500 var(--label-size)/1 var(--serif);
 }
 .ledger-symbols > * {
-  position: relative; display: grid; place-items: center; justify-self: end; margin-inline-end: var(--count-room);
+  position: relative; display: grid; place-items: center; justify-self: center; margin-inline-end: var(--count-room);
   width: min(calc(100% - var(--count-room)), var(--symbol-height)); aspect-ratio: 1;
   padding: 0; border: 0; background: transparent; line-height: 1;
 }
 .sci-dot { color: var(--ink-green); }
 .sci-dot svg { display: block; width: 100%; height: 100%; }
 .sci-dot b {
-  position: absolute; left: 100%; top: -.12rem;
+  position: absolute; left: 100%; top: 0;
   font: 700 max(6px, .63rem)/1 var(--serif); color: var(--ink-body);
 }
 .mini-ptoken, .city-chain-pip {
@@ -640,7 +635,10 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
 }
 .city-chain-pip { background: #4e4132; }
 .ledger-symbols :is(.mini-ptoken, .city-chain-pip) svg { display: block; width: 88%; height: 88%; }
-.chain-more { color: var(--ink-body); font: 700 .82rem/1 var(--serif); text-decoration: underline; }
+.chain-more {
+  align-self: stretch; padding: 0 .12rem; border: 0; background: transparent;
+  color: var(--ink-body); font: 700 .82rem/1 var(--serif); text-decoration: underline;
+}
 .dcard-sci-combo {
   position: absolute; right: .16rem; bottom: .16rem; z-index: 3;
   padding: .06rem .2rem; border-radius: .12rem;
@@ -1230,6 +1228,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
 .act-btn:disabled { color: #766e60; }
 .act-btn:disabled::before { background: #b7aa92; opacity: .23; }
 .act-btn.primary { --act-bg: var(--indigo); --act-bg-hi: var(--indigo-deep); --act-fg: #faf6eb; }
+#action-dock [data-resume-choice] { align-self: center; min-width: 8em; min-height: min(100%, max(30px, 2.6rem)); }
 .act-btn.primary::before { inset-block: 11% 9%; }
 .act-btn.discard { --act-bg: #e5c483; --act-bg-hi: #eed7aa; --act-fg: #523813; --act-mask: var(--mask-folio); }
 .act-btn.wonder  { --act-bg: #e5bbaa; --act-bg-hi: #edd2c2; --act-fg: #682f26; --act-mask: var(--mask-folio); }
@@ -1610,17 +1609,17 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
 .dlg-header::after { bottom: 0; }
 .dlg-header h2 { margin: 0; font: 700 max(16px,1.52rem)/1.3 var(--serif); letter-spacing: .035em; }
 .folio-subtitle { font: 500 max(10px,.88rem)/1.3 var(--inscription); letter-spacing: .04em; color: var(--ink-muted); }
-.dlg-close {
+.dlg-close, .dlg-peek {
   position: relative; flex: none; display: inline-grid; place-items: center;
   min-height: max(32px,2.45rem); min-width: 3.4em; padding: .22rem .6rem;
   border: 0; background: transparent; color: var(--ink-muted); font: 600 max(11px,.92rem)/1.2 var(--serif);
 }
-.dlg-close::after {
+:is(.dlg-close, .dlg-peek)::after {
   content: ""; position: absolute; inset-inline: .5em; bottom: .24em; height: 3px;
   background: var(--img-ink-rule) center / 100% 100% no-repeat;
 }
-.dlg-close:hover, .dlg-close:focus-visible { color: var(--indigo); }
-.dlg-close:active { transform: translateY(1px); }
+:is(.dlg-close, .dlg-peek):is(:hover, :focus-visible) { color: var(--indigo); }
+:is(.dlg-close, .dlg-peek):active { transform: translateY(1px); }
 
 .dlg-body {
   flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
@@ -2397,7 +2396,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .stat-chip svg { width: .86rem; height: .86rem; }
   .turn-ribbon { display: none; }
 
-  .city-dashboard { gap: .24rem; flex: 1; min-height: 0; }
+  .city-dashboard { --ledger-step: calc(var(--symbol-height) + .54rem); flex: 1; min-height: 0; }
   .wonders-tray {
     flex: none; align-self: stretch;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2476,11 +2475,8 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .seat-name-btn { font-size: 1.08rem; }
   .city-dashboard {
     --symbol-height: max(13px, 1.49rem);
-    display: grid; grid-template-columns: minmax(0,1fr);
-    grid-template-rows: minmax(0,1fr) auto; gap: .32rem;
   }
   .res-ledger {
-    --resource-rows: minmax(0,1.45fr) minmax(0,1fr) minmax(0,1fr);
     column-gap: .16rem;
   }
   .res-row-ico, .res-row-ico svg { width: clamp(18px, 4.8cqw, 35px); height: clamp(18px, 4.8cqw, 35px); }
@@ -2520,7 +2516,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr);
     grid-template-rows: minmax(0,1fr);
   }
-  .city-dashboard { justify-content: space-evenly; }
   .seat-head { padding-bottom: .18rem; gap: .3rem; }
   .seat-title-wrap { flex-direction: column; align-items: stretch; gap: .15rem; }
   .seat-crest { width: 1.42rem; height: 1.42rem; font-size: .68rem; }
@@ -2616,7 +2611,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .stat-chip { min-width: 2.45rem; height: 1.2rem; padding: 0 .26rem; }
   .stat-chip svg { width: .78rem; height: .78rem; }
 
-  .city-dashboard { gap: .2rem; }
   .res-row-ico { width: 1.1rem; height: 1.1rem; }
   .res-row-ico svg { width: 1.06rem; height: 1.06rem; }
   .res-row-prod { font-size: .82rem; }
@@ -2833,8 +2827,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .stat-chip svg { width: 1.02rem; height: 1.02rem; }
 
   /* 5-Resource Horizontal Strip with Organic Hand-Cut Trade Price Dabs */
-  .city-dashboard { gap: .26rem; }
-  .res-ledger { padding: .16rem 0 .12rem; }
   .res-row::before { opacity: .45; }
   .res-row.has-disc::before { opacity: 1; background: rgba(196, 146, 52, 0.22); }
   .res-row-ico, .res-row-ico svg { width: 1.38rem; height: 1.38rem; }
@@ -5643,6 +5635,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     observer.observe(layer.querySelector('.dlg-frame'));
     stopPaging = () => observer.disconnect();
     if (document.fonts?.status === 'loading') document.fonts.ready.then(layout);
+    return () => anchor;
   }
 
 
@@ -6105,7 +6098,21 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     });
   }
 
-  function showChooseStarter(layer, state, onPick) {
+  function openChoiceFolio(layer, options, onInspectBoard, items, anchor) {
+    openFolio(layer, {
+      ...options,
+      closable: false,
+      footHtml: '<button type="button" class="dlg-peek" data-view-board>查看棋桌</button>',
+    });
+    const currentAnchor = items && fitFolioPages(layer, items, anchor);
+    layer.querySelector('[data-view-board]').onclick = () => {
+      const firstVisible = currentAnchor ? currentAnchor() : 0;
+      closeFolio(layer);
+      onInspectBoard(firstVisible);
+    };
+  }
+
+  function showChooseStarter(layer, state, onPick, onInspectBoard) {
     const chooser = state.players[state.pending.seat];
     const nextAgeRoman = ['', 'I', 'II', 'III'][state.pending.nextAge];
     const reason = state.military === 0
@@ -6122,11 +6129,10 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
         </button>
       </div>
     `;
-    openFolio(layer, {
+    openChoiceFolio(layer, {
       title: `第 ${nextAgeRoman} 时代 · 先手决定`,
-      closable: false,
       bodyHtml,
-    });
+    }, onInspectBoard);
     layer.querySelectorAll('[data-starter]').forEach(btn => {
       btn.addEventListener('click', () => {
         closeFolio(layer);
@@ -6135,7 +6141,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     });
   }
 
-  function showTokenChoice(layer, { title, note, tokenIds, onPick }) {
+  function showTokenChoice(layer, { title, note, tokenIds, onPick, onInspectBoard, anchor }) {
     const cards = tokenIds.map(tid => {
       const t = Data.TOKEN_BY_ID[tid];
       return `
@@ -6147,13 +6153,11 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
         </button>
       `;
     }).join('');
-    openFolio(layer, {
+    openChoiceFolio(layer, {
       title,
       wide: true,
-      closable: false,
       bodyHtml: `<p class="dlg-note">${esc(note)}</p><div class="choice-grid">${cards}</div>`,
-    });
-    fitFolioPages(layer, '[data-pick-token]');
+    }, onInspectBoard, '[data-pick-token]', anchor);
     layer.querySelectorAll('[data-pick-token]').forEach(btn => {
       btn.addEventListener('click', () => {
         closeFolio(layer);
@@ -6162,18 +6166,16 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     });
   }
 
-  function showCardChoice(layer, { title, note, cardIds, renderCardHtml, onPick }) {
+  function showCardChoice(layer, { title, note, cardIds, renderCardHtml, onPick, onInspectBoard, anchor }) {
     const grid = cardIds.map(id => {
       const c = Data.CARD_BY_ID[id];
       return `<button type="button" class="archive-card-btn" data-pick-card="${esc(id)}" aria-label="${esc(c.name)}">${renderCardHtml(c)}</button>`;
     }).join('');
-    openFolio(layer, {
+    openChoiceFolio(layer, {
       title,
       wide: true,
-      closable: false,
       bodyHtml: `<p class="dlg-note">${esc(note)}</p><div class="card-archive-grid">${grid}</div>`,
-    });
-    fitFolioPages(layer, '[data-pick-card]');
+    }, onInspectBoard, '[data-pick-card]', anchor);
     layer.querySelectorAll('[data-pick-card]').forEach(btn => {
       btn.addEventListener('click', () => {
         closeFolio(layer);
@@ -7689,6 +7691,7 @@ SOFTWARE.
   let aiTimer = null;
   let aiRequest = 0;
   let victoryShown = false;
+  let inspectedChoiceAnchor = null;
   let justRevealedSlots = new Set();
 
   const $ = id => document.getElementById(id);
@@ -8018,6 +8021,7 @@ SOFTWARE.
   }
 
   function showSurface() {
+    inspectedChoiceAnchor = null;
     coverEl.hidden = true;
     coverEl.setAttribute('inert', '');
     surfaceEl.hidden = false;
@@ -8245,6 +8249,7 @@ SOFTWARE.
       }
     }
     selectedSlot = null;
+    inspectedChoiceAnchor = null;
     pickingWonder = false;
     victoryShown = false;
     justRevealedSlots = new Set();
@@ -8297,16 +8302,27 @@ SOFTWARE.
       return;
     }
 
+    if (state.pending && inspectedChoiceAnchor === null) showPendingChoice();
+  }
+
+  function inspectChoiceBoard(anchor) {
+    inspectedChoiceAnchor = anchor;
+    renderActionDock();
+    dockEl.querySelector('[data-resume-choice]').focus({ preventScroll: true });
+  }
+
+  function showPendingChoice(anchor = 0) {
     if (state.phase === 'choose_starter') {
       Dialogs.showChooseStarter(dialogLayer, state, starterSeat => {
         commitAction({ type: 'choose_starter', starterSeat });
-      });
+      }, inspectChoiceBoard);
     } else if (state.phase === 'choose_token') {
       const pName = state.players[state.pending.seat].name;
       Dialogs.showTokenChoice(dialogLayer, {
         title: `${pName} · 选取发展标记`,
         note: '科技符号成对，从棋盘任选 1 枚立即生效：',
         tokenIds: state.boardTokens,
+        anchor, onInspectBoard: inspectChoiceBoard,
         onPick: tokenId => commitAction({ type: 'pick_token', tokenId }),
       });
     } else if (state.phase === 'great_library') {
@@ -8315,6 +8331,7 @@ SOFTWARE.
         title: `亚历山大图书馆 · ${pName}`,
         note: '从盒中随机抽得 3 枚发展标记，任选 1 枚：',
         tokenIds: state.pending.options,
+        anchor, onInspectBoard: inspectChoiceBoard,
         onPick: tokenId => commitAction({ type: 'pick_library_token', tokenId }),
       });
     } else if (state.phase === 'destroy_card') {
@@ -8324,6 +8341,7 @@ SOFTWARE.
         title: `摧毁对手${colName} · ${pName}`,
         note: `选择 1 张对手的${colName}移入弃牌堆：`,
         cardIds: state.pending.targets,
+        anchor, onInspectBoard: inspectChoiceBoard,
         renderCardHtml: renderCardFaceHtml,
         onPick: cardId => commitAction({ type: 'destroy_card', cardId }),
       });
@@ -8333,6 +8351,7 @@ SOFTWARE.
         title: `摩索拉斯陵墓 · ${pName}`,
         note: '从弃牌堆任选 1 张建筑免费建成：',
         cardIds: state.discard,
+        anchor, onInspectBoard: inspectChoiceBoard,
         renderCardHtml: renderCardFaceHtml,
         onPick: cardId => commitAction({ type: 'mausoleum_build', cardId }),
       });
@@ -8398,14 +8417,13 @@ SOFTWARE.
   }
 
   function renderConflictBoard() {
-    const canPickBoardToken = state.phase === 'choose_token' && !isAiTurn();
     const tokenSlots = [];
     for (let i = 0; i < 5; i++) {
       const tid = state.boardTokens[i];
       if (tid) {
         const tok = Data.TOKEN_BY_ID[tid];
         tokenSlots.push(`
-          <button type="button" class="ptoken ${canPickBoardToken ? 'is-selectable' : ''}" data-ptoken="${tid}" aria-label="${Dialogs.esc(tok.name)} · 查看发展标记说明">
+          <button type="button" class="ptoken" data-ptoken="${tid}" aria-label="${Dialogs.esc(tok.name)} · 查看发展标记说明">
             <span class="ptoken-disc">${Icons.token(tid)}</span>
             <span class="ptoken-name">${Dialogs.esc(tok.name)}</span>
           </button>
@@ -8462,13 +8480,8 @@ SOFTWARE.
 
     conflictEl.querySelectorAll('[data-ptoken]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const tid = btn.dataset.ptoken;
-        if (canPickBoardToken) {
-          commitAction({ type: 'pick_token', tokenId: tid });
-        } else {
-          sfx('select');
-          Dialogs.showTokenInfo(dialogLayer, tid);
-        }
+        sfx('select');
+        Dialogs.showTokenInfo(dialogLayer, btn.dataset.ptoken);
       });
     });
   }
@@ -8517,7 +8530,7 @@ SOFTWARE.
       `<span class="city-chain-pip" role="img" aria-label="${Dialogs.esc(Data.CHAIN_META[c].name)}">${Icons.chain(c)}</span>`
     ).join('');
     const moreChains = ownedChainsArr.length - visibleChains.length;
-    const stampColumns = Math.max(1, sciEntries.length, p.tokens.length, Math.min(6, ownedChainsArr.length));
+    const stampColumns = Math.max(1, sciEntries.length, p.tokens.length, visibleChains.length);
 
     const canBuildWonderWithSelected =
       state.phase === 'play' && isActive && !isAiTurn() && selectedSlot !== null && state.wondersBuiltTotal < 7;
@@ -8591,18 +8604,18 @@ SOFTWARE.
               <div class="res-ledger" aria-label="资源产出与贸易价">
                 <span class="ledger-label production-label">产出</span><span class="ledger-label price-label">买价</span>${resHtml}
               </div>
-              <div class="city-side-panel" style="--stamp-columns:${stampColumns}; --science-columns:${Math.max(1, sciEntries.length)}">
-                <div class="ledger-line">
+              <div class="city-side-panel" style="--stamp-columns:${stampColumns}">
+                <div class="ledger-line" style="--row-slots:${Math.max(1, sciEntries.length)}">
                   <span class="ledger-label">科技 <span class="science-fraction ${sciThreat ? 'is-threat' : ''}">${sciEntries.length}/6</span></span>
                   <div class="ledger-symbols" role="group" aria-label="科技符号">${sciHtml}</div>
                 </div>
-                <div class="ledger-line">
+                <div class="ledger-line" style="--row-slots:${Math.max(1, p.tokens.length)}">
                   <span class="ledger-label">发展</span>
                   <div class="ledger-symbols" role="group" aria-label="发展标记">${tokensHtml}</div>
                 </div>
-                <div class="ledger-line">
-                  <span class="ledger-label">连锁</span>
-                  <div class="ledger-symbols" role="group" aria-label="连锁符号">${chainPipsHtml}${moreChains ? `<button type="button" class="chain-more" data-open-chains aria-label="查阅全部 ${ownedChainsArr.length} 个连锁符号">+${moreChains}</button>` : ''}</div>
+                <div class="ledger-line" style="--row-slots:${Math.max(1, visibleChains.length)}">
+                  <span class="ledger-caption"><span class="ledger-label">连锁</span>${moreChains ? `<button type="button" class="chain-more" data-open-chains aria-label="查阅全部 ${ownedChainsArr.length} 个连锁符号">+${moreChains}</button>` : ''}</span>
+                  <div class="ledger-symbols" role="group" aria-label="连锁符号">${chainPipsHtml}</div>
                 </div>
               </div>
             </div>
@@ -8632,7 +8645,8 @@ SOFTWARE.
     });
     el.querySelector('[data-open-chains]')?.addEventListener('click', () => {
       sfx('select');
-      Dialogs.showCityArchive(dialogLayer, state, seat, renderCardFaceHtml, 0, 'facts');
+      // The chain list is the last entry in the city facts.
+      Dialogs.showCityArchive(dialogLayer, state, seat, renderCardFaceHtml, Infinity, 'facts');
     });
     el.querySelectorAll('[data-seat-token]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -8803,7 +8817,7 @@ SOFTWARE.
         e.stopPropagation();
         const slot = Number(btn.dataset.slot);
         const card = Data.CARD_BY_ID[state.pyramid[slot].cardId];
-        if (!Engine.isSlotAvailable(state, slot)) {
+        if (inspectedChoiceAnchor !== null || !Engine.isSlotAvailable(state, slot)) {
           sfx('select');
           Dialogs.showCardInfo(dialogLayer, state, state.turn, card, renderCardFaceHtml);
           return;
@@ -8844,6 +8858,17 @@ SOFTWARE.
 
     if (state.phase === 'draft') {
       dockEl.innerHTML = '<span class="dock-hint">点选奇迹，查看后选定</span>';
+      return;
+    }
+
+    if (inspectedChoiceAnchor !== null) {
+      dockEl.innerHTML = '<button type="button" class="act-btn primary" data-resume-choice>返回选择</button>';
+      dockEl.querySelector('[data-resume-choice]').onclick = () => {
+        const anchor = inspectedChoiceAnchor;
+        inspectedChoiceAnchor = null;
+        renderActionDock();
+        showPendingChoice(anchor);
+      };
       return;
     }
 
@@ -8993,9 +9018,12 @@ SOFTWARE.
     if (e.key !== 'Escape' && e.target && ['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
     if (e.key === 'Escape') {
       if (dialogLayer.firstElementChild) {
-        if (!dialogLayer.querySelector('.dlg-close')) return;
-        dialogLayer.querySelector('.dlg-close').click();
+        const back = dialogLayer.querySelector('.dlg-close, [data-view-board]');
+        if (!back) return;
+        back.click();
         sfx('cancel');
+      } else if (inspectedChoiceAnchor !== null && !surfaceEl.hidden) {
+        dockEl.querySelector('[data-resume-choice]').click();
       } else if (selectedSlot !== null) {
         selectedSlot = null;
         pickingWonder = false;
