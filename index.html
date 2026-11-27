@@ -348,8 +348,8 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   box-shadow: 0 0 0 2px #f4d074, 0 0 18px #e4b44888, 0 6px 16px #2a1b0f77;
 }
 .city-leaf {
-  position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .38rem;
-  padding: .42rem .44rem .42rem; border-radius: .38rem;
+  position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: .36rem;
+  padding: .4rem .42rem .4rem; border-radius: .38rem;
   border: 1px solid #b5996f; color: var(--ink);
   background:
     linear-gradient(125deg, #f8eed5f5, #ecdcbaef 58%, #e2cd9ef5),
@@ -358,16 +358,12 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   overflow: hidden;
 }
 .city-upper {
-  flex: 1 1 0; min-height: 0;
-  display: flex; flex-direction: column; gap: .34rem;
-}
-.seat-portrait-right {
-  flex: 1 1 0; min-height: 0;
+  flex: none;
   display: flex; flex-direction: column; gap: .32rem;
 }
 
 .seat-head {
-  display: flex; align-items: center; gap: .38rem; padding-bottom: .24rem;
+  display: flex; align-items: center; gap: .36rem; padding-bottom: .22rem;
   border-bottom: 1px solid #ad906166; flex: none;
 }
 .seat-crest {
@@ -378,12 +374,12 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 }
 .seat-title-wrap {
   min-width: 0; flex: 1;
-  display: flex; align-items: center; justify-content: space-between; gap: .3rem;
+  display: flex; align-items: center; justify-content: space-between; gap: .28rem;
 }
-.seat-name-row { display: flex; align-items: center; gap: .26rem; min-width: 0; }
+.seat-name-row { display: flex; align-items: center; gap: .24rem; min-width: 0; }
 .seat-name-btn {
   display: block; max-width: 100%; padding: 0; border: 0; background: none; text-align: left;
-  font: 700 1.02rem/1.18 var(--serif); color: var(--seat-dark);
+  font: 700 1.04rem/1.18 var(--serif); color: var(--seat-dark);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .turn-ribbon {
@@ -394,12 +390,12 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   border: 1px solid #f4d68988; white-space: nowrap;
 }
 .seat-sub-stats {
-  display: flex; align-items: center; gap: .32rem; flex: none;
-  font: 800 .86rem/1 var(--digits);
+  display: flex; align-items: center; gap: .3rem; flex: none;
+  font: 800 .9rem/1 var(--digits);
 }
 .stat-chip {
   display: inline-flex; align-items: center; gap: .18rem;
-  padding: .12rem .38rem; border-radius: 99px; border: 1.2px solid #b89861;
+  padding: .13rem .4rem; border-radius: 99px; border: 1.2px solid #b89861;
   background: linear-gradient(180deg, #f8eccb, #e3cb98); color: #462f14;
   box-shadow: inset 0 1px 0 #fff9e6, 0 1px 2px #3b27142a;
 }
@@ -410,58 +406,97 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   cursor: pointer; transition: filter .13s, transform .13s;
 }
 .stat-chip.vp:hover { filter: brightness(1.06); transform: translateY(-1px); }
-.stat-chip svg { width: .96rem; height: .96rem; }
+.stat-chip svg { width: 1rem; height: 1rem; }
 
-/* Recessed Tabletop Resource & Trade Market Tray */
-.res-strip {
-  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .18rem;
-  padding: .18rem .18rem; border-radius: .36rem; flex: none;
-  background: #d8c499a8; border: 1.2px solid #b59b6d;
-  box-shadow: inset 0 1px 3px #5c452633;
+/* ---- Open, Spacious 2-Column City Dashboard: Vertical 5-Resource Ledger (Left) + Science/Tokens/Archive (Right) ---- */
+.city-dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.32fr) minmax(0, 0.92fr);
+  gap: .36rem;
+  align-items: stretch;
 }
-.res-pill {
-  min-width: 0; overflow: hidden;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: .16rem .06rem; border-radius: .26rem;
-  color: #3f2d1b; font: 800 .86rem/1.05 var(--digits);
-}
-.res-pill.is-zero { opacity: .72; }
-.res-pill.has-prod {
-  background: #f8edd4e8; box-shadow: 0 1px 2px #4a341933;
-}
-.res-pill.has-disc {
-  background: #fcecb8; box-shadow: inset 0 0 0 1.2px #c89428;
-}
-.res-pill-top { display: flex; align-items: center; justify-content: center; gap: .08rem; }
-.res-pill svg { width: 1.04rem; height: 1.04rem; }
-.res-pill small.trade-coin {
-  display: inline-flex; align-items: center; justify-content: center; gap: .04rem;
-  font: 700 .66rem/1 var(--digits); color: #685032; margin-top: .1rem;
-}
-.res-pill small.trade-coin svg { width: .72rem; height: .72rem; }
-.res-pill.has-disc small.trade-coin { color: #8c5508; }
 
-/* 6-Socket Visual Science Supremacy Track + Owned Progress Medallions */
-.city-meta-row {
-  display: flex; align-items: center; justify-content: space-between; gap: .26rem;
-  min-height: 1.62rem; flex: none;
-  padding: .12rem .22rem; border-radius: .32rem;
-  background: #e2d1aa99; border: 1px solid #bd9f6f88;
+/* BOLD VERTICAL 5-RESOURCE & TRADE MARKET LEDGER — Generous, Crisp, Unmistakable! */
+.res-ledger {
+  display: flex; flex-direction: column; gap: .2rem;
+  padding: .24rem .26rem; border-radius: .4rem;
+  background: #d8c49999; border: 1.2px solid #b59b6d;
+  box-shadow: inset 0 1.5px 4px #5c452633;
 }
-.sci-dots { display: flex; align-items: center; gap: .22rem; flex-wrap: nowrap; }
-.sci-dots.is-threat {
-  padding: .1rem .32rem; border-radius: 99px;
-  background: #1c6b4628; border: 1px solid #2b8f5e;
-  box-shadow: 0 0 8px #33b87855;
+.res-row {
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .32rem;
+  padding: .16rem .34rem; border-radius: .28rem;
+  background: #f6ead0b8; border: 1px solid #c5ad7f88;
+  color: #3a2716;
+  transition: background .16s;
+}
+.res-row.is-zero { background: #eadab87a; border-color: #c2aa7c55; }
+.res-row.is-zero .res-row-prod { opacity: .48; }
+.res-row.has-prod {
+  background: linear-gradient(180deg, #fbf1da, #efe0bd);
+  border-color: #b79558;
+  box-shadow: 0 1px 2px #4a34192a;
+}
+.res-row.has-disc {
+  background: linear-gradient(180deg, #fef0bd, #f2d47e);
+  border-color: #c79025;
+  box-shadow: 0 1px 3px #6b470c33;
+}
+.res-row-ico { display: inline-flex; align-items: center; justify-content: center; }
+.res-row-ico svg { width: 1.52rem; height: 1.52rem; filter: drop-shadow(0 1px 1.5px #2e1c0c44); }
+.res-row-prod {
+  font: 800 1.08rem/1 var(--digits); color: #2f1e0e;
+  letter-spacing: .02em;
+}
+.res-row-price {
+  display: inline-flex; align-items: center; gap: .12rem;
+  padding: .12rem .34rem; border-radius: 99px;
+  background: #e7d2a2cc; border: 1px solid #b49257;
+  font: 800 .86rem/1 var(--digits); color: #543812;
+}
+.res-row.has-disc .res-row-price {
+  background: #b87c18; border-color: #fff0b3; color: #fff8de;
+}
+.res-row-price svg { width: .92rem; height: .92rem; }
+
+/* Right Column: 2×3 BIG Science Supremacy Sockets + Owned Tokens + Chains + Archive Button */
+.city-side-panel {
+  display: flex; flex-direction: column; justify-content: space-between; gap: .26rem;
+  min-width: 0;
+}
+.sci-panel {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+  padding: .28rem .24rem; border-radius: .4rem;
+  background: #e1cf9f88; border: 1.2px solid #b89c6c;
+  box-shadow: inset 0 1.5px 4px #5c45262a;
+}
+.sci-panel.is-threat {
+  background: #1c6b4628; border-color: #2b8f5e;
+  box-shadow: 0 0 10px #33b87855;
+}
+.sci-grid {
+  display: grid; grid-template-columns: repeat(3, auto); gap: .24rem;
+  justify-content: center; align-items: center;
 }
 .sci-socket {
-  width: 1.32rem; height: 1.32rem; border-radius: 50%; flex: none;
-  border: 1.4px dashed #8a734f88;
-  background: radial-gradient(circle at 50% 60%, #d2be93, #bfa778);
+  width: 1.72rem; height: 1.72rem; border-radius: 50%;
+  border: 1.5px dashed #8a734f99;
+  background: radial-gradient(circle at 50% 60%, #d4c094, #bfa778);
   box-shadow: inset 0 1.5px 3px #59412244;
 }
+.sci-dot {
+  width: 1.72rem; height: 1.72rem; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 30% 25%, #34825f, #184a34);
+  color: #effef6; border: 1.4px solid #a2d9ba; font-size: 1.04rem; position: relative;
+  box-shadow: 0 1.5px 4px #142c2066;
+}
+.sci-dot.is-pair { box-shadow: 0 0 0 1.8px #f0c960; }
+.sci-dot b {
+  position: absolute; right: -.18rem; bottom: -.18rem; width: .82rem; height: .82rem;
+  border-radius: 50%; background: #e0aa3a; color: #24180c; font: 800 .56rem/.82rem var(--digits); text-align: center;
+}
 .sci-threat-tag {
-  font: 800 .68rem/1 var(--digits); color: #145c38; margin-left: .12rem;
+  font: 800 .72rem/1 var(--digits); color: #145c38;
 }
 .dcard-sci-combo {
   position: absolute; right: .16rem; bottom: .16rem; z-index: 3;
@@ -471,135 +506,79 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   font: 800 clamp(8px, 11.5cqi, 12px)/1 var(--serif);
   box-shadow: 0 1.5px 5px #0c2b1c99;
 }
-.sci-dot {
-  width: 1.36rem; height: 1.36rem; border-radius: 50%; display: grid; place-items: center;
-  background: radial-gradient(circle at 30% 25%, #327a59, #1b4d37);
-  color: #effef6; border: 1.2px solid #a2d9ba; font-size: .82rem; position: relative;
-  box-shadow: 0 1.5px 3px #142c2066;
+.owned-tokens {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .2rem;
 }
-.sci-dot.is-pair { box-shadow: 0 0 0 1.6px #f0c960; }
-.sci-dot b {
-  position: absolute; right: -.18rem; bottom: -.18rem; width: .74rem; height: .74rem;
-  border-radius: 50%; background: #e0aa3a; color: #24180c; font: 800 .52rem/.74rem var(--digits); text-align: center;
-}
-.owned-tokens { display: flex; align-items: center; gap: .2rem; }
 .mini-ptoken {
-  width: 1.54rem; height: 1.54rem; border-radius: 50%; padding: 0; border: 1.6px solid #cfa962;
+  width: 1.78rem; height: 1.78rem; border-radius: 50%; padding: 0; border: 1.6px solid #cfa962;
   display: grid; place-items: center; color: #f6e7c1;
   background: radial-gradient(circle at 30% 25%, #3c8665, #184734);
   box-shadow: 0 1.5px 4px #14261c66;
 }
-.mini-ptoken svg { width: .94rem; height: .94rem; }
-
-/* REAL GENEROUS 7-COLOR PHYSICAL CITY BUILDING TABLEAU (Grows Top-to-Bottom Like Real Tabletop Columns!) */
-.city-cards-btn {
-  position: relative; width: 100%; flex: 1 1 0; min-height: 4.5rem;
-  display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: .26rem;
-  padding: .28rem .32rem .3rem; border-radius: .42rem;
-  border: 1.4px solid #ad9061;
-  background:
-    linear-gradient(180deg, #e5d4aeaa, #d4be90aa),
-    repeating-linear-gradient(90deg, transparent 0 38px, #8c6f4312 38px 39px);
-  box-shadow: inset 0 2px 6px #5c442433, 0 1px 0 #fff7dfaa;
-  text-align: left; overflow: hidden;
-  transition: filter .14s, border-color .14s;
-}
-.city-cards-btn:hover { filter: brightness(1.03); border-color: #9e7c44; }
-.city-board-bar {
-  display: flex; align-items: center; justify-content: space-between; gap: .3rem;
-  padding-bottom: .18rem; border-bottom: 1px solid #9f815044; flex: none;
-  font: 700 .66rem/1.1 var(--serif); color: #5b4528; letter-spacing: .04em;
-}
+.mini-ptoken svg { width: 1.08rem; height: 1.08rem; }
 .city-chains-row {
-  display: inline-flex; align-items: center; gap: .16rem;
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .18rem;
 }
 .city-chain-pip {
-  width: 1.06rem; height: 1.06rem; border-radius: 50%;
+  width: 1.24rem; height: 1.24rem; border-radius: 50%;
   display: grid; place-items: center;
-  background: #2f2213; border: 1px solid #e6c677; color: #ffefba;
+  background: #2f2213; border: 1.2px solid #e6c677; color: #ffefba;
+  box-shadow: 0 1px 3px #1c120855;
 }
-.city-chain-pip svg { width: .68rem; height: .68rem; }
-.city-stacks-wrap {
-  flex: 1 1 0; min-height: 0;
-  display: flex; align-items: flex-start; justify-content: flex-start; gap: .24rem;
-  overflow: hidden;
+.city-chain-pip svg { width: .78rem; height: .78rem; }
+
+/* Sleek Carved Tabletop Button to Open Full 7-Color City Archive */
+.city-archive-pill {
+  width: 100%; margin-top: auto;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+  padding: .34rem .3rem; border-radius: .38rem;
+  border: 1.3px solid #9d7d4a;
+  background: linear-gradient(180deg, #f8ecd0, #e1ca98);
+  color: #3a2716;
+  box-shadow: inset 0 1px 0 #fff9e8, 0 2px 0 #8a6c3c88;
+  transition: filter .13s, transform .13s;
 }
-.city-empty-board {
-  flex: 1; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .18rem;
+.city-archive-pill:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.city-archive-pill:active { transform: translateY(1px); }
+.arch-title {
+  font: 700 .76rem/1.1 var(--serif); letter-spacing: .04em;
+  display: inline-flex; align-items: center; gap: .22rem;
 }
-.city-empty-hint {
-  font: 700 .86rem/1.15 var(--serif); color: #725b3d; opacity: .8; letter-spacing: .12em;
+.arch-title b { font-family: var(--digits); font-weight: 800; color: var(--seat-main); }
+.arch-dots {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .16rem;
 }
-.city-empty-sub {
-  font: 500 .64rem/1.15 var(--sans); color: #856d4c; opacity: .7;
-}
-.mini-stack {
-  flex: 1 1 0; max-width: 3.9rem; min-width: 1.6rem;
-  display: flex; flex-direction: column; align-items: stretch;
-}
-.mini-card-tab {
-  position: relative; height: 1.28rem; border-radius: .22rem .22rem 0 0;
-  border: 1.2px solid #f7ebd0dd; border-bottom: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .08rem;
-  padding: .06rem .1rem;
-  font: 700 .74rem/1 var(--digits); color: #fff7e4;
-  box-shadow: 0 -1px 3px #1c120844;
-}
-.mini-card-tab + .mini-card-tab { margin-top: -.16rem; }
-.mini-card-tab.is-front {
-  height: auto; min-height: 2.65rem; padding: .22rem .12rem .2rem;
-  border-radius: .26rem; border-bottom: 1.2px solid #f7ebd0dd;
-  box-shadow: 0 2px 6px #1c120844;
-}
-.mini-tab-glyph {
-  display: inline-flex; align-items: center; justify-content: center; gap: .08rem;
-}
-.mini-card-tab svg { width: .94rem; height: .94rem; filter: drop-shadow(0 1px 1px #00000077); }
-.mini-card-tab.is-front svg { width: 1.12rem; height: 1.12rem; }
-.mini-card-tab b { font-weight: 800; text-shadow: 0 1px 2px #00000099; }
-.mini-tab-name {
-  display: block; max-width: 100%; font-style: normal;
-  padding: .06rem .16rem; border-radius: .14rem;
-  background: #f9eed4e0; color: #2b1a0c;
-  font: 700 .56rem/1.08 var(--serif);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.mini-chain-dot {
-  width: .34rem; height: .34rem; border-radius: 50%; flex: none;
-  background: #ffe388; border: 1px solid #3a260a;
-}
-.mini-card-tab[data-c="brown"]  { background: linear-gradient(180deg, #8b532b, #653819); }
-.mini-card-tab[data-c="gray"]   { background: linear-gradient(180deg, #74838e, #525f68); }
-.mini-card-tab[data-c="yellow"] { background: linear-gradient(180deg, #d49b29, #9f6e15); }
-.mini-card-tab[data-c="blue"]   { background: linear-gradient(180deg, #2f71a8, #1f4f79); }
-.mini-card-tab[data-c="green"]  { background: linear-gradient(180deg, #2a7f58, #1a583b); }
-.mini-card-tab[data-c="red"]    { background: linear-gradient(180deg, #b5352b, #802019); }
-.mini-card-tab[data-c="purple"] { background: linear-gradient(180deg, #743c92, #4d2463); }
-.mini-stack-more {
-  font: 700 .56rem/1 var(--digits); text-align: center; color: #543e25; margin-bottom: .05rem;
+.arch-dot {
+  min-width: 1.06rem; height: 1.06rem; padding: 0 .16rem; border-radius: .2rem;
+  border: 1px solid #fff4d6cc;
+  display: inline-grid; place-items: center;
+  font: 800 .64rem/1 var(--digits); color: #fff8e4;
+  text-shadow: 0 1px 1px #00000088;
 }
 
-/* Authentic 2×2 Original-Ratio (1.48:1) Wonder Gallery — cqi Container-Scaled -> ZERO Clipping at ANY Width! */
+/* ============================================================================
+   VERTICAL 2×2 WONDER GALLERY — Left Vertical Cost Pillar | Right Vertical Function Pillar!
+   ============================================================================ */
 .wonders-tray {
-  flex: none;
+  flex: 1 1 0; min-height: 0;
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: .28rem;
+  gap: .32rem;
 }
 .wonder-mini {
-  position: relative; width: 100%; aspect-ratio: 1.48 / 1; min-height: 4.5rem;
+  position: relative; width: 100%; height: 100%; min-height: 0;
   container-type: inline-size;
   padding: 0; border: 1.6px solid #efe0bd; outline: 1px solid #6b4f2b;
-  border-radius: .42rem; overflow: hidden; background: #2c2016; text-align: left;
-  box-shadow: 0 2px 0 #664e32, 0 4px 8px #2d1e0f55;
+  border-radius: .46rem; overflow: hidden; background: #2c2016; text-align: left;
+  box-shadow: 0 2px 0 #664e32, 0 4px 10px #2d1e0f66;
   transition: transform .16s var(--lift-ease), box-shadow .16s, border-color .16s;
 }
 .wonder-mini:hover { transform: translateY(-1.5px); border-color: #f4d683; }
 .wonder-mini img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  filter: brightness(.88) saturate(1.02);
+  filter: brightness(.88) saturate(1.04);
 }
-.wonder-mini.is-built img { filter: brightness(1.05) saturate(1.1); }
+.wonder-mini.is-built img { filter: brightness(1.06) saturate(1.1); }
 .wonder-mini.is-built {
   border-color: #f3cd67; outline-color: #9e6f1e;
   box-shadow: inset 0 0 0 1px #fff3c2, 0 2px 8px #4a311088;
@@ -611,77 +590,94 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 }
 .wonder-mini-overlay {
   position: relative; z-index: 1; width: 100%; height: 100%;
-  display: flex; flex-direction: column; justify-content: space-between;
-  padding: 3.2cqi 3.6cqi 3.6cqi;
-  background: linear-gradient(180deg, #1b120bc8 0%, #1b120b18 36%, #1b120be2 100%);
+  display: flex; flex-direction: column;
+  background: linear-gradient(180deg, #1b120bd8 0%, #1b120b1c 28%, #1b120b28 72%, #1b120bb8 100%);
   color: #fff4d8;
 }
 .wonder-mini-top {
   display: flex; align-items: center; justify-content: space-between; gap: 2cqi;
+  padding: 3.2cqi 3.6cqi 2.6cqi; flex: none;
 }
 .wonder-mini-name {
-  font: 700 clamp(7.5px, 7.9cqi, 14px)/1.12 var(--serif); letter-spacing: -.02em; text-shadow: 0 1.5px 4px #000;
+  font: 700 clamp(8px, 8.2cqi, 14px)/1.12 var(--serif); letter-spacing: -.02em; text-shadow: 0 1.5px 4px #000;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .wonder-mini-status {
   display: inline-flex; align-items: center; gap: 1.2cqi; flex: none;
-  font: 700 clamp(7px, 7.8cqi, 12px)/1 var(--digits); padding: 1.6cqi 4cqi; border-radius: 99px;
+  font: 700 clamp(7.5px, 8.2cqi, 12.5px)/1 var(--digits); padding: 1.6cqi 4cqi; border-radius: 99px;
   background: #2f2014ea; border: 1.2px solid #d4af66; color: #fae4a6; white-space: nowrap;
   box-shadow: 0 1.5px 4px #00000088;
 }
-.wonder-mini-status svg { width: clamp(8px, 8.8cqi, 13px); height: clamp(8px, 8.8cqi, 13px); }
+.wonder-mini-status svg { width: clamp(8.5px, 9.2cqi, 13.5px); height: clamp(8.5px, 9.2cqi, 13.5px); }
 .wonder-mini-status.is-done { background: #cfa03a; border-color: #fff2be; color: #241506; }
 .wonder-mini-status.is-ok   { background: #1e6445f2; border-color: #a6f5cc; color: #eefff6; }
 .wonder-mini-status.is-no   { background: #64231ce8; border-color: #e49990; color: #ffe0da; }
 
-.wonder-mini-bottom {
-  display: flex; flex-direction: column; gap: 3cqi;
-  min-width: 0; max-width: 100%;
+/* Vertical Split Body: LEFT = Vertical Cost Column, RIGHT = Vertical Function Column! */
+.wonder-mini-body {
+  flex: 1 1 0; min-height: 0;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 1cqi 3.4cqi 3.6cqi 0;
 }
-/* Authentic Left-Anchored Dark-Parchment Material Cost Ribbon (cqi-Scaled -> NEVER Clips!) */
+
+/* Vertical Left Hanging Material Cost Column (Faithful to Original 7WD Wonders!) */
 .wonder-mini-cost {
-  display: inline-flex; align-items: center; align-self: flex-start; flex-wrap: nowrap;
-  gap: 2.4cqi; margin-left: -3.6cqi; max-width: calc(100% + 3.6cqi);
-  padding: 2cqi 4.8cqi 2cqi 3.4cqi;
-  border-radius: 0 .34rem .34rem 0;
-  background: #1a110aed;
-  border-block: 1.2px solid #e2c37fd8; border-right: 1.2px solid #e2c37fd8;
-  box-shadow: 2px 2px 6px #00000099;
-  font: 800 clamp(7.5px, 8.6cqi, 14px)/1 var(--digits);
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: 2.2cqi;
+  padding: 3.4cqi 4.8cqi 3.6cqi 3.4cqi;
+  border-radius: 0 .44rem .44rem 0;
+  background: linear-gradient(180deg, #1d130bf0, #2c1e12e8);
+  border-block: 1.3px solid #e4c582d8; border-right: 1.3px solid #e4c582d8;
+  box-shadow: 2px 3px 8px #00000099;
+  font: 800 clamp(8.5px, 10.6cqi, 16px)/1 var(--digits);
 }
 .wonder-mini-cost:empty { display: none; }
 .wonder-mini-cost .res-tag {
-  display: inline-flex; align-items: center; gap: 1cqi;
-  color: #fff6dc; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 2.2cqi;
+  color: #fff7df; white-space: nowrap;
 }
-.wonder-mini-cost svg { width: clamp(9px, 11.2cqi, 18px); height: clamp(9px, 11.2cqi, 18px); filter: drop-shadow(0 1px 2px #000); }
+.wonder-mini-cost svg {
+  width: clamp(11px, 14.5cqi, 22px); height: clamp(11px, 14.5cqi, 22px);
+  filter: drop-shadow(0 1px 2px #000);
+}
 
-/* BOLD, GENEROUS, CONFIDENT Reward Badges along Bottom-Right (cqi-Scaled -> ZERO Clipping even on 4-icon Appian Way!) */
+/* Vertical Right BOLD Function / Reward Column — HUGE, PROUD, ZERO HORIZONTAL CLIPPING! */
 .wonder-mini-eff {
-  display: inline-flex; align-items: center; align-self: flex-end; justify-content: flex-end;
-  gap: 1.6cqi; max-width: 100%;
-  font: 800 clamp(8px, 9.2cqi, 17px)/1 var(--digits);
+  margin-left: auto; align-self: flex-end;
+  display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end;
+  gap: 2.4cqi; max-width: 66%;
+  font: 800 clamp(9.5px, 11.4cqi, 18px)/1 var(--digits);
 }
 .wonder-mini-eff .eff-tag {
-  display: inline-flex; align-items: center; gap: 1.2cqi; padding: 1.8cqi 3cqi;
-  border-radius: .28rem; background: #1c130cf0; border: 1.4px solid #e5c172;
+  display: inline-flex; align-items: center; gap: 1.8cqi; padding: 2.4cqi 4.4cqi;
+  border-radius: .34rem; background: #1c130cf2; border: 1.5px solid #e6c373;
   color: #fff8e2; white-space: nowrap;
-  box-shadow: 0 2px 6px #000000aa;
+  box-shadow: 0 2px 7px #000000aa;
 }
+.wonder-mini-eff .eff-tag.is-vp { border-color: #f8df90; background: #3b290cf4; }
+.wonder-mini-eff .eff-tag.is-replay { border-color: #9de2f8; background: #19485cf4; }
+.wonder-mini-eff .eff-tag.is-destroy { border-color: #f28e7e; background: #661f18f4; }
+.wonder-mini-eff .w-slash { font-style: normal; opacity: .78; font-size: .82em; margin-inline: -.6cqi; }
+.wonder-mini-eff svg {
+  width: clamp(12.5px, 15.6cqi, 24px); height: clamp(12.5px, 15.6cqi, 24px);
+  filter: drop-shadow(0 1px 2px #00000088);
+}
+.wonder-mini-eff .eff-tag.is-wild3 {
+  padding: 2cqi 2.6cqi; gap: 1cqi;
+}
+.wonder-mini-eff .eff-tag.is-wild3 svg {
+  width: clamp(9.5px, 11.4cqi, 18px); height: clamp(9.5px, 11.4cqi, 18px);
+}
+/* 4-Effect Appian Way stacks 4 vertical badges cleanly without overflowing height */
 .wonder-mini-eff.is-eff-4 {
-  gap: 1.1cqi; font-size: clamp(7px, 7.5cqi, 14px);
+  gap: 1.4cqi; font-size: clamp(8px, 9.6cqi, 15px);
 }
 .wonder-mini-eff.is-eff-4 .eff-tag {
-  gap: .8cqi; padding: 1.5cqi 2.1cqi;
+  padding: 1.6cqi 3.6cqi; gap: 1.4cqi;
 }
 .wonder-mini-eff.is-eff-4 svg {
-  width: clamp(8.5px, 9.4cqi, 16.5px); height: clamp(8.5px, 9.4cqi, 16.5px);
+  width: clamp(10px, 12.6cqi, 19px); height: clamp(10px, 12.6cqi, 19px);
 }
-.wonder-mini-eff .eff-tag.is-vp { border-color: #f8df90; background: #38270bf2; }
-.wonder-mini-eff .eff-tag.is-replay { border-color: #9de2f8; background: #1a475af2; }
-.wonder-mini-eff .eff-tag.is-destroy { border-color: #f28e7e; background: #641f18f2; }
-.wonder-mini-eff .w-slash { font-style: normal; opacity: .78; font-size: .85em; }
-.wonder-mini-eff svg { width: clamp(10px, 12.2cqi, 22px); height: clamp(10px, 12.2cqi, 22px); filter: drop-shadow(0 1px 2px #00000088); }
 
 /* Tucked Age Card Corner under Constructed Wonders */
 .wonder-tucked-slip {
@@ -1750,8 +1746,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 </style>
   <style>/* ==========================================================================
    1. Portrait Adaptation — Huawei Pura X Max (1:√2, e.g. 800×1131 & 481×680)
-      Side-by-Side City Mat (Left) + Authentic 2×2 Wonder Gallery (Right)!
-      + 100% Full-Width Commanding Conflict & Progress Board!
+      Side-by-Side Vertical Resource Ledger + 2×2 Vertical-Split Wonder Gallery!
    ========================================================================== */
 @media (orientation: portrait) {
   :root {
@@ -1762,7 +1757,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     background-position: 50% 50%;
   }
   #playfield {
-    padding: .9cqh 1.6cqw 1.0cqh;
+    padding: .85cqh 1.6cqw .95cqh;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto minmax(0, 1fr) auto auto;
     grid-template-areas:
@@ -1781,83 +1776,104 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     grid-template-areas:
       "conflict conflict"
       "status   tools";
-    gap: .26rem .4rem;
+    gap: .24rem .4rem;
   }
   #conflict-zone {
     grid-area: conflict;
-    padding: .36rem .56rem .4rem;
-    gap: .36rem;
+    padding: .34rem .54rem .38rem;
+    gap: .34rem;
   }
   .progress-bar {
     justify-content: center; gap: clamp(.65rem, 3.8vw, 1.45rem);
-    min-height: 3.45rem; padding-bottom: .22rem;
+    min-height: 3.35rem; padding-bottom: .22rem;
   }
-  .ptoken, .ptoken-empty { width: 3.2rem; height: 3.2rem; }
-  .ptoken > svg { width: 1.72rem; height: 1.72rem; margin-top: -.2rem; }
+  .ptoken, .ptoken-empty { width: 3.12rem; height: 3.12rem; }
+  .ptoken > svg { width: 1.68rem; height: 1.68rem; margin-top: -.2rem; }
   .ptoken-cue { font-size: clamp(9.5px, .68rem, 12.5px); padding: .06rem .3rem; bottom: -.28rem; }
   .ptoken-cue svg { width: clamp(10px, .76rem, 13px); height: clamp(10px, .76rem, 13px); }
-  .military-wrap { padding: .28rem .42rem .26rem; }
-  .mil-zones { font-size: clamp(10px, .78rem, 14px); margin-bottom: .34rem; }
-  .mil-track { height: 1.68rem; }
-  .mil-cell { height: 1.02rem; }
-  .mil-pawn { width: 2.15rem; height: 2.5rem; }
+  .military-wrap { padding: .26rem .42rem .24rem; }
+  .mil-zones { font-size: clamp(10px, .78rem, 14px); margin-bottom: .32rem; }
+  .mil-track { height: 1.62rem; }
+  .mil-cell { height: .98rem; }
+  .mil-pawn { width: 2.1rem; height: 2.44rem; }
 
   #status-ribbon {
     grid-area: status; flex-direction: row; align-items: center; justify-content: flex-start;
-    gap: .4rem; padding: .18rem .58rem; border-radius: 99px;
+    gap: .4rem; padding: .16rem .56rem; border-radius: 99px;
     font-size: .76rem;
   }
   .wonder-pips { padding-left: .42rem; border-left: 1px solid #a8895888; }
   #toolbar { grid-area: tools; flex-wrap: nowrap; gap: .22rem; }
-  .tool-btn { width: 1.92rem; height: 1.92rem; }
-  .tool-btn svg { width: .94rem; height: .94rem; }
+  .tool-btn { width: 1.9rem; height: 1.9rem; }
+  .tool-btn svg { width: .92rem; height: .92rem; }
 
-  /* Portrait City Band: Left 47% = Spacious City Mat, Right 53% = Authentic 2×2 Wonder Gallery! */
+  /* Portrait City Band: Left 47% = Header + Vertical 5-Resource Ledger + Science/Archive; Right 53% = 2×2 Wonders */
   .city-ledger { padding: .2rem .24rem; }
   .city-leaf {
-    padding: .3rem .36rem; gap: .38rem;
+    padding: .28rem .34rem; gap: .36rem;
     display: grid;
     grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
     grid-template-rows: minmax(0, 1fr);
     align-items: stretch;
   }
-  .city-upper { gap: .24rem; }
-  .seat-head { padding-bottom: .16rem; gap: .26rem; }
-  .seat-crest { width: 1.6rem; height: 1.6rem; font-size: .76rem; }
-  .seat-name-btn { font-size: .92rem; }
-  .seat-sub-stats { font-size: .78rem; gap: .24rem; }
+  .city-upper { gap: .22rem; }
+  .seat-head { padding-bottom: .14rem; gap: .24rem; }
+  .seat-crest { width: 1.56rem; height: 1.56rem; font-size: .74rem; }
+  .seat-name-btn { font-size: .9rem; }
+  .seat-sub-stats { font-size: .78rem; gap: .22rem; }
   .stat-chip { padding: .08rem .3rem; }
   .stat-chip svg { width: .86rem; height: .86rem; }
   .turn-ribbon { font-size: .54rem; padding: .07rem .26rem; }
 
-  .seat-portrait-right { gap: .22rem; }
-  .res-strip { gap: .12rem; padding: .12rem .12rem; }
-  .res-pill { padding: .08rem .02rem; font-size: .78rem; }
-  .res-pill svg { width: .92rem; height: .92rem; }
-  .res-pill small.trade-coin { margin-top: .06rem; font-size: .6rem; }
-  .res-pill small.trade-coin svg { width: .64rem; height: .64rem; }
-  .city-meta-row { min-height: 1.38rem; padding: .08rem .18rem; }
-  .sci-socket, .sci-dot { width: 1.18rem; height: 1.18rem; font-size: .68rem; }
-  .mini-ptoken { width: 1.32rem; height: 1.32rem; }
-  .city-cards-btn { min-height: 3.2rem; padding: .18rem .2rem; gap: .14rem; }
-  .city-board-bar { font-size: .56rem; padding-bottom: .1rem; }
-  .city-chain-pip { width: .92rem; height: .92rem; }
-  .city-chain-pip svg { width: .58rem; height: .58rem; }
-  .city-stacks-wrap { gap: .16rem; }
-  .mini-card-tab { height: .9rem; }
-  .mini-card-tab.is-front { min-height: 1.88rem; padding: .14rem .08rem; }
-  .mini-card-tab svg { width: .82rem; height: .82rem; }
-  .mini-tab-name { font-size: .5rem; }
+  .city-dashboard { gap: .24rem; }
+  .res-ledger { padding: .16rem .18rem; gap: .12rem; }
+  .res-row { padding: .1rem .22rem; gap: .2rem; }
+  .res-row-ico svg { width: 1.24rem; height: 1.24rem; }
+  .res-row-prod { font-size: .92rem; }
+  .res-row-price { font-size: .72rem; padding: .08rem .24rem; }
+  .res-row-price svg { width: .76rem; height: .76rem; }
 
-  /* 2×2 Original-Ratio Wonder Gallery right beside the City Mat! */
+  .sci-panel { padding: .2rem .16rem; }
+  .sci-grid { gap: .16rem; }
+  .sci-socket, .sci-dot { width: 1.38rem; height: 1.38rem; font-size: .82rem; }
+  .mini-ptoken { width: 1.42rem; height: 1.42rem; }
+  .mini-ptoken svg { width: .84rem; height: .84rem; }
+  .city-chain-pip { width: 1.05rem; height: 1.05rem; }
+  .city-chain-pip svg { width: .66rem; height: .66rem; }
+  .city-archive-pill { padding: .22rem .2rem; gap: .14rem; }
+  .arch-title { font-size: .68rem; }
+  .arch-dot { min-width: .92rem; height: .92rem; font-size: .56rem; }
+
   .wonders-tray {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex: none; align-self: stretch;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    gap: .24rem; align-self: center;
+    gap: .24rem;
   }
-  .wonder-mini { aspect-ratio: 1.62 / 1; min-height: 4.4rem; }
+  .wonder-mini { min-height: 6.4rem; }
+  /* In Portrait bands, 2×2 Wonder cards are wider than tall -> use clean horizontal cost + horizontal effect strips! */
+  .wonder-mini-body {
+    flex-direction: column; align-items: stretch; justify-content: flex-end;
+    gap: .2rem; padding: 0 .22rem .22rem;
+  }
+  .wonder-mini-cost {
+    flex-direction: row; align-items: center; align-self: flex-start;
+    margin-left: -.22rem; padding: .1rem .28rem .1rem .22rem;
+    gap: .16rem; font-size: clamp(9.5px, .76rem, 13px);
+  }
+  .wonder-mini-cost .res-tag { gap: .06rem; }
+  .wonder-mini-cost svg { width: clamp(11.5px, .96rem, 16px); height: clamp(11.5px, .96rem, 16px); }
+  .wonder-mini-eff {
+    flex-direction: row; align-items: center; align-self: flex-end; justify-content: flex-end;
+    max-width: 100%; gap: .14rem; font-size: clamp(10.5px, .9rem, 15.5px);
+  }
+  .wonder-mini-eff .eff-tag { padding: .1rem .24rem; gap: .1rem; }
+  .wonder-mini-eff svg { width: clamp(13px, 1.15rem, 19px); height: clamp(13px, 1.15rem, 19px); }
+  .wonder-mini-eff.is-eff-4 { gap: .1rem; font-size: clamp(9px, .78rem, 13.5px); }
+  .wonder-mini-eff.is-eff-4 .eff-tag { padding: .08rem .18rem; gap: .06rem; }
+  .wonder-mini-eff.is-eff-4 svg { width: clamp(11px, .96rem, 16px); height: clamp(11px, .96rem, 16px); }
 
-  #action-dock { --dock-h: 3.05rem; padding: .22rem .46rem; gap: .34rem; }
+  #action-dock { --dock-h: 3rem; padding: .22rem .46rem; gap: .34rem; }
   .act-btn { min-height: 2rem; padding: .24rem .6rem; font-size: .76rem; }
 
   /* Optional Tabletop Face-to-Face Mode: Rotate Opponent Seat 180deg */
@@ -1868,107 +1884,109 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 
 /* ==========================================================================
    2. Narrow Tall Phones — iPhone 17 Pro Portrait (~402×874, 9:19.5)
-      100% Full-Width Commanding Conflict Board + 2×2 Wide Wonders (188px each!)
+      Compact Resource Strip + Science/Archive + Spacious 2×2 Vertical-Split Wonders!
    ========================================================================== */
 @media (orientation: portrait) and (max-aspect-ratio: 3/5) {
   :root {
     font-size: clamp(9.5px, 2.5vw, 12.5px);
   }
   #playfield {
-    padding: .32rem .38rem .38rem;
-    gap: .22rem;
+    padding: .3rem .38rem .36rem;
+    gap: .2rem;
   }
 
-  #table-crown { gap: .2rem .26rem; }
-  #conflict-zone {
-    padding: .32rem .38rem .34rem;
-    gap: .3rem;
-  }
-  .progress-bar {
-    min-height: 3.2rem; gap: .62rem; padding-bottom: .2rem;
-    justify-content: center;
-  }
-  .ptoken, .ptoken-empty { width: 3.02rem; height: 3.02rem; }
-  .ptoken > svg { width: 1.62rem; height: 1.62rem; margin-top: -.18rem; }
-  .ptoken-cue { font-size: 9.5px; padding: .05rem .26rem; bottom: -.26rem; }
-  .ptoken-cue svg { width: 10px; height: 10px; }
-  .military-wrap { padding: .24rem .28rem .22rem; }
-  .mil-zones { font-size: 9.5px; margin-bottom: .3rem; }
+  #table-crown { gap: .18rem .24rem; }
+  #conflict-zone { padding: .3rem .36rem .32rem; gap: .28rem; }
+  .progress-bar { min-height: 3.1rem; gap: .6rem; padding-bottom: .18rem; }
+  .ptoken, .ptoken-empty { width: 2.95rem; height: 2.95rem; }
+  .ptoken > svg { width: 1.56rem; height: 1.56rem; margin-top: -.18rem; }
+  .ptoken-cue { font-size: 9px; padding: .04rem .24rem; bottom: -.24rem; }
+  .ptoken-cue svg { width: 9.5px; height: 9.5px; }
+  .military-wrap { padding: .22rem .26rem .2rem; }
+  .mil-zones { font-size: 9.5px; margin-bottom: .28rem; }
   .mil-zone-vp { padding: .04rem .18rem; gap: .06rem; }
-  .mil-zone-vp svg { width: 11px; height: 11px; }
-  .mil-zone-cap svg { width: 12.5px; height: 12.5px; }
-  .mil-loot-pill { font-size: 8.5px; padding: .04rem .18rem; }
-  .mil-track { height: 1.54rem; }
-  .mil-cell { height: .94rem; }
-  .mil-pawn { width: 2.02rem; height: 2.36rem; }
+  .mil-zone-vp svg { width: 10.5px; height: 10.5px; }
+  .mil-zone-cap svg { width: 12px; height: 12px; }
+  .mil-loot-pill { font-size: 8.5px; padding: .03rem .16rem; }
+  .mil-track { height: 1.48rem; }
+  .mil-cell { height: .9rem; }
+  .mil-pawn { width: 1.96rem; height: 2.3rem; }
 
-  #status-ribbon { font-size: .68rem; gap: .26rem; padding: .12rem .42rem; }
-  #status-ribbon .age-pill { font-size: .6rem; padding: .06rem .32rem; }
+  #status-ribbon { font-size: .68rem; gap: .26rem; padding: .1rem .4rem; }
+  #status-ribbon .age-pill { font-size: .6rem; padding: .05rem .3rem; }
   .wonder-pips { padding-left: .28rem; gap: .12rem; }
   .wpip { width: .3rem; height: .3rem; }
-  .wonder-pips svg { width: .74rem; height: .74rem; }
+  .wonder-pips svg { width: .72rem; height: .72rem; }
   #toolbar { gap: .14rem; }
-  .tool-btn { width: 1.82rem; height: 1.82rem; }
-  .tool-btn svg { width: .88rem; height: .88rem; }
+  .tool-btn { width: 1.8rem; height: 1.8rem; }
+  .tool-btn svg { width: .86rem; height: .86rem; }
 
-  /* On narrow 402px portrait: stack City Header+Resources+Stacks ABOVE a spacious 2×2 Wonder Gallery (188px wide per Wonder!) */
-  .city-ledger { padding: .16rem .18rem; }
+  /* Narrow 402px Portrait: clean horizontal resource bar + Science/Archive strip above 2×2 Wonders */
+  .city-ledger { padding: .15rem .18rem; }
   .city-leaf {
-    padding: .2rem .26rem; gap: .2rem;
+    padding: .18rem .24rem; gap: .18rem;
     display: flex; flex-direction: column;
   }
-  .city-upper { flex: none; gap: .16rem; }
-  .seat-head { padding-bottom: .1rem; gap: .22rem; }
-  .seat-crest { width: 1.46rem; height: 1.46rem; font-size: .7rem; }
-  .seat-name-btn { font-size: .86rem; }
+  .city-upper { gap: .14rem; }
+  .seat-head { padding-bottom: .08rem; gap: .22rem; }
+  .seat-crest { width: 1.42rem; height: 1.42rem; font-size: .68rem; }
+  .seat-name-btn { font-size: .84rem; }
   .seat-sub-stats { font-size: .74rem; gap: .18rem; }
 
-  .seat-portrait-right {
-    flex: none;
-    display: grid; grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
-    gap: .14rem .22rem; align-items: center;
+  .city-dashboard { display: flex; flex-direction: column; gap: .14rem; }
+  .res-ledger {
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .12rem;
+    padding: .1rem .12rem;
   }
-  .res-strip { grid-column: 1 / -1; gap: .12rem; padding: .07rem .1rem; }
-  .res-pill { flex-direction: row; gap: .14rem; padding: .06rem .04rem; font-size: .7rem; }
-  .res-pill svg { width: .82rem; height: .82rem; }
-  .res-pill small.trade-coin { margin-top: 0; font-size: .56rem; }
-  .city-meta-row { min-height: 1.24rem; padding: .06rem .14rem; }
-  .sci-dots { gap: .14rem; }
-  .sci-socket, .sci-dot { width: 1.04rem; height: 1.04rem; font-size: .62rem; }
-  .mini-ptoken { width: 1.14rem; height: 1.14rem; }
-  .city-cards-btn { flex: none; min-height: 1.6rem; padding: .1rem .14rem; gap: .12rem; flex-direction: row; align-items: flex-end; }
-  .city-board-bar { display: none; }
-  .city-stacks-wrap { align-items: flex-end; gap: .12rem; }
-  .city-empty-sub { display: none; }
-  .city-empty-hint { font-size: .64rem; }
-  .mini-card-tab { height: .54rem; }
-  .mini-card-tab.is-front { min-height: 1.04rem; padding: .06rem .08rem; }
-  .mini-tab-name { display: none; }
-  .mini-card-tab svg { width: .76rem; height: .76rem; }
+  .res-row {
+    display: flex; flex-direction: row; align-items: center; justify-content: center; gap: .12rem;
+    padding: .08rem .06rem;
+  }
+  .res-row-ico svg { width: .96rem; height: .96rem; }
+  .res-row-prod { font-size: .78rem; }
+  .res-row-price { font-size: .58rem; padding: .04rem .14rem; gap: .04rem; }
+  .res-row-price svg { width: .62rem; height: .62rem; }
 
-  /* 2×2 Wide Wonders on iPhone Portrait: 188px wide -> Full Names + Clear Material Costs + Bold Reward Symbols! */
+  .city-side-panel {
+    flex-direction: row; align-items: center; justify-content: space-between; gap: .2rem;
+  }
+  .sci-panel { flex-direction: row; padding: .08rem .18rem; gap: .14rem; }
+  .sci-grid { display: flex; gap: .12rem; }
+  .sci-socket, .sci-dot { width: 1.08rem; height: 1.08rem; font-size: .64rem; }
+  .mini-ptoken { width: 1.18rem; height: 1.18rem; }
+  .city-chains-row { display: none; }
+  .city-archive-pill {
+    width: auto; margin-top: 0; flex-direction: row; gap: .22rem;
+    padding: .14rem .36rem;
+  }
+  .arch-title { font-size: .64rem; }
+  .arch-dot { min-width: .84rem; height: .84rem; font-size: .52rem; }
+
+  /* 2×2 Wonders on iPhone Portrait: clean horizontal cost left + horizontal effect right (0px clipping!) */
   .wonders-tray {
     width: 100%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: repeat(2, auto);
-    gap: .18rem;
+    gap: .16rem;
   }
-  .wonder-mini { aspect-ratio: auto; min-height: 5.2rem; height: 5.35rem; }
-  .wonder-mini-overlay { padding: .14rem .2rem .16rem; }
+  .wonder-mini { min-height: 5.2rem; height: 5.45rem; }
+  .wonder-mini-top { padding: .12rem .18rem .06rem; }
   .wonder-mini-name { font-size: 10.5px; }
-  .wonder-mini-status { font-size: 9px; padding: .05rem .2rem; }
+  .wonder-mini-status { font-size: 9px; padding: .04rem .18rem; }
   .wonder-mini-status svg { width: 9.5px; height: 9.5px; }
-  .wonder-mini-bottom { gap: .12rem; }
+  .wonder-mini-body { gap: .12rem; padding: 0 .18rem .14rem; }
   .wonder-mini-cost {
-    margin-left: -.2rem; padding: .06rem .22rem .06rem .16rem;
+    margin-left: -.18rem; padding: .06rem .2rem .06rem .14rem;
     gap: .12rem; font-size: 9.5px;
   }
-  .wonder-mini-cost svg { width: 11.5px; height: 11.5px; }
-  .wonder-mini-eff { font-size: 11px; gap: .1rem; }
-  .wonder-mini-eff .eff-tag { padding: .08rem .2rem; border-width: 1.3px; }
-  .wonder-mini-eff svg { width: 13.5px; height: 13.5px; }
+  .wonder-mini-cost svg { width: 11px; height: 11px; }
+  .wonder-mini-eff { gap: .1rem; font-size: 10.5px; }
+  .wonder-mini-eff .eff-tag { padding: .07rem .18rem; }
+  .wonder-mini-eff svg { width: 12.5px; height: 12.5px; }
+  .wonder-mini-eff.is-eff-4 { gap: .07rem; font-size: 9px; }
+  .wonder-mini-eff.is-eff-4 .eff-tag { padding: .06rem .13rem; }
+  .wonder-mini-eff.is-eff-4 svg { width: 10.5px; height: 10.5px; }
 
-  /* Pyramid Uses Full Mobile Width — BIG, CRISP CARDS! */
   .pyramid-canvas {
     --cw: min(calc(98.5cqw / 6.3), calc(96cqh / 2.92 * var(--card-ratio)));
     --step-x: calc(var(--cw) * 0.53);
@@ -1979,7 +1997,6 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .dcard-head { min-height: 1.2rem; }
   .dcard-name { font-size: clamp(7.5px, 12.2cqi, 12px); padding: .1rem .1rem .11rem; }
 
-  /* Wonder Draft on iPhone Portrait */
   .draft-grid { gap: .4rem; padding: .12rem 0; }
   .draft-top-bar strong { font-size: .88rem; }
   .draft-cost-col { top: 1.8rem; gap: .12rem; padding: .16rem .24rem; }
@@ -1988,9 +2005,8 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .draft-reward-bar .eff-tag { padding: .12rem .28rem; font-size: .76rem; }
   .draft-reward-bar .eff-tag svg { width: .96rem; height: .96rem; }
 
-  /* Action Dock: Strictly Locked 2-Row Height on iPhone Portrait -> ZERO Pyramid Jump! */
   #action-dock {
-    --dock-h: 4.35rem;
+    --dock-h: 4.3rem;
     padding: .2rem .34rem; gap: .16rem .26rem;
     flex-direction: column; align-items: stretch; justify-content: center;
   }
@@ -1998,7 +2014,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .dock-info-btn { width: 100%; margin-right: 0; padding: .05rem .18rem .05rem .08rem; }
   .dock-swatch { height: 1.3rem; }
   .dock-actions { width: 100%; display: grid; grid-template-columns: 1.35fr 1fr .95fr auto; gap: .24rem; }
-  .act-btn { min-height: 1.98rem; padding: .18rem .3rem; font-size: .74rem; }
+  .act-btn { min-height: 1.96rem; padding: .18rem .3rem; font-size: .74rem; }
 }
 
 /* ==========================================================================
@@ -2010,31 +2026,31 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     font-size: clamp(8px, min(1.06vw, 2.2vh), 11px);
   }
   #playfield {
-    padding: .24rem .4rem .26rem;
-    grid-template-columns: minmax(14.5rem, 1.36fr) minmax(0, 2.38fr) minmax(14.5rem, 1.36fr);
+    padding: .22rem .38rem .24rem;
+    grid-template-columns: minmax(14.8rem, 1.4fr) minmax(0, 2.3fr) minmax(14.8rem, 1.4fr);
     grid-template-rows: auto minmax(0, 1fr) auto;
     grid-template-areas:
       "crown crown crown"
       "seat0 arena seat1"
       "seat0 dock  seat1";
-    gap: .2rem .36rem;
+    gap: .18rem .34rem;
   }
 
   #table-crown {
-    grid-template-columns: minmax(8.8rem, 1fr) minmax(0, 4.5fr) minmax(8.8rem, 1fr);
-    gap: .36rem;
+    grid-template-columns: minmax(9.2rem, 1fr) minmax(0, 4.4fr) minmax(9.2rem, 1fr);
+    gap: .34rem;
   }
-  #status-ribbon { padding: .22rem .44rem; gap: .16rem; font-size: .72rem; }
-  #status-ribbon .age-pill { font-size: .62rem; padding: .06rem .34rem; }
+  #status-ribbon { padding: .2rem .42rem; gap: .14rem; font-size: .72rem; }
+  #status-ribbon .age-pill { font-size: .62rem; padding: .05rem .32rem; }
   .wpip { width: .34rem; height: .34rem; }
   .wonder-pips svg { width: .76rem; height: .76rem; }
-  #toolbar { gap: .18rem; }
-  .tool-btn { width: 1.8rem; height: 1.8rem; }
-  .tool-btn svg { width: .88rem; height: .88rem; }
+  #toolbar { gap: .16rem; }
+  .tool-btn { width: 1.76rem; height: 1.76rem; }
+  .tool-btn svg { width: .86rem; height: .86rem; }
 
-  #conflict-zone { padding: .18rem .46rem .22rem; gap: .18rem; }
+  #conflict-zone { padding: .18rem .44rem .22rem; gap: .18rem; }
   .progress-bar { min-height: 3.1rem; gap: .82rem; padding-bottom: .34rem; }
-  .ptoken, .ptoken-empty { width: 2.86rem; height: 2.86rem; }
+  .ptoken, .ptoken-empty { width: 2.84rem; height: 2.84rem; }
   .ptoken > svg { width: 1.24rem; height: 1.24rem; margin-top: -.44rem; }
   .ptoken-cue { font-size: 7.5px; padding: .02rem .2rem; bottom: -.46rem; }
   .ptoken-cue svg { width: 8px; height: 8px; }
@@ -2049,36 +2065,38 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .mil-cell { height: .74rem; }
   .mil-pawn { width: 1.68rem; height: 1.98rem; }
 
-  .city-ledger { padding: .16rem .18rem; }
-  .city-leaf { padding: .22rem .26rem; gap: .2rem; }
-  .city-upper { gap: .16rem; }
-  .seat-head { padding-bottom: .1rem; gap: .22rem; }
-  .seat-crest { width: 1.44rem; height: 1.44rem; font-size: .68rem; }
+  .city-ledger { padding: .15rem .18rem; }
+  .city-leaf { padding: .2rem .24rem; gap: .18rem; }
+  .city-upper { gap: .14rem; }
+  .seat-head { padding-bottom: .1rem; gap: .2rem; }
+  .seat-crest { width: 1.4rem; height: 1.4rem; font-size: .68rem; }
   .seat-name-btn { font-size: .84rem; }
-  .seat-sub-stats { font-size: .72rem; gap: .2rem; }
+  .seat-sub-stats { font-size: .72rem; gap: .18rem; }
   .stat-chip { padding: .06rem .26rem; }
   .stat-chip svg { width: .78rem; height: .78rem; }
-  .res-strip { padding: .07rem .09rem; gap: .08rem; }
-  .res-pill { padding: .04rem .02rem; font-size: .7rem; }
-  .res-pill svg { width: .76rem; height: .76rem; }
-  .res-pill small.trade-coin { font-size: .52rem; margin-top: .04rem; }
-  .city-meta-row { min-height: 1.15rem; padding: .06rem .14rem; }
-  .sci-socket, .sci-dot { width: 1.02rem; height: 1.02rem; font-size: .6rem; }
-  .mini-ptoken { width: 1.12rem; height: 1.12rem; }
-  .city-cards-btn { min-height: 2.3rem; padding: .14rem .16rem; gap: .12rem; }
-  .city-board-bar { font-size: .56rem; padding-bottom: .08rem; }
-  .city-chain-pip { width: .88rem; height: .88rem; }
-  .city-chain-pip svg { width: .54rem; height: .54rem; }
-  .city-stacks-wrap { gap: .14rem; }
-  .city-empty-sub { display: none; }
-  .city-empty-hint { font-size: .68rem; }
-  .mini-card-tab { height: .72rem; }
-  .mini-card-tab.is-front { min-height: 1.48rem; padding: .08rem .06rem; }
-  .mini-tab-name { display: none; }
-  .mini-card-tab svg { width: .76rem; height: .76rem; }
+
+  .city-dashboard { gap: .2rem; }
+  .res-ledger { padding: .12rem .14rem; gap: .08rem; }
+  .res-row { padding: .06rem .18rem; gap: .16rem; }
+  .res-row-ico svg { width: 1.08rem; height: 1.08rem; }
+  .res-row-prod { font-size: .82rem; }
+  .res-row-price { font-size: .64rem; padding: .05rem .18rem; }
+  .res-row-price svg { width: .68rem; height: .68rem; }
+
+  .city-side-panel { gap: .14rem; }
+  .sci-panel { padding: .14rem .12rem; }
+  .sci-grid { gap: .12rem; }
+  .sci-socket, .sci-dot { width: 1.18rem; height: 1.18rem; font-size: .7rem; }
+  .mini-ptoken { width: 1.22rem; height: 1.22rem; }
+  .city-chain-pip { width: .94rem; height: .94rem; }
+  .city-archive-pill { padding: .16rem .16rem; gap: .1rem; }
+  .arch-title { font-size: .62rem; }
+  .arch-dot { min-width: .8rem; height: .8rem; font-size: .5rem; }
 
   .wonders-tray { gap: .18rem; }
-  .wonder-mini { aspect-ratio: 1.62 / 1; min-height: 0; }
+  .wonder-mini-cost { gap: 1.4cqi; padding: 2.2cqi 3.6cqi 2.2cqi 2.4cqi; }
+  .wonder-mini-eff { gap: 1.4cqi; }
+  .wonder-mini-eff.is-eff-4 { gap: .9cqi; }
 
   .dcard-head { min-height: 1.08rem; }
   .dcard-name { padding: .08rem .1rem .09rem; }
@@ -5609,7 +5627,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   function renderWonderEffectIcons(w) {
     const bits = [];
     if (w.wild) {
-      bits.push(`<span class="eff-tag">${w.wild.map(r => Icons.resource(r)).join('<i class="w-slash">/</i>')}</span>`);
+      bits.push(`<span class="eff-tag ${w.wild.length >= 3 ? 'is-wild3' : ''}">${w.wild.map(r => Icons.resource(r)).join('<i class="w-slash">/</i>')}</span>`);
     }
     if (w.destroyColor) {
       bits.push(`<span class="eff-tag is-destroy">${Icons.destroyCard(w.destroyColor)}</span>`);
@@ -6207,9 +6225,10 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       const hasWild = wilds.some(w => w.includes(r));
       const hasProd = prod[r] > 0 || hasWild;
       return `
-        <div class="res-pill ${hasDisc ? 'has-disc' : (hasProd ? 'has-prod' : 'is-zero')}">
-          <div class="res-pill-top">${Icons.resource(r)}<span>${prod[r]}${hasWild ? '+' : ''}</span></div>
-          <small class="trade-coin">${Icons.ui('coin')}${prices[r]}</small>
+        <div class="res-row ${hasDisc ? 'has-disc' : (hasProd ? 'has-prod' : 'is-zero')}">
+          <span class="res-row-ico">${Icons.resource(r)}</span>
+          <span class="res-row-prod">${prod[r]}${hasWild ? '+' : ''}</span>
+          <span class="res-row-price">${Icons.ui('coin')}<b>${prices[r]}</b></span>
         </div>
       `;
     }).join('');
@@ -6225,7 +6244,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
         sciSockets.push(`<span class="sci-socket" aria-hidden="true"></span>`);
       }
     }
-    const sciHtml = sciSockets.join('') + (sciThreat ? `<span class="sci-threat-tag">${sciEntries.length}/6</span>` : '');
+    const sciHtml = sciSockets.join('');
 
     const tokensHtml = p.tokens.map(tid =>
       `<button type="button" class="mini-ptoken" data-seat-token="${tid}" aria-label="${Dialogs.esc(Data.TOKEN_BY_ID[tid].name)}">${Icons.token(tid)}</button>`
@@ -6233,38 +6252,14 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 
     const ownedChainsArr = [...Engine.getOwnedChains(p)];
     const chainPipsHtml = ownedChainsArr.length
-      ? `<span class="city-chains-row">${ownedChainsArr.slice(0, 6).map(c => `<span class="city-chain-pip">${Icons.chain(c)}</span>`).join('')}</span>`
+      ? `<div class="city-chains-row">${ownedChainsArr.slice(0, 5).map(c => `<span class="city-chain-pip">${Icons.chain(c)}</span>`).join('')}</div>`
       : '';
 
-    const colorsOrder = ['brown', 'gray', 'yellow', 'blue', 'green', 'red', 'purple'];
-    const miniStacksHtml = colorsOrder.map(col => {
-      const cardsOfCol = p.cards.map(id => Data.CARD_BY_ID[id]).filter(c => c && c.color === col);
-      if (!cardsOfCol.length) return '';
-      const visible = cardsOfCol.slice(-6);
-      const hiddenCount = cardsOfCol.length - visible.length;
-      const tabs = visible.map((c, idx) => {
-        let glyph = '';
-        if (c.produce) {
-          const rKey = Data.RESOURCES.find(r => c.produce[r]);
-          const amt = rKey ? c.produce[rKey] : 1;
-          glyph = rKey ? `${Icons.resource(rKey)}${amt > 1 ? `<b>${amt}</b>` : ''}` : '';
-        } else if (c.wild) glyph = Icons.resource(c.wild[0]);
-        else if (c.tradeDiscount) glyph = `${Icons.resource(c.tradeDiscount[0])}<b>1</b>`;
-        else if (c.science) glyph = Icons.science(c.science);
-        else if (c.shields) glyph = `${Icons.ui('shield')}<b>${c.shields}</b>`;
-        else if (c.vp) glyph = `${Icons.ui('vp')}<b>${c.vp}</b>`;
-        else if (c.coinsGain) glyph = `${Icons.ui('coin')}<b>${c.coinsGain}</b>`;
-        else glyph = Icons.ui('vp');
-        const isFront = idx === visible.length - 1;
-        const chainMark = c.chainOut ? `<i class="mini-chain-dot" aria-hidden="true"></i>` : '';
-        return `<span class="mini-card-tab ${isFront ? 'is-front' : ''}" data-c="${col}"><span class="mini-tab-glyph">${glyph}${chainMark}</span>${isFront ? `<em class="mini-tab-name">${Dialogs.esc(c.name)}</em>` : ''}</span>`;
-      }).join('');
-      return `<div class="mini-stack">${hiddenCount > 0 ? `<span class="mini-stack-more">+${hiddenCount}</span>` : ''}${tabs}</div>`;
-    }).filter(Boolean).join('');
-
-    const cityBoardInner = miniStacksHtml
-      ? `<div class="city-board-bar"><span>城邦建筑 · ${p.cards.length}</span>${chainPipsHtml}</div><div class="city-stacks-wrap">${miniStacksHtml}</div>`
-      : `<div class="city-board-bar"><span>城邦建筑 · 0</span></div><div class="city-empty-board"><span class="city-empty-hint">待兴建城邦</span><small class="city-empty-sub">点击查阅城邦档案</small></div>`;
+    const colorCountsHtml = ['brown', 'gray', 'yellow', 'blue', 'green', 'red', 'purple']
+      .map(col => {
+        const n = Engine.countColor(p, col);
+        return n > 0 ? `<span class="arch-dot col-swatch ${col}">${n}</span>` : '';
+      }).filter(Boolean).join('');
 
     const canBuildWonderWithSelected =
       state.phase === 'play' && isActive && !isAiTurn() && selectedSlot !== null && state.wondersBuiltTotal < 7;
@@ -6299,9 +6294,9 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
               <span class="wonder-mini-name">${Dialogs.esc(w.name)}</span>
               ${statusHtml}
             </div>
-            <div class="wonder-mini-bottom">
-              <span class="wonder-mini-cost">${wSlot.built ? '' : renderWonderCostIcons(w.cost)}</span>
-              <span class="wonder-mini-eff ${countWonderEffects(w) >= 4 ? 'is-eff-4' : ''}">${renderWonderEffectIcons(w)}</span>
+            <div class="wonder-mini-body">
+              <div class="wonder-mini-cost">${wSlot.built ? '' : renderWonderCostIcons(w.cost)}</div>
+              <div class="wonder-mini-eff ${countWonderEffects(w) >= 4 ? 'is-eff-4' : ''}">${renderWonderEffectIcons(w)}</div>
             </div>
           </div>
         </button>
@@ -6325,15 +6320,20 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
                 </div>
               </div>
             </div>
-            <div class="seat-portrait-right">
-              <div class="res-strip">${resHtml}</div>
-              <div class="city-meta-row">
-                <div class="sci-dots ${sciThreat ? 'is-threat' : ''}" aria-label="科技符号 ${sciEntries.length}/6">${sciHtml}</div>
-                <div class="owned-tokens">${tokensHtml}</div>
+            <div class="city-dashboard">
+              <div class="res-ledger" aria-label="资源产出与贸易价">${resHtml}</div>
+              <div class="city-side-panel">
+                <div class="sci-panel ${sciThreat ? 'is-threat' : ''}" aria-label="科技符号 ${sciEntries.length}/6">
+                  <div class="sci-grid">${sciHtml}</div>
+                  ${sciThreat ? `<span class="sci-threat-tag">${sciEntries.length}/6</span>` : ''}
+                </div>
+                ${tokensHtml ? `<div class="owned-tokens">${tokensHtml}</div>` : ''}
+                ${chainPipsHtml}
+                <button type="button" class="city-archive-pill city-cards-btn" data-open-city="${seat}" aria-label="查阅城邦档案（${p.cards.length} 座建筑）">
+                  <span class="arch-title">城邦档案 <b>${p.cards.length}</b></span>
+                  ${colorCountsHtml ? `<span class="arch-dots">${colorCountsHtml}</span>` : ''}
+                </button>
               </div>
-              <button type="button" class="city-cards-btn" data-open-city="${seat}" aria-label="查看已建成的 ${p.cards.length} 座建筑">
-                ${cityBoardInner}
-              </button>
             </div>
           </div>
           <div class="wonders-tray">${wondersHtml}</div>
