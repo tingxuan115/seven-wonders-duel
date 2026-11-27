@@ -708,17 +708,12 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   width: clamp(10px, 12.6cqi, 19px); height: clamp(10px, 12.6cqi, 19px);
 }
 
-/* Tucked Age Card Corner under Constructed Wonders */
+/* A glimpse of the foundation card remains visible on completed wonders. */
 .wonder-tucked-slip {
-  position: absolute; left: -.06rem; bottom: -.06rem; z-index: 2;
-  padding: .05rem .26rem .04rem .2rem;
-  border-radius: 0 .26rem 0 0; border-top: 1px solid #f3dc9f; border-right: 1px solid #f3dc9f;
-  font: 700 .52rem/1 var(--inscription); color: #f8e5b2; letter-spacing: .04em;
-
+  position: absolute; left: 0; bottom: 0; z-index: 2;
+  width: 1rem; height: .65rem; border: 1px solid #473d34;
+  background: var(--back-tone,#b8a883) var(--back-art,none) 50% 75% / 180% auto no-repeat;
 }
-.wonder-tucked-slip[data-age="1"] { background: #6b411c; }
-.wonder-tucked-slip[data-age="2"] { background: #22465e; }
-.wonder-tucked-slip[data-age="3"] { background: #522345; }
 
 /* ---- Center Arena (Pure Hero Pyramid — Status & Tools Live Cleanly in the Royal Crown!) ---- */
 #arena-zone {
@@ -954,31 +949,18 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 }
 
 /* Embossed Linen-Finish Age Card Backs (Official Bronze / Cerulean / Amethyst) */
+/* Based on the single-ink architectural subjects shown on page 7 of the rulebook. */
+[data-back="age1"] { --back-tone: #b95127; --back-art: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDAgMjE2Ij4NCiAgPHBhdGggZmlsbD0iI2I5NTEyNyIgZD0iTTAgMGgxNDB2MjE2SDB6Ii8+DQogIDxwYXRoIGZpbGw9IiM5YjQ3MmMiIGQ9Ik0wIDE5MWgxNDB2MjVIMHoiLz4NCiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMjQpIj4NCiAgICA8cGF0aCBmaWxsPSIjYzg2NTM2IiBkPSJNMCAxNDFxMjMtMTggNDYtMTV0NDctMTRxMjQtMTIgNDctMTB2MTE0SDB6Ii8+DQogICAgPHBhdGggZmlsbD0iI2E4NGIyOCIgZD0iTTAgMTY5cTIwLTEzIDQ4LTEzdDU4LTE5cTE3LTcgMzQtNXY4NEgweiIvPg0KICAgIDxwYXRoIGZpbGw9IiM5NzQwMjgiIGQ9Ik0xMyAxNThxLTYtNiAzLTMzIDcgMjMgMiAzM3Y2aC01em0xMS0zcS00LTUgMy0yNCA1IDE4IDIgMjR2NWgtNXoiLz4NCiAgICA8cGF0aCBmaWxsPSIjOTA0MzJhIiBkPSJNNDggMTAyaDc1djU1SDQ4eiIvPg0KICAgIDxwYXRoIGZpbGw9IiNkODg1NTIiIGQ9Ik00OCAxMDZoOGwtMSA0MmgtNnptMjAgMGg4bC0xIDQyaC02em0yMiAwaDhsLTEgNDJoLTZ6bTIzIDBoOGwtMSA0MmgtNnoiLz4NCiAgICA8cGF0aCBmaWxsPSIjY2M3MzQ0IiBkPSJNNDIgOTdxMjAtOCA0My0zOCAxOCAyNCA0NiAzOC0zOSA4LTg5IDB6Ii8+DQogICAgPHBhdGggZmlsbD0iIzlkNDUyNyIgZD0iTTgzIDYxcS01IDE3LTIxIDM1IDEzLTEwIDI1LTI5bC0yLTh6bTMgMnExMSAyMSAyNCAzMy0xMC00LTIwLTIzeiIvPg0KICAgIDxwYXRoIGZpbGw9IiNlMTk0NWQiIGQ9Ik00MSA5N3E0MyA2IDkxIDB2NnEtNDMgNy05MCAweiIvPg0KICAgIDxwYXRoIGZpbGw9IiNjOTc2NDgiIGQ9Ik00NSAxNDdxNDAgNSA4Mi0xdjhxLTQzIDYtODIgMHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjZTE5NjYwIiBkPSJNNDIgMTU0aDg2bDUgNUgzOHptLTkgOGg5OWw1IDVIMjd6Ii8+DQogICAgPHBhdGggZmlsbD0iIzliNDcyYyIgZD0iTTAgMTg4cTQ0LTE2IDc0LTEwdDY2LTV2NDNIMHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjY2E3NDQ5IiBkPSJNMCAxOTVxMzctNyA2Mi01LTMwIDQtNDUgMTFIMHoiLz4NCiAgPC9nPg0KPC9zdmc+DQo="); }
+[data-back="age2"] { --back-tone: #0792d1; --back-art: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDAgMjE2Ij4NCiAgPHBhdGggZmlsbD0iIzA3OTJkMSIgZD0iTTAgMGgxNDB2MjE2SDB6Ii8+DQogIDxwYXRoIGZpbGw9IiMyOTg3YjUiIGQ9Ik0wIDIwMGgxNDB2MTZIMHoiLz4NCiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMTUpIj4NCiAgICA8cGF0aCBmaWxsPSIjMzRhM2QyIiBkPSJNMCAxMzBxMjctMjkgNTQtMTd0NDktMXEyMi0xMiAzNy03djExMUgweiIvPg0KICAgIDxwYXRoIGZpbGw9IiMyOTg3YjUiIGQ9Ik0wIDE0OXEyMy03IDUyIDQgMjggOSA1Mi0xdDM2LTh2NzJIMHoiLz4NCiAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxIC4xOSAwIDEgLTkgMCkiPg0KICAgICAgPHBhdGggZmlsbD0iIzE5NzdhNSIgZD0iTTAgNTNoMTYwdjQ1SDB6Ii8+DQogICAgICA8cGF0aCBmaWxsPSIjNDliMmRiIiBkPSJNMCA1NGgxNjB2MzZoLThWNzZxLTEtMTItOS0xMnQtOSAxMnYxNGgtN1Y3NXEwLTEyLTktMTJ0LTkgMTJ2MTVoLTdWNzVxMC0xMi05LTEydC05IDEydjE1aC03Vjc1cTAtMTItOS0xMlQ1OSA3NXYxNWgtN1Y3NXEwLTEyLTktMTJ0LTkgMTJ2MTVoLTdWNzRxMC0xMi05LTEyVDkgNzR2MTZIMHoiLz4NCiAgICAgIDxwYXRoIGZpbGw9IiMwOThlYzAiIGQ9Ik05IDc0cTAtMTIgOS0xMnQ5IDEydjE2SDl6bTI1IDFxMC0xMiA5LTEydDkgMTJ2MTVIMzR6bTI1IDBxMC0xMiA5LTEydDkgMTJ2MTVINTl6bTI1IDBxMC0xMiA5LTEydDkgMTJ2MTVIODR6bTI1IDBxMC0xMiA5LTEydDkgMTJ2MTVoLTE4em0yNSAxcTAtMTIgOS0xMnQ5IDEydjE0aC0xOHoiLz4NCiAgICAgIDxwYXRoIGZpbGw9IiMyZmEwY2EiIGQ9Ik0wIDk2aDE2MHY2MWgtMTF2LTI3cTAtMjMtMTYtMjN0LTE2IDIzdjI3aC0xMHYtMjlxMC0yMi0xNi0yMnQtMTYgMjJ2MjlINjR2LTMxcTAtMjItMTYtMjJ0LTE2IDIydjMxSDIwdi0zM3EwLTIxLTE1LTIxbC01IDF6Ii8+DQogICAgICA8cGF0aCBmaWxsPSIjNWRiOWRhIiBkPSJNMCA1MGgxNjB2NUgwem0wIDQwaDE2MHY2SDB6Ii8+DQogICAgPC9nPg0KICAgIDxwYXRoIGZpbGw9IiMyMDZlOWIiIGQ9Ik0wIDE2OXEyMyAxIDU2IDE1bDI0IDdxLTI0IDAtNDctNHQtMzMtMXoiLz4NCiAgICA8cGF0aCBmaWxsPSIjNThiNmQ2IiBkPSJNMCAxODhxMzMtNSA2MCAyIDI1IDYgODAgM3Y2cS01MCA1LTg4LTMtMjItNS01Mi0yeiIvPg0KICA8L2c+DQo8L3N2Zz4NCg=="); }
+[data-back="age3"] { --back-tone: #b486c7; --back-art: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDAgMjE2Ij4NCiAgPHBhdGggZmlsbD0iI2I0ODZjNyIgZD0iTTAgMGgxNDB2MjE2SDB6Ii8+DQogIDxwYXRoIGZpbGw9IiNhMjdiYjMiIGQ9Ik0wIDE5OGgxNDB2MThIMHoiLz4NCiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMTcpIj4NCiAgICA8cGF0aCBmaWxsPSIjYzM5YWQwIiBkPSJNMCAxMjRxMjgtMTMgNDQtMTF0NDYtOHEyMy0xMCA1MC03djExOEgweiIvPg0KICAgIDxwYXRoIGZpbGw9IiM5Zjc1YjEiIGQ9Im00MCA5MSA1OSA1IDMwLTd2NzVsLTMxIDgtNTgtOHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjY2JhYmQ2IiBkPSJtMjkgOTEgMzktNDggNDMgNDgtNyA1LTcwLTF6Ii8+DQogICAgPHBhdGggZmlsbD0iIzlkNzFhZSIgZD0ibTM5IDg3IDI5LTM0IDMyIDM0eiIvPg0KICAgIDxwYXRoIGZpbGw9IiNhMjc5YjYiIGQ9Im02OCA0MyAyOCA0IDM5IDM4LTI0IDZ6Ii8+DQogICAgPHBhdGggZmlsbD0iI2QyYjVkYSIgZD0iTTI5IDkyaDgxdjdIMzF6Ii8+DQogICAgPHBhdGggZmlsbD0iIzg2NjE5NyIgZD0iTTM0IDk5aDcwdjU3SDM0eiIvPg0KICAgIDxwYXRoIGZpbGw9IiNjOWEzZDMiIGQ9Ik0zNCAxMDFoMTBsLTEgNTNoLTh6bTIwIDBoMTBsLTEgNTNoLTh6bTIwIDBoMTBsLTEgNTNoLTh6bTIwIDBoMTBsLTEgNTNoLTh6Ii8+DQogICAgPHBhdGggZmlsbD0iI2IwOGJjMiIgZD0ibTExMSA5OSA2LTJ2NTVsLTYgMnptMTItNCA1LTF2NTVsLTUgMnoiLz4NCiAgICA8cGF0aCBmaWxsPSIjZDNiNWRhIiBkPSJNMzEgMTU1aDc1bDI0LTd2NmwtMjMgN0gyOXptLTUgOWg4M2wyMi02djVsLTIxIDdIMjN6Ii8+DQogICAgPHBhdGggZmlsbD0iI2EyN2JiMyIgZD0iTTAgMTc4cTM5LTExIDc1LTR0NjUgMHY0MkgweiIvPg0KICAgIDxwYXRoIGZpbGw9IiM5ODcxYTkiIGQ9Ik05IDE0NmgxNXEwIDctNiA5djExaDN2M0gxMXYtM2gzdi0xMXEtNS0yLTUtOXoiLz4NCiAgPC9nPg0KPC9zdmc+DQo="); }
+[data-back="guild"] { --back-tone: #7160b3; --back-art: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDAgMjE2Ij4NCiAgPHBhdGggZmlsbD0iIzcxNjBiMyIgZD0iTTAgMGgxNDB2MjE2SDB6Ii8+DQogIDxwYXRoIGZpbGw9IiM2MDUyOGYiIGQ9Ik0wIDE5OGgxNDB2MThIMHoiLz4NCiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtMTcpIj4NCiAgICA8cGF0aCBmaWxsPSIjODM3NGJlIiBkPSJNMCAxMzdxMjgtMTQgNDQtMTEgMjYgMyA0OC0xMCAzMC0xNSA0OC0xM3YxMTNIMHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjNjk1YWEwIiBkPSJNMCAxNjZxMjktNSA2NC0xIDMwIDQgNzYtNXY1NkgweiIvPg0KICAgIDxwYXRoIGZpbGw9IiM4MDZmYjQiIGQ9Ik0xOCA4NiA2NiA3N2w1MSAxNXY3MGwtOTkgM3oiLz4NCiAgICA8cGF0aCBmaWxsPSIjNWE0OThiIiBkPSJtMTcgODkgNDktMjEgNTQgMjItMyA3LTQ5LTEyLTQ5IDExeiIvPg0KICAgIDxwYXRoIGZpbGw9IiM5OTg5YzUiIGQ9Ik0xMiA2OWgyNHY5M0gxMnptOTEgMTBoMjJ2ODJoLTIyeiIvPg0KICAgIDxwYXRoIGZpbGw9IiM2NTUyOWIiIGQ9Im04IDY5IDE3LTE5IDE1IDE5LTIgNEgxMHptOTIgMTAgMTQtMTggMTQgMTctMiA1aC0yNHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjNTY0NDgzIiBkPSJNMTkgNzdxNS01IDEwIDB2MTJIMTl6bTg5IDEwcTUtNSAxMCAwdjEwaC0xMHpNNDUgOTlxNC00IDggMHYxMGgtOHptMTQtM3E0LTQgOCAwdjEwaC04em0xNSAwcTQtNCA4IDB2MTBoLTh6bTE0IDRxNC00IDggMHYxMGgtOHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjOWE4OWM0IiBkPSJNMzkgMTYydi0yN3EwLTE4IDIwLTIzIDIwIDUgMjAgMjN2Mjd6bTQ3IDB2LTI0cTAtMTAgOC0xMyA4IDMgOCAxM3YyNHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjNTg0OTg4IiBkPSJNNDUgMTYxdi0yNXEwLTE0IDE0LTE4IDE0IDQgMTQgMTh2MjV6bTQ1IDB2LTIxcTAtOCA0LTEwIDUgMiA1IDEwdjIxeiIvPg0KICAgIDxwYXRoIGZpbGw9IiM5MDgwYmIiIGQ9Ik05IDE2M2gxMTdsNSA2SDZ6bTEwIDEyaDk5bDYgNUgxNHoiLz4NCiAgICA8cGF0aCBmaWxsPSIjNjA1MjhmIiBkPSJNMCAxOThxMzktMTIgNzQtNnQ2Ni0ydjI2SDB6Ii8+DQogIDwvZz4NCjwvc3ZnPg0K"); }
 .dcard-back {
-  width: 100%; height: 100%; border-radius: .36rem; overflow: hidden;
-  padding: clamp(2px, .2rem, 3px);
-  background: #dbccaa;
-
-  display: flex;
+  width: 100%; height: 100%; border-radius: .34rem;
+  border: clamp(1px,.16rem,2.5px) solid #29282b;
+  background: var(--back-tone) var(--back-art) center / cover no-repeat;
   box-shadow: var(--paper-edge);
 }
-.dcard-back-inner {
-  flex: 1; border-radius: .24rem; position: relative;
-  display: grid; place-items: center; overflow: hidden;
-  border: 1px solid #f4dc9d88;
-}
-.dcard-back[data-age="1"] .dcard-back-inner { background: #806342; }
-.dcard-back[data-age="2"] .dcard-back-inner { background: #446071; }
-.dcard-back[data-age="3"] .dcard-back-inner { background: #77556c; }
-.dcard-back-inner::before {
-  content: ""; position: absolute; inset: 7%; border-radius: .2rem;
-  border: 1px solid #f3da9877;
-}
-.dcard-back span {
-  position: relative; z-index: 1;
-  font: 700 clamp(17px, 35cqi, 34px)/1 var(--inscription); color: #f8e5ae;
-   letter-spacing: .08em;
-}
+.pcard.is-facedown { filter: none; }
 
 /* 3D Flip Reveal Animation */
 .pcard.just-revealed { perspective: 700px; }
@@ -2502,7 +2484,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .wonder-mini.is-built { outline-color: #775b29; border-color: #d9c387; }
   .wonder-mini.is-built .wonder-mini-overlay { background: linear-gradient(180deg,#16372ce8,transparent 66%); }
   .wonder-mini-status.is-done { border-radius: 0; width: 1.6rem; height: 1.6rem; justify-content: center; color: #fff2ca; border: 0; background: none;  }
-  .wonder-tucked-slip { left: auto; right: .28rem; bottom: .55rem; padding: .05rem .4rem; font-size: .68rem; border: 1px solid #c9af78; border-radius: 1px; }
+  .wonder-tucked-slip { left: auto; right: .28rem; bottom: .55rem; border-radius: 1px; }
   .wonder-mini.is-disabled { opacity: .52; pointer-events: auto; }
   #surface[data-picking="true"] .seat.is-active .wonder-mini.is-buildable { z-index: 2; transform: translateY(-2px);
     outline: 2px solid var(--ochre-edge);
@@ -2728,6 +2710,72 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .turn-ribbon { display: none; }
   .dock-last-move { max-width: 100%; }
 }
+
+/* The physical wonder card is 100 mm wide by 65 mm high. Only its exposed
+   strip changes in a stack. Hit targets follow the exposed part of each card. */
+:root { --wonder-aspect: 100 / 65; }
+.wonders-tray { container-type: size; }
+.wonders-tray > .wonder-mini {
+  place-self: center;
+  width: min(100%, calc((100cqh - .4rem) * .5 * 100 / 65));
+  height: auto; min-height: 0; aspect-ratio: var(--wonder-aspect);
+}
+.wonder-face {
+  position: relative; display: block; width: 100%; height: 100%;
+  overflow: hidden; border-radius: inherit; pointer-events: none;
+}
+.draft-card-wrap {
+  container-type: size; display: grid; align-items: center; justify-items: center;
+}
+.draft-card-wrap:nth-child(odd) { justify-items: end; }
+.draft-card-wrap:nth-child(even) { justify-items: start; }
+.draft-card-wrap:nth-child(-n+2) { align-items: end; }
+.draft-card-wrap:nth-child(n+3) { align-items: start; }
+.draft-card {
+  flex: none; width: min(100%, calc(100cqh * 100 / 65));
+  height: auto; min-height: 0; aspect-ratio: var(--wonder-aspect);
+}
+.draft-grid { align-content: center; }
+.wonder-detail-art, .wonder-spread .wonder-detail-art, .ceremony-wonder-frame {
+  aspect-ratio: var(--wonder-aspect);
+}
+@media (orientation: portrait) {
+  .wonders-tray > .wonder-mini:nth-child(odd) { justify-self: end; }
+  .wonders-tray > .wonder-mini:nth-child(even) { justify-self: start; }
+}
+@media (orientation: portrait) and (max-aspect-ratio: 3/5) {
+  .wonders-tray { height: 11.1rem; grid-template-rows: repeat(2,minmax(0,1fr)); }
+}
+@media (orientation: landscape) and (min-aspect-ratio: 6/5) and (max-aspect-ratio: 17/10) {
+  .wonders-tray {
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0;
+    --hand-width: min(100cqw,69cqh);
+  }
+  .wonders-tray > .wonder-mini,
+  .wonders-tray > .wonder-mini:nth-child(-n+3) {
+    flex: none; align-self: center; width: var(--hand-width); min-height: 0;
+    height: calc(var(--hand-width) * .265); aspect-ratio: auto;
+    overflow: visible; border: 0; outline: 0; background: transparent; box-shadow: none;
+  }
+  .wonders-tray > .wonder-mini:last-child { height: calc(var(--hand-width) * .65); }
+  .wonders-tray .wonder-face {
+    position: absolute; top: 0; left: 0; width: 100%; height: auto;
+    aspect-ratio: var(--wonder-aspect); isolation: isolate;
+    border: 1px solid #ad9b7a; border-radius: .22rem; background: #eaddc1; box-shadow: var(--paper-edge);
+  }
+  .wonders-tray .is-built .wonder-face { border-color: #72866b; }
+  .wonders-tray .is-buildable .wonder-face { border-color: var(--ochre-edge); }
+  #surface[data-picking="true"] .seat.is-active .wonder-mini.is-buildable {
+    z-index: auto; outline: 0; box-shadow: none;
+  }
+  #surface[data-picking="true"] .wonder-mini.is-buildable .wonder-face { border: 2px solid var(--ochre-edge); }
+  .wonders-tray .wonder-mini:focus-visible .wonder-face { outline: 2px solid var(--ink-green); outline-offset: -2px; }
+  .sci-panel { grid-template-columns: auto minmax(0,1fr); align-items: center; column-gap: .35rem; min-height: 24px; }
+  .sci-grid { display: flex; justify-content: flex-end; gap: .18rem; }
+  .sci-dot { flex: 0 1 auto; min-width: 0; }
+  .sci-socket { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -3156,7 +3204,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       name,
       coins: 7,
       cards: [],          // array of card IDs
-      wonders: [],        // array of { id, built: boolean, underCardAge: number|null, disabled: boolean }
+      wonders: [],        // Draft slots stay stable. A completed wonder also records its build turn.
       tokens: [],         // array of progress token IDs
     };
   }
@@ -4020,6 +4068,8 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       node.taken = true;
       wSlot.built = true;
       wSlot.underCardAge = state.age;
+      wSlot.underCardIsGuild = card.color === 'purple';
+      wSlot.builtOnTurn = state.turnCount + 1;
       state.wondersBuiltTotal++;
       player.coins -= pay.totalCoins;
       let economyGain = 0;
@@ -6214,7 +6264,17 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       const raw = localStorage.getItem(SAVE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed && parsed.version === 1 && Array.isArray(parsed.players)) return parsed;
+        if (parsed && parsed.version === 1 && Array.isArray(parsed.players)) {
+          for (const player of parsed.players) {
+            for (const wonder of player.wonders || []) {
+              if (!wonder.built || Number.isFinite(wonder.builtOnTurn)) continue;
+              const name = Data.WONDER_BY_ID[wonder.id]?.name;
+              const entry = parsed.log?.find(item => item.text?.includes(` 建成奇迹【${name}】`));
+              if (entry && Number.isFinite(entry.t)) wonder.builtOnTurn = entry.t;
+            }
+          }
+          return parsed;
+        }
       }
     } catch (_) {}
     return null;
@@ -6246,6 +6306,14 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 
   function wonderArtUrl(wonderId) {
     return Art.wonders?.[wonderId] || '';
+  }
+
+  function cardBackType(age, isGuild) {
+    return isGuild ? 'guild' : `age${age}`;
+  }
+
+  function renderCardBack(type) {
+    return `<div class="dcard-back" data-back="${type}" aria-hidden="true"></div>`;
   }
 
   function isAiTurn() {
@@ -6540,7 +6608,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
         flightSource = {
           rect: slotBtn.getBoundingClientRect(),
           cardHtml: action.type === 'build_wonder'
-            ? `<div class="dcard-back" data-age="${prevState.age}"><div class="dcard-back-inner"><span>${['', 'I', 'II', 'III'][prevState.age]}</span></div></div>`
+            ? renderCardBack(cardBackType(prevState.age, Data.CARD_BY_ID[prevState.pyramid[action.slot].cardId].color === 'purple'))
             : slotBtn.querySelector('.dcard').outerHTML,
         };
       }
@@ -6965,7 +7033,12 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     const canBuildWonderWithSelected =
       state.phase === 'play' && isActive && !isAiTurn() && selectedSlot !== null && state.wondersBuiltTotal < 7;
 
-    const wondersHtml = p.wonders.map((wSlot, idx) => {
+    const hand = p.wonders.map((wSlot, idx) => ({ wSlot, idx }));
+    hand.sort(({ wSlot: a, idx: ai }, { wSlot: b, idx: bi }) =>
+      Number(a.built) - Number(b.built) ||
+      (a.underCardAge || 0) - (b.underCardAge || 0) ||
+      (a.builtOnTurn ?? -1) - (b.builtOnTurn ?? -1) || ai - bi);
+    const wondersHtml = hand.map(({ wSlot, idx }) => {
       const w = Data.WONDER_BY_ID[wSlot.id];
       const pay = !wSlot.built && !wSlot.disabled ? Engine.evaluateCost(state, seat, w, 'wonder') : null;
       const buildableNow = Boolean(canBuildWonderWithSelected && pay && pay.affordable);
@@ -6980,24 +7053,27 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
         statusHtml = `<span class="wonder-mini-status is-no">${Icons.ui('coin')}${pay.totalCoins}</span>`;
       }
 
+      const knownBack = wSlot.underCardAge && (wSlot.underCardAge < 3 || typeof wSlot.underCardIsGuild === 'boolean');
       const tuckedSlip = wSlot.built
-        ? `<span class="wonder-tucked-slip" data-age="${wSlot.underCardAge || 1}">${['', 'I', 'II', 'III'][wSlot.underCardAge || 1]}</span>`
+        ? `<span class="wonder-tucked-slip" aria-hidden="true" data-back="${knownBack ? cardBackType(wSlot.underCardAge, wSlot.underCardIsGuild) : 'unknown'}"></span>`
         : '';
 
       return `
         <button type="button"
           class="wonder-mini ${wSlot.built ? 'is-built' : ''} ${wSlot.disabled ? 'is-disabled' : ''} ${buildableNow ? 'is-buildable' : ''}"
           data-wonder-seat="${seat}" data-wonder-idx="${idx}" aria-label="${Dialogs.esc(w.name)}${wSlot.built ? '，已落成' : (wSlot.disabled ? '，已移出' : '')}">
-          <img src="${wonderArtUrl(wSlot.id)}" alt="">
-          ${tuckedSlip}
-          <div class="wonder-mini-overlay">
-            <div class="wonder-mini-top">
-              <span class="wonder-mini-name">${Dialogs.esc(w.name)}</span>
-              ${statusHtml}
-            </div>
-            <div class="wonder-mini-body">
-              <div class="wonder-mini-cost">${wSlot.built ? '' : renderWonderCostIcons(w.cost)}</div>
-              <div class="wonder-mini-eff ${countWonderEffects(w) >= 4 ? 'is-eff-4' : ''}">${renderWonderEffectIcons(w)}</div>
+          <div class="wonder-face">
+            <img src="${wonderArtUrl(wSlot.id)}" alt="">
+            ${tuckedSlip}
+            <div class="wonder-mini-overlay">
+              <div class="wonder-mini-top">
+                <span class="wonder-mini-name">${Dialogs.esc(w.name)}</span>
+                ${statusHtml}
+              </div>
+              <div class="wonder-mini-body">
+                <div class="wonder-mini-cost">${wSlot.built ? '' : renderWonderCostIcons(w.cost)}</div>
+                <div class="wonder-mini-eff ${countWonderEffects(w) >= 4 ? 'is-eff-4' : ''}">${renderWonderEffectIcons(w)}</div>
+              </div>
             </div>
           </div>
         </button>
@@ -7165,10 +7241,10 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       if (node.taken) return '';
       const style = `--x:${node.x};--row:${node.row};`;
       if (!node.faceUp) {
-        const roman = ['', 'I', 'II', 'III'][state.age];
+        const isGuild = Data.CARD_BY_ID[node.cardId].color === 'purple';
         return `
-          <div class="pcard is-covered is-facedown" style="${style}" data-slot="${node.slot}" aria-label="暗牌">
-            <div class="dcard-back" data-age="${state.age}"><div class="dcard-back-inner"><span>${roman}</span></div></div>
+          <div class="pcard is-covered is-facedown" style="${style}" data-slot="${node.slot}" aria-label="${isGuild ? '公会暗牌' : '时代暗牌'}">
+            ${renderCardBack(cardBackType(state.age, isGuild))}
           </div>
         `;
       }
