@@ -2630,7 +2630,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 @media (orientation: landscape) and (min-aspect-ratio: 6/5) and (max-aspect-ratio: 17/10) {
   .city-side-panel { flex-wrap: nowrap; min-height: 24px; column-gap: .25rem; }
   .sci-panel, .sci-panel.is-threat { padding: 0; background: transparent; box-shadow: none; }
-  .science-count, .arch-title {
+  .science-count {
     display: inline-flex; align-items: baseline; gap: .32em; white-space: nowrap;
     color: #493a26; font: 700 clamp(9px,.95rem,14px)/1.16 var(--serif); letter-spacing: .015em;
   }
@@ -2644,7 +2644,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     background: #7d977652; -webkit-mask: var(--ink-wash) center / 100% 100% no-repeat;
     mask: var(--ink-wash) center / 100% 100% no-repeat;
   }
-  .science-fraction, .arch-title b {
+  .science-fraction {
     display: inline-flex; align-items: baseline; gap: .09em; color: #44321f;
     font: 700 1.05em/1 var(--digits); letter-spacing: 0;
   }
@@ -2663,6 +2663,28 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .stat-chip.vp svg { filter: brightness(.62) sepia(.45); }
 }
 
+
+@media (orientation: landscape) and (min-aspect-ratio: 6/5) and (max-aspect-ratio: 17/10) {
+  .seat-name-btn { text-decoration: underline; text-decoration-color: #a78a5d66; text-underline-offset: .22em; }
+  .city-upper { border-bottom: 0; }
+  .city-side-panel { display: block; }
+  .sci-panel {
+    display: grid; justify-items: start; gap: .08rem; padding: .14rem 0 .42rem;
+    border-bottom: 1px solid #b59d7059;
+  }
+  .science-count, .sci-panel.is-threat .science-count { min-height: 0; padding: .2rem .05rem; }
+  .sci-grid { display: grid; width: 100%; grid-template-columns: repeat(6,minmax(0,1fr)); gap: .16rem; justify-items: center; }
+  .sci-dot, .sci-socket { width: clamp(12px,2.55cqw,25px); height: auto; aspect-ratio: 1; }
+  .sci-dot { background: #35644f; color: #fff2cc; border: 1px solid #687c59; box-shadow: inset 0 0 0 1px #c5cf9d55; }
+  .sci-dot svg { width: 75%; height: 75%; }
+  .sci-dot.is-pair { box-shadow: 0 0 0 1px #b89449; }
+  .sci-dot b { min-width: .85rem; height: .85rem; font: 700 .7rem/.85rem var(--digits); }
+  .sci-socket { border: none; border-radius: 0; box-shadow: none; background: linear-gradient(#9c86543d,#9c86543d) center 60% / 45% 1px no-repeat; }
+  .wonders-tray { flex: 0 1 clamp(100px,47cqh,420px); margin-top: auto; }
+  .wonders-tray:has(> :nth-child(4)) { grid-template-rows: repeat(3,minmax(0,1fr)) minmax(0,1.78fr); }
+  .wonders-tray > .wonder-mini:not(:last-child) { height: 144%; }
+  .wonder-mini.is-built .wonder-tucked-slip { top: clamp(17px,1.9rem,30px); bottom: auto; }
+}
 </style>
 </head>
 <body>
@@ -6842,7 +6864,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     for (let i = 0; i < 6; i++) {
       if (i < sciEntries.length) {
         const [sym, cnt] = sciEntries[i];
-        sciSockets.push(`<span class="sci-dot ${cnt >= 2 ? 'is-pair' : ''}">${Icons.science(sym)}${cnt > 1 ? `<b>${cnt}</b>` : ''}</span>`);
+        sciSockets.push(`<span role="img" aria-label="${Dialogs.esc(Data.SCIENCE_META[sym].name)}，${cnt} 枚" class="sci-dot ${cnt >= 2 ? 'is-pair' : ''}">${Icons.science(sym)}${cnt > 1 ? `<b>${cnt}</b>` : ''}</span>`);
       } else {
         sciSockets.push(`<span class="sci-socket" aria-hidden="true"></span>`);
       }
@@ -6857,12 +6879,6 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     const chainPipsHtml = ownedChainsArr.length
       ? `<div class="city-chains-row">${ownedChainsArr.slice(0, 5).map(c => `<span class="city-chain-pip">${Icons.chain(c)}</span>`).join('')}</div>`
       : '';
-
-    const colorCountsHtml = ['brown', 'gray', 'yellow', 'blue', 'green', 'red', 'purple']
-      .map(col => {
-        const n = Engine.countColor(p, col);
-        return n > 0 ? `<span class="arch-dot col-swatch ${col}">${n}</span>` : '';
-      }).filter(Boolean).join('');
 
     const canBuildWonderWithSelected =
       state.phase === 'play' && isActive && !isAiTurn() && selectedSlot !== null && state.wondersBuiltTotal < 7;
@@ -6914,7 +6930,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
               <div class="seat-crest">${seat === 0 ? 'I' : 'II'}</div>
               <div class="seat-title-wrap">
                 <div class="seat-name-row">
-                  <button type="button" class="seat-name-btn" data-open-city="${seat}">${Dialogs.esc(p.name)}</button>
+                  <button type="button" class="seat-name-btn city-cards-btn" data-open-city="${seat}" aria-label="${Dialogs.esc(p.name)}，查阅城邦档案，${p.cards.length} 座建筑">${Dialogs.esc(p.name)}</button>
                   ${isActive ? `<span class="turn-ribbon">回合</span>` : ''}
                 </div>
                 <div class="seat-sub-stats">
@@ -6927,9 +6943,9 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
               <div class="res-ledger" aria-label="资源产出与贸易价">${resHtml}</div>
               <div class="city-side-panel">
                 <div class="sci-panel ${sciThreat ? 'is-threat' : ''}" aria-label="科技符号 ${sciEntries.length}/6">
-                  <button type="button" class="science-count" data-open-city="${seat}" aria-label="查看科技，已集齐 ${sciEntries.length} 种，共需 6 种">
+                  <span class="science-count">
                     <span>科技</span><span class="science-fraction"><b>${sciEntries.length}</b><i>/</i><span>6</span></span>
-                  </button>
+                  </span>
                   <div class="sci-grid">${sciHtml}</div>
                   ${sciThreat ? `<span class="sci-threat-tag">${sciEntries.length}/6</span>` : ''}
                 </div>
@@ -6937,10 +6953,6 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
                   ${tokensHtml ? `<div class="owned-tokens">${tokensHtml}</div>` : ''}
                   ${chainPipsHtml}
                 </div>
-                <button type="button" class="city-archive-pill city-cards-btn" data-open-city="${seat}" aria-label="查阅城邦档案（${p.cards.length} 座建筑）">
-                  <span class="arch-title">城邦档案 <b>${p.cards.length}</b></span>
-                  ${colorCountsHtml ? `<span class="arch-dots">${colorCountsHtml}</span>` : ''}
-                </button>
               </div>
             </div>
           </div>
