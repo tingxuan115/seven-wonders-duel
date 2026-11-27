@@ -2718,6 +2718,11 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .act-btn { min-height: 1.96rem; padding: .18rem .3rem; font-size: .74rem; }
 }
 
+/* In a short, nearly square window the resource ledger sets the height of this band. */
+@media (orientation: landscape) and (max-height: 440px) and (max-aspect-ratio: 17/10) {
+  .city-side-panel { contain: size; --symbol-height: 1.3rem; }
+}
+
 /* ==========================================================================
    4. Ultra-Wide Short Phone Landscape ONLY — iPhone Landscape (~874×402)
       Strictly max-height: 440px so Huawei Pura X Max / Tablets / Desktops
