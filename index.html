@@ -1719,7 +1719,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
 /* Interactive Choice Grids inside Dialogs */
 .dlg-note { margin: 0 0 .75rem; font: 500 .88rem/1.55 var(--sans); color: var(--ink-muted); }
 .choice-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: .68rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: .68rem;
 }
 .choice-card {
   position: relative; isolation: isolate;
@@ -1899,7 +1899,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     var(--img-ink-rule) left bottom / 100% 5px no-repeat,
     rgba(241, 228, 198, 0.92);
 }
-.settings-links { display: flex; flex-wrap: wrap; gap: .55rem; }
+.settings-links { display: flex; flex-wrap: wrap; gap: 1.15rem; }
 .settings-link { align-self: start; min-height: 26px; padding: .2rem 0; border: 0; background: transparent; font: 600 max(10px,.9rem)/1.2 var(--serif); color: var(--ink-body); text-decoration: underline; text-underline-offset: .27em; text-decoration-color: var(--paper-rule); }
 .settings-book .mode-tabs { display: flex; width: 100%; }
 .settings-book .mode-tabs button { flex: 1; text-align: center; }
@@ -6109,7 +6109,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     const chooser = state.players[state.pending.seat];
     const nextAgeRoman = ['', 'I', 'II', 'III'][state.pending.nextAge];
     const reason = state.military === 0
-      ? '军事平手，由上一时代末回合行动者决定先手。'
+      ? `军事平手，${chooser.name} 打出上一时代的最后一张牌，由其决定先手。`
       : `${chooser.name} 军事处于劣势，决定第 ${nextAgeRoman} 时代先手。`;
     const bodyHtml = `
       <p class="dlg-note">${esc(reason)}</p>
