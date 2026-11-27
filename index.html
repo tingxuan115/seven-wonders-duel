@@ -874,16 +874,20 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   --card-ratio: 0.66;
-  --cw: min(calc(97cqw / 6.38), calc(95cqh / 2.92 * var(--card-ratio)));
+  --columns: calc(1 + var(--max-x) * .524);
+  --row-gaps: calc(var(--rows) - 1);
+  --usable-height: calc(100cqh - max(14px, 1.4rem));
+  --min-reveal: .46;
+  --cw: min(calc((100cqw - max(6px, .65rem)) / var(--columns)), calc(var(--usable-height) * var(--card-ratio) / (1 + var(--row-gaps) * var(--min-reveal))));
   --ch: calc(var(--cw) / var(--card-ratio));
-  --step-x: calc(var(--cw) * 0.535);
-  --step-y: calc(var(--ch) * 0.475);
+  --step-x: calc(var(--cw) * .524);
+  /* Use spare vertical space to expose the illustration without breaking the overlap. */
+  --step-y: min(calc(var(--ch) * .71), calc((var(--usable-height) - var(--ch)) / var(--row-gaps)));
   width: calc(var(--max-x) * var(--step-x) + var(--cw));
   height: calc((var(--rows) - 1) * var(--step-y) + var(--ch));
 }
 .pyramid-canvas[data-age="3"] {
-  --cw: min(calc(97cqw / 4.32), calc(96cqh / 3.52 * var(--card-ratio)));
-  --step-y: calc(var(--ch) * 0.415);
+  --min-reveal: .41;
 }
 
 .pcard {
@@ -1128,20 +1132,23 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .draft-card-wrap { position: relative; min-width: 0; min-height: 0; display: flex; }
 .draft-card-wrap.is-taken { opacity: .24; filter: grayscale(.88); pointer-events: none; }
 .draft-card {
-  position: relative; flex: 1; width: 100%; height: 100%; padding: 0; overflow: hidden;
-  container-type: inline-size;
+  position: relative; display: block; padding: 0; border: 0; background: transparent;
+  transition: transform .16s var(--lift-ease);
+}
+.draft-face {
+  position: relative; display: block; width: 100%; aspect-ratio: var(--wonder-aspect);
+  container-type: inline-size; overflow: hidden;
   border-radius: 2px; border: 1.5px solid #e7dec8; outline: 1px solid #bfb399;
   clip-path: polygon(0.7% 0.4%, 99.4% 0.1%, 99.7% 99.4%, 0.4% 99.8%);
   background: #2b241c;
-  transition: transform .16s var(--lift-ease), outline-color .16s, border-color .16s;
+  transition: border-color .16s;
   box-shadow: 0 3px 10px rgba(34, 28, 20, 0.2);
 }
-.draft-card:not(:disabled):hover {
-  transform: translateY(-2px); border-color: #f3dc9a;
-  outline: 2px solid var(--ochre);
-}
+.draft-card:not(:disabled):hover { transform: translateY(-2px); }
+.draft-card:not(:disabled):hover .draft-face { border-color: #f3dc9a; }
+.draft-caption { display: none; }
 .draft-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.draft-card::after {
+.draft-face::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg, rgba(24, 20, 15, 0.64) 0%, transparent 32%, transparent 56%, rgba(24, 20, 15, 0.78) 100%);
 }
@@ -1764,11 +1771,24 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .dlg-panel .cost-breakdown-list .cb-chip { border-color: transparent; border-radius: 0; }
 .wonder-description { min-width: 0; }
 @media (orientation: landscape) {
+  .dlg-panel:has(.wonder-spread) { width: min(100%, 85vw, 56rem); }
   .wonder-spread {
-    display: grid; grid-template-columns: minmax(0,.92fr) minmax(0,1.28fr);
-    align-items: start; gap: 1.1rem;
+    display: grid; grid-template-columns: minmax(0,1.13fr) minmax(0,1fr);
+    align-items: center; gap: clamp(10px, 1.5rem, 26px);
   }
-  .wonder-spread .wonder-detail-art { margin: 0; aspect-ratio: 1.22; }
+  .wonder-spread .wonder-detail-art {
+    margin: 0; box-shadow: none;
+    -webkit-mask-image: linear-gradient(to right, #000 91%, transparent);
+    mask-image: linear-gradient(to right, #000 91%, transparent);
+  }
+  .wonder-description .detail-kv {
+    display: grid; grid-template-columns: 4.3em minmax(0, 1fr);
+    font-size: max(11px, 1rem); padding-block: .53em; gap: .4rem; align-items: baseline;
+  }
+  .wonder-description .draft-cost-pills .draft-pill { font-size: 1em; }
+  .wonder-description .detail-kv > span, .wonder-description .draft-cost-pills,
+  .wonder-description .wonder-detail-rewards { justify-content: flex-start; text-align: start; }
+  .wonder-description .dlg-note { font-size: max(11px, 1.04rem); }
 }
 @media (orientation: portrait) and (min-aspect-ratio: 3/5) {
   .dlg-panel.is-book .settings-book { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.4rem; }
@@ -2258,7 +2278,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 }
 
 .cover-menu {
-  width: min(100%, 18.2rem);
+  width: min(100%, 21rem);
   display: grid; grid-template-columns: 1fr 1fr; gap: .56rem .5rem; align-items: center;
 }
 #cover-mode { grid-column: 1 / -1; margin-bottom: .18rem; }
@@ -2356,9 +2376,9 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   #cover-title { font-size: clamp(28px, 10.5vh, 48px); }
   .cover-sub { font-size: clamp(12px, 4vh, 18px); padding: .14rem .95rem; padding-left: 1.25rem; }
   .cover-lettering { font-size: clamp(11px, 3.6vh, 16px); margin-top: .18rem; }
-  .cover-menu { width: min(100%, 16rem); gap: .28rem; }
-  .cover-primary { min-height: 2.6rem; font-size: 1.06rem; padding: .38rem 1.3rem; }
-  .cover-secondary, .cover-packs { min-height: 1.9rem; font-size: .82rem; }
+  .cover-menu { width: min(100%, 20rem); gap: .32rem; }
+  .cover-primary { min-height: 3.1rem; font-size: 1.24rem; padding: .38rem 1.3rem; }
+  .cover-secondary, .cover-packs { min-height: 2.2rem; font-size: .96rem; }
 }
 
 @media (orientation: portrait) {
@@ -2611,7 +2631,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   }
   #playfield {
     padding: 1.4cqh .32rem;
-    --seat-band: min(24.2cqh, 18.8rem);
+    --seat-band: min(22.4cqh, 18.8rem);
     gap: .2rem;
   }
 
@@ -2641,31 +2661,33 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .tool-btn { width: 1.82rem; height: 1.82rem; }
 
   .city-leaf, .seat-0 .city-leaf, .seat-1 .city-leaf {
-    padding: .22rem .28rem; gap: .16rem;
-    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+    padding: .22rem .28rem; gap: .22rem .58rem;
+    display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.65fr);
+    grid-template-rows: auto minmax(0,1fr) 1.6rem;
+    grid-template-areas: "head wonders" "resources wonders" "symbols symbols";
   }
-  .city-upper { gap: .12rem; }
-  .seat-head { padding-bottom: .1rem; gap: .22rem; }
+  .city-upper, .city-dashboard { display: contents; }
+  .seat-head { grid-area: head; padding-bottom: .18rem; gap: .3rem; }
+  .seat-title-wrap { flex-direction: column; align-items: stretch; gap: .15rem; }
   .seat-crest { width: 1.42rem; height: 1.42rem; font-size: .68rem; }
-  .seat-name-btn { font-size: .84rem; }
+  .seat-name-btn { font-size: 1rem; }
   .seat-sub-stats { font-size: .74rem; gap: .18rem; }
 
-  .city-dashboard { display: flex; flex-direction: column; gap: .12rem; }
   .res-ledger {
-    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .12rem;
-    padding: 0;
+    grid-area: resources; display: grid; grid-template-columns: minmax(0,1fr);
+    grid-template-rows: repeat(5,minmax(0,1fr)); gap: 0; padding: 0;
   }
   .res-row {
-    display: flex; flex-direction: row; align-items: center; justify-content: center; gap: .12rem;
-    min-height: 1.32rem; padding: .06rem .06rem;
+    display: grid; grid-template-columns: 1.55rem minmax(1.5rem,1fr) auto;
+    align-items: center; gap: .28rem; min-height: 0; padding: 0 .42rem;
   }
-  .res-row-ico { width: .96rem; height: .96rem; }
-  .res-row-ico svg { width: .94rem; height: .94rem; }
-  .res-row-prod { font-size: .78rem; }
-  .res-row-price { min-width: 0; height: 1.04rem; font-size: .58rem; padding: 0 .16rem; gap: .04rem; }
-  .res-row-price svg { width: .62rem; height: .62rem; }
+  .res-row-ico, .res-row-ico svg { width: 1.35rem; height: 1.35rem; }
+  .res-row-prod { font-size: .97rem; text-align: left; }
+  .res-row-price { min-width: 2.5rem; height: 1.28rem; font-size: .8rem; padding: 0 .22rem; gap: .1rem; }
+  .res-row-price svg { width: .8rem; height: .8rem; }
 
   .city-side-panel {
+    grid-area: symbols;
     --symbol-cols: 6; --symbol-step: 1.65rem; --symbol-height: 1.18rem;
     height: 1.52rem; flex: none; display: grid;
     grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr) minmax(0, .9fr);
@@ -2687,6 +2709,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .stat-chip { min-width: 0; height: 1.24rem; }
 
   .wonders-tray {
+    grid-area: wonders;
     width: 100%;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
@@ -2694,13 +2717,6 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   }
   .wonder-mini { min-height: 0; }
 
-  .pyramid-canvas {
-    --cw: min(calc(98.5cqw / 6.3), calc(96cqh / 2.92 * var(--card-ratio)));
-    --step-x: calc(var(--cw) * 0.53);
-  }
-  .pyramid-canvas[data-age="3"] {
-    --cw: min(calc(98.5cqw / 4.28), calc(96cqh / 3.52 * var(--card-ratio)));
-  }
   .dcard-head { min-height: 1.2rem; }
   .dcard-name { font-size: clamp(7.5px, 12.2cqi, 12px); padding: .1rem .1rem .11rem; }
 
@@ -2869,7 +2885,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   overflow: hidden; border-radius: inherit; pointer-events: none;
 }
 .draft-card-wrap {
-  container-type: size; display: grid; align-items: center; justify-items: center;
+  container: draft-slot / size; display: grid; align-items: center; justify-items: center;
 }
 .draft-card-wrap:nth-child(odd) { justify-items: end; }
 .draft-card-wrap:nth-child(even) { justify-items: start; }
@@ -2878,6 +2894,16 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .draft-card {
   flex: none; width: min(100%, calc(100cqh * 100 / 65));
   height: auto; min-height: 0; aspect-ratio: var(--wonder-aspect);
+}
+@container draft-slot (min-width: 160px) and (min-height: 155px) and (max-aspect-ratio: 6/5) {
+  .draft-card {
+    --notes-height: max(48px, 4.75rem); aspect-ratio: auto;
+    width: min(100%, calc((100cqh - var(--notes-height)) * 100 / 65));
+  }
+  .draft-caption {
+    display: block; min-height: var(--notes-height); padding: .35rem .25rem 0;
+    font: 500 clamp(10px, min(.98rem, 5.9cqw), 16px)/1.4 var(--sans); color: var(--ink-body); text-align: start;
+  }
 }
 .draft-grid { align-content: center; }
 .wonder-detail-art, .wonder-spread .wonder-detail-art, .ceremony-wonder-frame {
@@ -2888,7 +2914,7 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
   .wonders-tray > .wonder-mini:nth-child(even) { justify-self: start; }
 }
 @media (orientation: portrait) and (max-aspect-ratio: 3/5) {
-  .wonders-tray { max-height: 12.2rem; grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .wonders-tray { grid-template-rows: repeat(2, minmax(0, 1fr)); }
 }
 
 /* Compact Modern-Flat Folio Polish (ensures zero overflow across 457×646 & 646×457) */
@@ -2928,8 +2954,8 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
       "crown crown crown"
       "seat0 arena seat1"
       "seat0 dock  seat1";
-    grid-template-rows: clamp(56px, 13.8cqh, 94px) minmax(0, 1fr) clamp(68px, 16.5cqh, 108px);
-    padding: 1.5cqh 1.5cqw;
+    grid-template-rows: clamp(41px, 9.6cqh, 76px) minmax(0, 1fr) clamp(59px, 13cqh, 96px);
+    padding: 1.25cqh 1.15cqw;
     gap: 0 .45rem;
   }
 
@@ -3106,12 +3132,12 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
     flex: 1 1 0; min-height: 0;
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     gap: 0; margin: 0 .06rem; padding: .12rem .04rem;
-    --hand-width: min(100cqw, 68cqh);
+    --hand-width: min(100cqw, 63.5cqh);
   }
   .wonders-tray > .wonder-mini,
   .wonders-tray > .wonder-mini:nth-child(-n+3) {
     flex: none; align-self: center; width: var(--hand-width); min-height: 0;
-    height: calc(var(--hand-width) * .265); aspect-ratio: auto;
+    height: calc(var(--hand-width) * .304); aspect-ratio: auto;
     overflow: visible; border: 0; outline: 0; background: transparent; box-shadow: none;
     border-radius: 6px;
     transition: filter .16s, transform .16s;
@@ -9178,13 +9204,14 @@ SOFTWARE.
           const isTaken = taken[idx];
           return `
             <div class="draft-card-wrap ${isTaken ? 'is-taken' : ''}">
-              <button type="button" class="draft-card" data-draft-idx="${idx}" aria-label="${Dialogs.esc(w.name)}" ${isTaken || locked ? 'disabled' : ''}>
-                <img class="draft-bg" src="${wonderArtUrl(wid)}" alt="">
-                <div class="draft-top-bar">
-                  <strong>${Dialogs.esc(w.name)}</strong>
-                </div>
-                <div class="draft-cost-col">${renderWonderCostIcons(w.cost)}</div>
-                <div class="draft-reward-bar">${renderWonderEffectIcons(w)}</div>
+              <button type="button" class="draft-card" data-draft-idx="${idx}" aria-label="${Dialogs.esc(w.name)}" aria-describedby="draft-effect-${idx}" ${isTaken || locked ? 'disabled' : ''}>
+                <span class="draft-face">
+                  <img class="draft-bg" src="${wonderArtUrl(wid)}" alt="">
+                  <span class="draft-top-bar"><strong>${Dialogs.esc(w.name)}</strong></span>
+                  <span class="draft-cost-col">${renderWonderCostIcons(w.cost)}</span>
+                  <span class="draft-reward-bar">${renderWonderEffectIcons(w)}</span>
+                </span>
+                <span class="draft-caption" id="draft-effect-${idx}">${Dialogs.esc(w.desc)}</span>
               </button>
 
             </div>
