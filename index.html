@@ -528,80 +528,56 @@ svg { display: inline-block; vertical-align: middle; flex: none; }
 .stat-chip.vp:hover { filter: brightness(1.08); transform: translateY(-1px); }
 .stat-chip svg { display: block; width: 1rem; height: 1rem; }
 
-/* The same five resource columns and three symbol rows are used at both seats. */
-.city-dashboard {
-  --label-size: clamp(9px, .93rem, 15px);
-  --symbol-height: max(12px, 1.35rem);
-  --ledger-step: calc(var(--symbol-height) + .16rem);
-  display: grid; grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: max-content repeat(5, minmax(0, var(--ledger-step)));
-  align-content: center; min-width: 0;
-}
-.ledger-label {
-  color: var(--ink-body); font: 600 var(--label-size)/1.1 var(--serif);
-  letter-spacing: .02em; white-space: nowrap;
-}
-.res-ledger {
-  display: grid; grid-template-columns: max-content repeat(5, minmax(0, 1fr));
-  grid-row: 1 / span 3; grid-template-rows: subgrid; grid-auto-flow: column;
-  gap: 0 .08rem; min-width: 0;
-}
-.res-ledger > .ledger-label { grid-column: 1; align-self: center; padding-inline-end: .1em; }
-.production-label { grid-row: 2; }
-.price-label { grid-row: 3; }
-.res-row {
-  display: grid;
-  grid-row: 1 / -1; grid-template-rows: subgrid; place-items: center;
-  min-width: 0; gap: 0; padding: 0; color: var(--ink);
-}
-.res-row.is-zero .res-row-prod { opacity: .44; }
-.res-row-ico { display: inline-flex; align-items: center; justify-content: center; width: 1.56rem; height: 1.56rem; }
-.res-row-ico svg { display: block; width: 1.48rem; height: 1.48rem; }
-.res-row-prod {
-  display: inline-flex; align-items: center;
-  font: 800 1.06rem/1 var(--digits); color: var(--ink);
-  letter-spacing: .02em;
-}
-button.res-row-prod { border: 0; background: transparent; padding: 0; min-width: 100%; justify-content: center; }
-.res-row-price {
-  display: inline-flex; align-items: center; justify-content: center; gap: .16rem;
-  min-width: 2.8rem; height: 1.38rem;
-  padding: 0 .4rem; border-radius: 0;
-  background: transparent; border: 0;
-  font: 800 .84rem/1 var(--digits); color: var(--ink-body);
-}
-.res-row-price b { min-width: 1.1ch; text-align: center; }
-.res-row.has-disc .res-row-price { color: var(--ink-green-deep); }
-.res-row-price svg { display: block; width: .88rem; height: .88rem; }
+#surface[data-phase="draft"] :is(.city-dashboard, .seat-sub-stats) { visibility: hidden; }
 
-/* Shared baselines and a right-aligned set of stamp positions in all three rows. */
-.city-side-panel {
-  grid-row: 4 / span 3; display: grid; grid-template-rows: subgrid;
-  grid-template-columns: minmax(max-content, 1fr) repeat(var(--stamp-columns), minmax(0, calc(var(--symbol-height) + .52rem)));
-  min-width: 0;
+/* One resource heading and five equal rows at both seats in either orientation. */
+.city-dashboard {
+  --label-size: clamp(9px, .96rem, 16px);
+  --value-size: clamp(9px, 1.06rem, 17px);
+  --symbol-height: max(12px, 1.4rem);
+  --resource-size: clamp(18px, 2.15rem, 34px);
+  --ledger-step: calc(var(--symbol-height) + .52rem);
+  --count-room: max(4px, .39rem);
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) repeat(var(--ledger-columns), minmax(0, calc(2.1 * var(--symbol-height))));
+  grid-template-rows: var(--resource-size) repeat(5, minmax(0, var(--ledger-step)));
+  align-content: center; min-width: 0; padding-inline-end: var(--count-room);
 }
 .ledger-line {
   grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center;
 }
 .ledger-line > :is(.ledger-label, .ledger-caption) {
-  grid-column: 1 / span calc(1 + var(--stamp-columns) - var(--row-slots));
+  grid-column: 1 / span calc(1 + var(--ledger-columns) - var(--row-slots));
+}
+.ledger-label {
+  color: var(--ink-body); font: 600 var(--label-size)/1.1 var(--serif);
+  letter-spacing: .02em; white-space: nowrap;
 }
 .ledger-caption { display: flex; align-items: center; gap: .18rem; }
-.science-fraction {
-  font: inherit; font-variant-numeric: tabular-nums; letter-spacing: 0; color: var(--ink-muted);
-}
-.science-fraction.is-threat { color: var(--ink-green-deep); font-weight: 800; }
-.ledger-symbols {
-  --count-room: max(4px, .39rem);
+.ledger-values {
   grid-column: span var(--row-slots) / -1; display: grid; grid-template-columns: subgrid;
-  align-items: center; min-width: 0; height: 100%;
+  place-items: center; min-width: 0; height: 100%;
 }
+.resource-heading { grid-row: 1; }
+.res-row-ico { display: grid; place-items: center; width: min(100%, var(--resource-size)); aspect-ratio: 1; }
+.res-row-ico svg { display: block; width: 100%; height: 100%; }
+.res-row-prod, .res-row-price {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0; border: 0; background: transparent;
+  color: var(--ink-body); font: 700 var(--value-size)/1 var(--digits);
+}
+.res-row-prod.is-zero { opacity: .67; }
+button.res-row-prod { width: 100%; height: 100%; }
+.res-row-price { max-width: calc(100% - .16rem); gap: .06em; }
+.res-row-price svg { width: .84em; height: .84em; flex-shrink: 1; min-width: 0; }
+.res-row-price b { font: inherit; }
+.res-row-price.has-disc { color: var(--ink-green-deep); }
 .ledger-symbols:empty::after {
   content: "—"; justify-self: center;
   color: var(--ink-muted); opacity: .58; font: 500 var(--label-size)/1 var(--serif);
 }
 .ledger-symbols > * {
-  position: relative; display: grid; place-items: center; justify-self: center; margin-inline-end: var(--count-room);
+  position: relative; display: grid; place-items: center; justify-self: center;
   width: min(calc(100% - var(--count-room)), var(--symbol-height)); aspect-ratio: 1;
   padding: 0; border: 0; background: transparent; line-height: 1;
 }
@@ -1209,7 +1185,10 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
 .act-btn:disabled { color: #766e60; }
 .act-btn:disabled::before { background: #b7aa92; opacity: .23; }
 .act-btn.primary { --act-bg: var(--indigo); --act-bg-hi: var(--indigo-deep); --act-fg: #faf6eb; }
-#action-dock [data-resume-choice] { align-self: center; min-width: 8em; min-height: min(100%, max(30px, 2.6rem)); }
+#action-dock .act-btn[data-resume-choice] {
+  align-self: center; min-width: 8em; min-height: min(100%, max(30px, 2.6rem));
+  padding: .25rem .9rem; font: 700 max(11px, .98rem)/1.15 var(--serif);
+}
 .act-btn.primary::before { inset-block: 11% 9%; }
 .act-btn.discard { --act-bg: #e5c483; --act-bg-hi: #eed7aa; --act-fg: #523813; --act-mask: var(--mask-folio); }
 .act-btn.wonder  { --act-bg: #e5bbaa; --act-bg-hi: #edd2c2; --act-fg: #682f26; --act-mask: var(--mask-folio); }
@@ -2373,7 +2352,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .stat-chip svg { width: .86rem; height: .86rem; }
   .turn-ribbon { display: none; }
 
-  .city-dashboard { --ledger-step: calc(var(--symbol-height) + .54rem); flex: 1; min-height: 0; }
+  .city-dashboard { flex: 1; min-height: 0; }
   .wonders-tray {
     flex: none; align-self: stretch;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2436,7 +2415,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
       Fixed geometry from first draft pick onward
    ========================================================================== */
 @media (orientation: portrait) and (aspect-ratio > 3/5) {
-  #surface[data-phase="draft"] .city-dashboard, #surface[data-phase="draft"] .seat-sub-stats { visibility: hidden; }
   #playfield { padding: max(3px, .65cqh) .65cqw; gap: .18rem; }
   .pyramid-canvas { --min-reveal: .43; }
   #status-ribbon .age-pill {
@@ -2450,17 +2428,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   }
   .seat-head { padding-bottom: .22rem; border: 0; }
   .seat-name-btn { font-size: 1.08rem; }
-  .city-dashboard {
-    --symbol-height: max(13px, 1.49rem);
-  }
-  .res-ledger {
-    column-gap: .16rem;
-  }
-  .res-row-ico, .res-row-ico svg { width: clamp(18px, 4.8cqw, 35px); height: clamp(18px, 4.8cqw, 35px); }
-  .res-row-prod { font-size: max(12px, 1.33rem); }
-  .res-row.is-zero .res-row-prod { opacity: .67; }
-  .res-row-price { font-size: max(10px, 1.06rem); min-width: 2.8rem; height: 1.47rem; gap: .12rem; }
-  .res-row-price svg { width: 1.08rem; height: 1.08rem; }
   .wonders-tray { padding: .16rem; gap: .24rem; }
 
   #action-dock {
@@ -2499,10 +2466,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .seat-name-btn { font-size: 1rem; }
   .seat-sub-stats { font-size: .74rem; gap: .18rem; }
 
-  .res-row-ico, .res-row-ico svg { width: 1.55rem; height: 1.55rem; }
-  .res-row-prod { font-size: 1.08rem; }
-  .res-row-price { min-width: 0; font-size: .85rem; padding: 0 .16rem; }
-  .city-dashboard { --symbol-height: max(12px, 1.32rem); }
   .stat-chip { min-width: 0; height: 1.24rem; }
 
   .wonders-tray {
@@ -2587,12 +2550,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .seat-sub-stats { font-size: .72rem; gap: .18rem; }
   .stat-chip { min-width: 2.45rem; height: 1.2rem; padding: 0 .26rem; }
   .stat-chip svg { width: .78rem; height: .78rem; }
-
-  .res-row-ico { width: 1.1rem; height: 1.1rem; }
-  .res-row-ico svg { width: 1.06rem; height: 1.06rem; }
-  .res-row-prod { font-size: .82rem; }
-  .res-row-price { min-width: 2.2rem; height: 1.06rem; font-size: .64rem; padding: 0 .18rem; }
-  .res-row-price svg { width: .66rem; height: .66rem; }
 
   .wonders-tray {
     gap: .28rem; align-content: center;
@@ -2802,19 +2759,6 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
   .stat-chip.coins { padding: .08rem .42rem; }
   .stat-chip.vp { padding: .08rem .68rem .08rem .44rem; }
   .stat-chip svg { width: 1.02rem; height: 1.02rem; }
-
-  .res-row-ico, .res-row-ico svg { width: 1.38rem; height: 1.38rem; }
-  .res-row-prod { font-size: .88rem; line-height: 1.02; }
-  .res-row-price {
-    display: inline-flex; align-items: center; justify-content: center; gap: .08rem;
-    min-width: 0; height: 1.08rem; padding: 0 .28rem; border-radius: 0;
-    background: transparent; color: var(--ink-body);
-    font: 700 .66rem/1 var(--digits);
-  }
-  .res-row-price svg { width: .81rem; height: .81rem; }
-
-  #surface[data-phase="draft"] .city-dashboard,
-  #surface[data-phase="draft"] .seat-sub-stats { visibility: hidden; }
 
   /* ---- 100×65 mm Stacked Wonders with Visible Cost & Rewards Inside Exposed Strip ---- */
   .wonders-tray {
@@ -5558,11 +5502,12 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
     const label = nav.querySelector('span');
     let starts = [0];
     let page = 0;
-    function display(index) {
+    function display(index, rememberFirst = true) {
       page = index;
-      anchor = starts[index];
+      const first = starts[index];
+      if (rememberFirst) anchor = first;
       const end = starts[index + 1] ?? items.length;
-      items.forEach((el, i) => { el.hidden = i < anchor || i >= end; });
+      items.forEach((el, i) => { el.hidden = i < first || i >= end; });
       prev.disabled = index === 0;
       next.disabled = index === starts.length - 1;
       label.textContent = `${index + 1} / ${starts.length}`;
@@ -5599,7 +5544,7 @@ button.res-row-prod { border: 0; background: transparent; padding: 0; min-width:
           }
         });
       }
-      display(starts.reduce((found, start, i) => start <= anchor ? i : found, 0));
+      display(starts.reduce((found, start, i) => start <= anchor ? i : found, 0), false);
     }
     prev.onclick = () => display(Math.max(0, page - 1));
     next.onclick = () => display(Math.min(starts.length - 1, page + 1));
@@ -8472,23 +8417,18 @@ SOFTWARE.
     const sciCounts = Engine.getScienceCounts(p);
     const score = Engine.calculateScoreBreakdown(state, seat);
 
-    const resHtml = Data.RESOURCES.map(r => {
-      const hasDisc = discounts.has(r);
-      const hasWild = wilds.some(w => w.includes(r));
-      const hasProd = prod[r] > 0 || hasWild;
-      return `
-        <div class="res-row ${hasDisc ? 'has-disc' : (hasProd ? '' : 'is-zero')}">
-          <span class="res-row-ico">${Icons.resource(r)}</span>
-          ${hasWild
-            ? `<button type="button" class="res-row-prod" data-wild-resource="${r}" aria-label="查看${Data.RESOURCE_META[r].name}的自选来源">${prod[r]}+</button>`
-            : `<span class="res-row-prod">${prod[r]}</span>`}
-          <span class="res-row-price">${Icons.ui('coin')}<b>${prices[r]}</b></span>
-        </div>
-      `;
-    }).join('');
+    const resourceIcons = Data.RESOURCES.map(r =>
+      `<span class="res-row-ico" role="img" aria-label="${Data.RESOURCE_META[r].name}">${Icons.resource(r)}</span>`
+    ).join('');
+    const amounts = Data.RESOURCES.map(r => wilds.some(w => w.includes(r))
+      ? `<button type="button" class="res-row-prod" data-wild-resource="${r}" aria-label="${Data.RESOURCE_META[r].name}产出 ${prod[r]}+，查看自选来源">${prod[r]}+</button>`
+      : `<span class="res-row-prod ${prod[r] ? '' : 'is-zero'}">${prod[r]}</span>`
+    ).join('');
+    const tradePrices = Data.RESOURCES.map(r =>
+      `<span class="res-row-price ${discounts.has(r) ? 'has-disc' : ''}">${Icons.ui('coin')}<b>${prices[r]}</b></span>`
+    ).join('');
 
     const sciEntries = Object.entries(sciCounts);
-    const sciThreat = sciEntries.length >= 4;
     const sciHtml = sciEntries.map(([sym, cnt]) =>
       `<span role="img" aria-label="${Dialogs.esc(Data.SCIENCE_META[sym].name)}，${cnt} 枚" class="sci-dot ${cnt >= 2 ? 'is-pair' : ''}">${Icons.science(sym)}${cnt > 1 ? `<b>${cnt}</b>` : ''}</span>`
     ).join('');
@@ -8503,7 +8443,7 @@ SOFTWARE.
       `<span class="city-chain-pip" role="img" aria-label="${Dialogs.esc(Data.CHAIN_META[c].name)}">${Icons.chain(c)}</span>`
     ).join('');
     const moreChains = ownedChainsArr.length - visibleChains.length;
-    const stampColumns = Math.max(1, sciEntries.length, p.tokens.length, visibleChains.length);
+    const ledgerColumns = Math.max(Data.RESOURCES.length, sciEntries.length, p.tokens.length, visibleChains.length);
 
     const canBuildWonderWithSelected =
       state.phase === 'play' && isActive && !isAiTurn() && selectedSlot !== null && state.wondersBuiltTotal < 7;
@@ -8573,23 +8513,23 @@ SOFTWARE.
                 </div>
               </div>
             </div>
-            <div class="city-dashboard">
-              <div class="res-ledger" aria-label="资源产出与贸易价">
-                <span class="ledger-label production-label">产出</span><span class="ledger-label price-label">买价</span>${resHtml}
+            <div class="city-dashboard" style="--ledger-columns:${ledgerColumns}; --row-slots:${Data.RESOURCES.length}">
+              <div class="ledger-values resource-heading">${resourceIcons}</div>
+              <div class="ledger-line">
+                <span class="ledger-label">产出</span><div class="ledger-values">${amounts}</div>
               </div>
-              <div class="city-side-panel" style="--stamp-columns:${stampColumns}">
-                <div class="ledger-line" style="--row-slots:${Math.max(1, sciEntries.length)}">
-                  <span class="ledger-label">科技 <span class="science-fraction ${sciThreat ? 'is-threat' : ''}">${sciEntries.length}/6</span></span>
-                  <div class="ledger-symbols" role="group" aria-label="科技符号">${sciHtml}</div>
-                </div>
-                <div class="ledger-line" style="--row-slots:${Math.max(1, p.tokens.length)}">
-                  <span class="ledger-label">发展</span>
-                  <div class="ledger-symbols" role="group" aria-label="发展标记">${tokensHtml}</div>
-                </div>
-                <div class="ledger-line" style="--row-slots:${Math.max(1, visibleChains.length)}">
-                  <span class="ledger-caption"><span class="ledger-label">连锁</span>${moreChains ? `<button type="button" class="chain-more" data-open-chains aria-label="查阅全部 ${ownedChainsArr.length} 个连锁符号">+${moreChains}</button>` : ''}</span>
-                  <div class="ledger-symbols" role="group" aria-label="连锁符号">${chainPipsHtml}</div>
-                </div>
+              <div class="ledger-line">
+                <span class="ledger-label">买价</span><div class="ledger-values">${tradePrices}</div>
+              </div>
+              <div class="ledger-line" style="--row-slots:${Math.max(1, sciEntries.length)}">
+                <span class="ledger-label">科技</span><div class="ledger-values ledger-symbols" role="group" aria-label="科技符号">${sciHtml}</div>
+              </div>
+              <div class="ledger-line" style="--row-slots:${Math.max(1, p.tokens.length)}">
+                <span class="ledger-label">发展</span><div class="ledger-values ledger-symbols" role="group" aria-label="发展标记">${tokensHtml}</div>
+              </div>
+              <div class="ledger-line" style="--row-slots:${Math.max(1, visibleChains.length)}">
+                <span class="ledger-caption"><span class="ledger-label">连锁</span>${moreChains ? `<button type="button" class="chain-more" data-open-chains aria-label="查阅全部 ${ownedChainsArr.length} 个连锁符号">+${moreChains}</button>` : ''}</span>
+                <div class="ledger-values ledger-symbols" role="group" aria-label="连锁符号">${chainPipsHtml}</div>
               </div>
             </div>
           </div>
