@@ -852,14 +852,21 @@ button.res-row-prod { width: 100%; height: 100%; }
   display: flex; flex-direction: column;
 }
 
-/* One rim per face. Selection and uncover previews use the marks outside the card. */
-.pcard[data-border-hint="science"] { --hint-ink: #45976a; }
-.pcard[data-border-hint="free"] { --hint-ink: #568eb8; }
-.pcard[data-border-hint="purchase"] { --hint-ink: #c49a48; }
-.pcard[data-border-hint] .dcard {
-  background: var(--hint-ink); padding: clamp(2px, .25rem, 3.5px);
+@media (prefers-reduced-motion: no-preference) {
+  .pcard.has-polish .dcard::after {
+    content: ""; position: absolute; z-index: 4; pointer-events: none;
+    top: -18%; bottom: -18%; left: 0; width: 54%;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / .07) 32%,
+      rgb(255 255 255 / .19) 53%, rgb(255 255 255 / .055) 72%, transparent);
+    transform: translateX(-150%) skewX(-12deg);
+    animation: card-polish 9s ease-in-out infinite;
+    animation-delay: calc(.2s + var(--x) * .17s + var(--row) * .14s);
+  }
+  @keyframes card-polish {
+    0% { transform: translateX(-150%) skewX(-12deg); }
+    40%, 100% { transform: translateX(245%) skewX(-12deg); }
+  }
 }
-.pcard[data-border-hint] .dcard-inner { border-radius: 3.7% / 2.44%; }
 .pcard.is-selected .dcard {
   outline: 0;
   box-shadow: 0 7px 16px rgba(38, 26, 12, 0.3);
@@ -5688,7 +5695,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       <details name="duel-rule-section" class="rule-sec">
         <summary>贸易、连锁与时代交替</summary>
         <ul>
-          <li>牌边按科技（绿）、免费（蓝）、付费可建（金）的顺序显示一种颜色。绿色提示分为「成对」「即胜」「待配」。「待配」表示此牌还被压住，或当前金币不足。</li>
+          <li>可免费建造的牌和有科技机会的明牌，牌面偶尔会掠过一道淡淡的白光。科技提示分为「成对」「即胜」「待配」。「待配」表示此牌还被压住，或当前金币不足。</li>
           <li>单份资源贸易价 = <b>2 + 对手棕/灰牌固定产出</b>（黄牌与奇迹自选产出不计入）；行栈/海关降至固定 1 金。</li>
           <li>插画左上角是<b>连锁前置</b>，满足时显示绿色对勾。右上角的金签是<b>建成后提供的连锁</b>。右下角显示本次建造需付的金币。城市规划在连锁免费建造时额外 +4 金。</li>
           <li>时代交替时由军事劣势方（平手则最后行动方）决定下一时代先手；时代末牌触发的再行动不顺延至下时代。</li>
@@ -8713,9 +8720,7 @@ SOFTWARE.
       const pairs = state.phase === 'play' && myScience[card.science] === 1;
       const pendingPair = pairs && (!avail || !pay.affordable);
       const scienceVictory = state.phase === 'play' && pay?.affordable && card.science && !myScience[card.science] && myUniqueSci === 5;
-      let borderHint = '';
-      if (pairs || scienceVictory) borderHint = 'science';
-      else if (state.phase === 'play' && pay?.affordable) borderHint = pay.totalCoins === 0 ? 'free' : 'purchase';
+      const freeBuild = state.phase === 'play' && pay?.totalCoins === 0;
 
       let priceTag = '';
       if (avail && pay && state.phase === 'play') {
@@ -8731,12 +8736,13 @@ SOFTWARE.
       const cls = [
         'pcard',
         avail ? 'is-available' : 'is-covered',
+        pairs || scienceVictory || freeBuild ? 'has-polish' : '',
         isSel ? 'is-selected' : '',
         revealedNow ? 'just-revealed' : '',
       ].filter(Boolean).join(' ');
 
       return `
-        <button type="button" class="${cls}" style="${style}" data-slot="${node.slot}" ${borderHint ? `data-border-hint="${borderHint}"` : ''} aria-label="${Dialogs.esc(card.name)}${pendingPair ? ' · 待配' : ''}">
+        <button type="button" class="${cls}" style="${style}" data-slot="${node.slot}" aria-label="${Dialogs.esc(card.name)}${pendingPair ? ' · 待配' : ''}">
           ${renderCardFaceHtml(card, avail ? ownedChains : null, priceTag, pendingPair)}
         </button>
       `;
