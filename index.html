@@ -2095,24 +2095,6 @@ button.res-row-prod { width: 100%; height: 100%; }
     radial-gradient(ellipse 64% 118% at 16% 50%, #f6efe0fa 0%, #f6efe0f0 46%, #f6efe096 68%, transparent 88%),
     linear-gradient(90deg, #f5eedf 0%, #f5eedfeb 28%, transparent 62%);
 }
-.cover-screen {
-  position: absolute; z-index: 4; isolation: isolate;
-  top: max(calc(var(--edge) + 10px), var(--edge-top));
-  left: max(calc(var(--edge) + 14px), var(--edge-left));
-  padding: .4rem 1.05rem; border: 0; border-radius: 0;
-  background: transparent; color: var(--ink-body); font: 700 .8rem/1.2 var(--sans);
-  transition: color .16s, transform .16s var(--lift-ease);
-}
-.cover-screen::before {
-  content: ""; position: absolute; inset: -1px -4px; z-index: -1;
-  background: rgba(154, 134, 98, 0.24);
-  -webkit-mask: var(--mask-wash) center / 100% 100% no-repeat;
-  mask: var(--mask-wash) center / 100% 100% no-repeat;
-  opacity: .72; transition: opacity .18s, transform .2s var(--lift-ease);
-}
-.cover-screen:hover { color: var(--ink); }
-.cover-screen:hover::before { opacity: 1; transform: scaleX(1.06); }
-
 .cover-copy {
   position: absolute; inset: 0 auto 0 max(4.2%, var(--edge-left));
   width: min(37%, 24rem); z-index: 3;
@@ -2141,12 +2123,12 @@ button.res-row-prod { width: 100%; height: 100%; }
 }
 
 .cover-menu {
-  width: min(100%, 21rem);
-  display: grid; grid-template-columns: 1fr 1fr; gap: .56rem .5rem; align-items: center;
+  width: min(100%, 21rem); display: flex; flex-direction: column; align-items: stretch;
+  gap: clamp(3px, .65vh, 8px);
 }
-#cover-mode {
-  grid-column: 1 / -1; margin-bottom: .18rem;
-  display: flex; flex-direction: column; align-items: center; gap: .32rem;
+.cover-utilities {
+  display: flex; justify-content: center; gap: clamp(12px, 3vmin, 28px);
+  margin-top: clamp(4px, 1.25vh, 13px);
 }
 
 /* A thin pigment mark picks out one option on the paper. */
@@ -2204,16 +2186,20 @@ button.res-row-prod { width: 100%; height: 100%; }
 .mode-tabs.is-tier button.is-on { color: var(--terracotta-deep); }
 .mode-tabs.is-tier button.is-on::before { opacity: .13; }
 
-#cover-progress {
-  grid-column: 1 / -1; margin: 0 0 .12rem; font: 600 .8rem/1.35 var(--sans); color: var(--ink-muted);
-}
+.dlg-panel:has(.new-game-options) { width: min(100%, 29rem); }
+.new-game-options { display: grid; gap: .75rem; }
+.new-game-options .mode-tabs { display: flex; padding: .3rem; }
+.new-game-options .mode-tabs[hidden] { display: none; }
+.new-game-options .mode-tabs button { flex: 1; min-height: 40px; font-size: max(13px, 1.05rem); }
+.new-game-options .is-tier button { min-height: 32px; font-size: max(12px, .94rem); }
+.new-game-notice { margin: .9rem 0 0; color: var(--ink-muted); font: 500 max(12px, .88rem)/1.4 var(--sans); }
 
 /* Expressive Tapered Gouache Primary CTA Sweep */
 .cover-primary {
-  grid-column: 1 / -1; position: relative; isolation: isolate; white-space: nowrap;
-  min-height: 3.35rem; padding: .58rem 1.8rem;
+  position: relative; isolation: isolate; white-space: nowrap;
+  min-height: max(42px, 3.35rem); padding: .58rem 1.8rem;
   border: 0; border-radius: 0; background: transparent;
-  color: #fbf7ec; font: 700 1.24rem/1.15 var(--serif); letter-spacing: .16em;
+  color: #fbf7ec; font: 700 max(15px, 1.24rem)/1.15 var(--serif); letter-spacing: .16em;
   transition: transform .16s var(--lift-ease);
 }
 .cover-primary::before {
@@ -2230,7 +2216,7 @@ button.res-row-prod { width: 100%; height: 100%; }
 /* Unboxed Rest -> Watercolor Wash Hover Secondary Menu Items */
 .cover-secondary, .cover-packs {
   position: relative; isolation: isolate; white-space: nowrap;
-  min-height: 2.3rem; padding: .3rem .65rem; border: 0; border-radius: 0; background: transparent;
+  min-height: max(32px, 2.3rem); padding: .3rem .65rem; border: 0; border-radius: 0; background: transparent;
   font: 700 .9rem/1.2 var(--sans); color: var(--ink-body);
   text-decoration: none;
   transition: color .16s, transform .18s var(--lift-ease);
@@ -2245,7 +2231,8 @@ button.res-row-prod { width: 100%; height: 100%; }
 }
 .cover-secondary:hover, .cover-packs:hover { color: var(--ink); }
 .cover-secondary:hover::before, .cover-packs:hover::before { opacity: .26; transform: scaleX(1.06) translateX(2px); }
-.cover-secondary { grid-column: 1 / -1; color: var(--terracotta); }
+.cover-secondary { color: var(--ink-body); font: 700 max(13px, 1.12rem)/1.25 var(--serif); }
+.cover-packs { font-size: max(11px, .86rem); color: var(--ink-muted); }
 .cover-secondary::before { background: var(--terracotta); }
 
 @media (orientation: landscape) and (max-height: 490px),
@@ -2257,10 +2244,9 @@ button.res-row-prod { width: 100%; height: 100%; }
   .cover-sub { font-size: clamp(12px, 4vh, 18px); padding: .14rem .95rem; padding-left: 1.25rem; }
   .cover-lettering { font-size: clamp(11px, 3.6vh, 16px); margin-top: .18rem; }
   .cover-menu { width: min(100%, 20rem); gap: .32rem; }
-  #cover-mode { gap: .2rem; margin-bottom: .08rem; }
   .mode-tabs.is-tier button { padding: .2rem .68rem; font-size: .78rem; }
-  .cover-primary { min-height: 3.1rem; font-size: 1.24rem; padding: .38rem 1.3rem; }
-  .cover-secondary, .cover-packs { min-height: 2.2rem; font-size: .96rem; }
+  .cover-primary { min-height: max(38px, 3.1rem); font-size: max(15px, 1.24rem); padding: .38rem 1.3rem; }
+  .cover-utilities { margin-top: 2px; }
 }
 
 @media (orientation: portrait) {
@@ -2967,7 +2953,6 @@ button.res-row-prod { width: 100%; height: 100%; }
 <body>
   <main id="game-cover" aria-labelledby="cover-title">
     <div class="cover-illustration" aria-hidden="true"></div>
-    <button type="button" class="screen-toggle cover-screen" data-fullscreen><span>进入全屏</span></button>
     <div class="cover-copy">
       <div class="cover-masthead">
         <h1 id="cover-title">七大奇迹</h1>
@@ -2975,12 +2960,12 @@ button.res-row-prod { width: 100%; height: 100%; }
         <span class="cover-lettering" lang="en">7 Wonders · Duel</span>
       </div>
       <div class="cover-menu">
-        <div id="cover-mode"></div>
-        <p id="cover-progress" hidden></p>
-        <button type="button" class="cover-primary" id="cover-primary" data-lobby="start">开始对局</button>
-        <button type="button" class="cover-secondary" id="cover-new" data-lobby="new" hidden>新开一局</button>
-        <button type="button" class="cover-packs" data-lobby="setup" aria-haspopup="dialog">对局设置</button>
-        <button type="button" class="cover-packs" data-lobby="rules" aria-haspopup="dialog">规则手册</button>
+        <button type="button" class="cover-primary" id="cover-primary" data-game-action="new">新游戏</button>
+        <button type="button" class="cover-secondary" id="cover-secondary" hidden></button>
+        <div class="cover-utilities">
+          <button type="button" class="cover-packs" data-lobby="setup" aria-haspopup="dialog">设置</button>
+          <button type="button" class="cover-packs" data-lobby="rules" aria-haspopup="dialog">规则手册</button>
+        </div>
       </div>
     </div>
   </main>
@@ -5758,13 +5743,64 @@ button.res-row-prod { width: 100%; height: 100%; }
     });
   }
 
+  function modeControls({mode, aiLevel}) {
+    const modeButton = (id, label) =>
+      `<button type="button" data-mode="${id}" aria-pressed="${mode === id}" class="${mode === id ? 'is-on' : ''}">${label}</button>`;
+    return `
+      <div class="mode-tabs" id="set-mode-tabs" role="group" aria-label="对战模式">
+        ${modeButton('pvp', '同机双人')}${modeButton('ai', '单人挑战')}
+      </div>
+      <div class="mode-tabs is-tier" id="set-level-tabs" role="group" aria-label="对手难度" ${mode === 'ai' ? '' : 'hidden'}>
+        ${Object.values(Engine.AI_LEVELS).map(item => `<button type="button" data-level="${item.id}" aria-pressed="${aiLevel === item.id}" class="${aiLevel === item.id ? 'is-on' : ''}">${item.label}</button>`).join('')}
+      </div>`;
+  }
+
+  function bindModeControls(layer, selection, onChange) {
+    const modes = layer.querySelector('#set-mode-tabs');
+    const levels = layer.querySelector('#set-level-tabs');
+    function select(group, button) {
+      for (const item of group.querySelectorAll('button')) {
+        item.classList.toggle('is-on', item === button);
+        item.setAttribute('aria-pressed', String(item === button));
+      }
+      onChange?.();
+    }
+    modes.onclick = e => {
+      const button = e.target.closest('[data-mode]');
+      if (!button) return;
+      selection.mode = button.dataset.mode;
+      levels.hidden = selection.mode !== 'ai';
+      select(modes, button);
+    };
+    levels.onclick = e => {
+      const button = e.target.closest('[data-level]');
+      if (!button) return;
+      selection.aiLevel = button.dataset.level;
+      select(levels, button);
+    };
+  }
+
+  function showNewGame(layer, prefs, replacing, onStart) {
+    const selection = {mode: prefs.mode, aiLevel: prefs.aiLevel};
+    openFolio(layer, {
+      title: '新游戏', closeLabel: '返回',
+      bodyHtml: `<div class="new-game-options">${modeControls(selection)}</div>
+        ${replacing ? '<p class="new-game-notice">开始后将替换未完成的对局。</p>' : ''}`,
+      footHtml: `<button type="button" class="dlg-btn primary" id="btn-start-game">${replacing ? '替换并开始' : '开始对局'}</button>`,
+    });
+    bindModeControls(layer, selection);
+    layer.querySelector('#btn-start-game').onclick = () => {
+      closeFolio(layer);
+      onStart(selection);
+    };
+  }
+
   function showSettings(layer, { state, prefs, onSave, onNewGame, onReturnCover, onAudioPreview }) {
     const humanNames = prefs.humanNames.map((name, seat) =>
       state && !(state.mode === 'ai' && state.aiSeat === seat) ? state.players[seat].name : name
     );
     const aiSeat = state?.mode === 'ai' ? state.aiSeat : 1;
-    const mode = prefs.mode || 'pvp';
-    const aiLevel = Engine.normalizeAiLevel(prefs.aiLevel, state?.mode === 'ai' ? Engine.normalizeAiLevel(state.aiLevel, 'master') : 'advanced');
+    const selection = {mode: prefs.mode, aiLevel: state?.mode === 'ai' ? state.aiLevel : prefs.aiLevel};
     const firstOrder = prefs.firstOrder || 'p0';
     const volPct = Math.round((prefs.musicVolume ?? 0.36) * 100);
 
@@ -5778,15 +5814,7 @@ button.res-row-prod { width: 100%; height: 100%; }
           <input id="set-p1" type="text" maxlength="12">
 
           <label style="margin-top:.22rem">对战模式（新局生效）</label>
-          <div class="mode-tabs" id="set-mode-tabs">
-            <button type="button" data-mode="pvp" class="${mode === 'pvp' ? 'is-on' : ''}">同机双人</button>
-            <button type="button" data-mode="ai" class="${mode === 'ai' ? 'is-on' : ''}">单人挑战</button>
-          </div>
-          <div class="mode-tabs is-tier" id="set-level-tabs" role="group" aria-label="对手难度" ${mode === 'ai' ? '' : 'hidden'}>
-            ${Object.values(Engine.AI_LEVELS).map(item => `
-              <button type="button" data-level="${item.id}" aria-pressed="${aiLevel === item.id}" class="${aiLevel === item.id ? 'is-on' : ''}">${item.label}</button>
-            `).join('')}
-          </div>
+          ${modeControls(selection)}
 
           <label style="margin-top:.2rem">新局先手</label>
           <div class="mode-tabs" id="set-first-tabs">
@@ -5845,15 +5873,12 @@ button.res-row-prod { width: 100%; height: 100%; }
       onClose: () => onAudioPreview?.({ music: prefs.music, musicVolume: prefs.musicVolume }) });
     root.DuelFullscreen?.syncButtons();
 
-    let selMode = mode;
-    let selLevel = aiLevel;
     let selFirst = firstOrder;
     const nameFields = [layer.querySelector('#set-p0'), layer.querySelector('#set-p1')];
-    const levelTabs = layer.querySelector('#set-level-tabs');
     function syncNames() {
       nameFields.forEach((input, seat) => {
-        input.disabled = selMode === 'ai' && seat === aiSeat;
-        input.value = input.disabled ? Engine.getAiName(selLevel) : humanNames[seat];
+        input.disabled = selection.mode === 'ai' && seat === aiSeat;
+        input.value = input.disabled ? Engine.getAiName(selection.aiLevel) : humanNames[seat];
       });
     }
     nameFields.forEach((input, seat) => {
@@ -5861,25 +5886,7 @@ button.res-row-prod { width: 100%; height: 100%; }
     });
     syncNames();
 
-    layer.querySelectorAll('#set-mode-tabs button').forEach(b => {
-      b.addEventListener('click', () => {
-        selMode = b.dataset.mode;
-        if (levelTabs) levelTabs.hidden = selMode !== 'ai';
-        syncNames();
-        layer.querySelectorAll('#set-mode-tabs button').forEach(x => x.classList.toggle('is-on', x === b));
-      });
-    });
-    layer.querySelectorAll('#set-level-tabs button').forEach(b => {
-      b.addEventListener('click', () => {
-        selLevel = Engine.normalizeAiLevel(b.dataset.level, 'advanced');
-        syncNames();
-        layer.querySelectorAll('#set-level-tabs button').forEach(x => {
-          const on = x === b;
-          x.classList.toggle('is-on', on);
-          x.setAttribute('aria-pressed', String(on));
-        });
-      });
-    });
+    bindModeControls(layer, selection, syncNames);
     layer.querySelectorAll('#set-first-tabs button').forEach(b => {
       b.addEventListener('click', () => {
         selFirst = b.dataset.first;
@@ -5905,8 +5912,7 @@ button.res-row-prod { width: 100%; height: 100%; }
     function readSettings() {
       return {
         humanNames: [humanNames[0].trim() || '玩家一', humanNames[1].trim() || '玩家二'],
-        mode: selMode,
-        aiLevel: selLevel,
+        ...selection,
         firstOrder: selFirst,
         music: musicInput.checked,
         musicVolume: Number(volInput.value) / 100,
@@ -6256,6 +6262,7 @@ button.res-row-prod { width: 100%; height: 100%; }
     showScoreBreakdown,
     showRules,
     showSettings,
+    showNewGame,
     confirmNewGame,
     showCityArchive,
     showDiscardPile,
@@ -8048,67 +8055,15 @@ SOFTWARE.
     renderActionDock();
   }
 
-  function hasMatchingOngoingGame() {
-    if (!state || state.mode !== prefs.mode) return false;
-    if (prefs.mode !== 'ai') return true;
-    return Engine.normalizeAiLevel(state.aiLevel, 'master') === Engine.normalizeAiLevel(prefs.aiLevel, DEFAULT_PREFS.aiLevel);
-  }
-
-  // ---- Cover / Lobby Rendering ----
-
   function renderCover() {
-    const modeBox = $('cover-mode');
-    const curLevel = Engine.normalizeAiLevel(prefs.aiLevel, DEFAULT_PREFS.aiLevel);
-    const tierHtml = prefs.mode === 'ai'
-      ? `
-        <div class="mode-tabs is-tier" role="group" aria-label="对手难度">
-          ${Object.values(Engine.AI_LEVELS).map(item => `
-            <button type="button" data-cover-level="${item.id}" aria-pressed="${curLevel === item.id}" class="${curLevel === item.id ? 'is-on' : ''}">${item.label}</button>
-          `).join('')}
-        </div>
-      `
-      : '';
-    modeBox.innerHTML = `
-      <div class="mode-tabs" role="group" aria-label="对战模式">
-        <button type="button" data-cover-mode="pvp" aria-pressed="${prefs.mode === 'pvp'}" class="${prefs.mode === 'pvp' ? 'is-on' : ''}">同机双人</button>
-        <button type="button" data-cover-mode="ai" aria-pressed="${prefs.mode === 'ai'}" class="${prefs.mode === 'ai' ? 'is-on' : ''}">单人挑战</button>
-      </div>
-      ${tierHtml}
-    `;
-    modeBox.querySelectorAll('[data-cover-mode]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        prefs.mode = btn.dataset.coverMode;
-        savePrefs();
-        sfx('select');
-        renderCover();
-      });
-    });
-    modeBox.querySelectorAll('[data-cover-level]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        prefs.aiLevel = Engine.normalizeAiLevel(btn.dataset.coverLevel, DEFAULT_PREFS.aiLevel);
-        savePrefs();
-        sfx('select');
-        renderCover();
-      });
-    });
-
-    const hasOngoing = hasMatchingOngoingGame();
-    const prog = $('cover-progress');
-    const primaryBtn = $('cover-primary');
-    const newBtn = $('cover-new');
-
-    if (hasOngoing) {
-      const stageTxt = state.phase === 'draft' ? `奇迹轮抽 ${state.draftRound + 1}/2` : `第 ${['', 'I', 'II', 'III'][state.age]} 时代`;
-      prog.hidden = false;
-      const modeName = state.mode === 'ai' ? '人机' : '双人';
-      prog.textContent = `${modeName} · ${state.players[0].name} / ${state.players[1].name} · ${state.phase === 'over' ? '终局' : stageTxt}`;
-      primaryBtn.textContent = state.phase === 'over' ? '查看上局' : '继续对局';
-      newBtn.hidden = false;
-    } else {
-      prog.hidden = true;
-      primaryBtn.textContent = '开始对局';
-      newBtn.hidden = true;
-    }
+    const unfinished = state && state.phase !== 'over';
+    const primary = $('cover-primary');
+    const secondary = $('cover-secondary');
+    primary.textContent = unfinished ? '继续游戏' : '新游戏';
+    primary.dataset.gameAction = unfinished ? 'resume' : 'new';
+    secondary.hidden = !state;
+    secondary.textContent = unfinished ? '新游戏' : '查看上局';
+    secondary.dataset.gameAction = unfinished ? 'new' : 'resume';
   }
 
   function cancelComputerTurn() {
@@ -8507,7 +8462,7 @@ SOFTWARE.
         prefs = { ...prefs, ...next };
         savePrefs();
         if (state) {
-          if (state.mode === 'ai') {
+          if (state.mode === 'ai' && next.mode === 'ai') {
             state.aiLevel = Engine.normalizeAiLevel(prefs.aiLevel, 'master');
           }
           for (const player of state.players) {
@@ -9069,19 +9024,21 @@ SOFTWARE.
 
   // ---- Global Listeners & Pro Keyboard Shortcuts ----
 
-  document.querySelector('[data-lobby="start"]')?.addEventListener('click', () => {
+  coverEl.querySelector('.cover-menu').addEventListener('click', e => {
+    const action = e.target.closest('[data-game-action]')?.dataset.gameAction;
+    if (!action) return;
     Music?.unlock();
-    if (hasMatchingOngoingGame()) {
+    sfx('paper');
+    if (action === 'resume') {
       if (state.phase === 'over') victoryShown = false;
-      sfx('paper');
       showSurface();
-    } else {
-      requestNewGame();
+      return;
     }
-  });
-  document.querySelector('[data-lobby="new"]')?.addEventListener('click', () => {
-    Music?.unlock();
-    requestNewGame();
+    Dialogs.showNewGame(dialogLayer, prefs, state && state.phase !== 'over', options => {
+      prefs = { ...prefs, ...options };
+      savePrefs();
+      startNewGame();
+    });
   });
   document.querySelector('[data-lobby="setup"]')?.addEventListener('click', () => {
     sfx('paper');
