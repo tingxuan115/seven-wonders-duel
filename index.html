@@ -815,13 +815,6 @@ button.res-row-prod { width: 100%; height: 100%; }
 .pcard.will-uncover {
   filter: brightness(1.06) saturate(1.04);
 }
-.pcard.will-uncover .dcard,
-.pcard.will-uncover .dcard-back {
-
-  animation: none;
-  outline: 1px dashed #805d2a;
-  outline-offset: 1px;
-}
 .pcard.will-uncover::before {
   content: "▲";
   position: absolute; left: 50%; top: -.56rem; transform: translateX(-50%);
@@ -835,10 +828,11 @@ button.res-row-prod { width: 100%; height: 100%; }
 .pcard.is-available { cursor: pointer; }
 .pcard.is-available:hover { transform: translateY(-3px); z-index: 30; }
 .pcard.is-available.is-selected { transform: translateY(-5px); z-index: 40; }
-.pcard.is-selected::after {
+.pcard:focus-visible { outline: 0; }
+.pcard:is(.is-selected, :focus-visible)::after {
   content: ""; position: absolute; left: 1%; right: -2%; top: calc(100% + 1px);
   height: clamp(3px, .36rem, 6px); pointer-events: none; z-index: 6;
-  background: var(--ochre-deep);
+  background: var(--ink-body);
   -webkit-mask: var(--mask-sweep) center / 100% 100% no-repeat;
   mask: var(--mask-sweep) center / 100% 100% no-repeat;
 }
@@ -848,29 +842,25 @@ button.res-row-prod { width: 100%; height: 100%; }
    ============================================================================ */
 .dcard {
   position: relative; width: 100%; height: 100%; border-radius: var(--card-corner); overflow: hidden;
-  padding: clamp(2px, .22rem, 3.5px);
-  background: #eadcc0;
+  padding: 0;
   display: flex; flex-direction: column;
   container-type: inline-size;
   box-shadow: var(--paper-edge);
 }
 .dcard-inner {
-  position: relative; flex: 1; min-height: 0; border-radius: 4% / 2.64%; overflow: hidden;
-  border: 1px solid #75644b70;
+  position: relative; flex: 1; min-height: 0; border-radius: inherit; overflow: hidden;
   display: flex; flex-direction: column;
 }
 
-/* Ochre for an affordable build, Viridian for a free chain. */
-.pcard.is-available.is-affordable .dcard {
-  background: #c5a15a;
-  box-shadow: var(--paper-edge);
+/* One rim per face. Selection and uncover previews use the marks outside the card. */
+.pcard[data-border-hint="science"] { --hint-ink: #45976a; }
+.pcard[data-border-hint="free"] { --hint-ink: #568eb8; }
+.pcard[data-border-hint="purchase"] { --hint-ink: #c49a48; }
+.pcard[data-border-hint] .dcard {
+  background: var(--hint-ink); padding: clamp(2px, .25rem, 3.5px);
 }
-.pcard.is-available.is-free-chain .dcard {
-  background: #6f9a7d;
-  box-shadow: var(--paper-edge);
-}
+.pcard[data-border-hint] .dcard-inner { border-radius: 3.7% / 2.44%; }
 .pcard.is-selected .dcard {
-  background: #e2c778;
   outline: 0;
   box-shadow: 0 7px 16px rgba(38, 26, 12, 0.3);
 }
@@ -1435,7 +1425,6 @@ button.res-row-prod { width: 100%; height: 100%; }
 .col-swatch.purple { background: #6f3b8c; }
 
 /* The table uses quoted prices. The selected card and inspection folio retain its printed cost. */
-:is(.pcard, .flight-ghost, .dlg-panel) .dcard { padding: clamp(1.4px, .17rem, 2.6px); }
 :is(.pcard, .flight-ghost, .dlg-panel) .dcard-head { position: static; height: 26%; min-height: 0; padding: 0; }
 :is(.pcard, .flight-ghost, .dlg-panel) .dcard-body img { position: static; width: 100%; height: 100%; }
 :is(.pcard, .flight-ghost, .dlg-panel) .dcard-body::after, :is(.pcard, .flight-ghost) .dcard-cost { display: none; }
@@ -3374,10 +3363,14 @@ button.res-row-prod { width: 100%; height: 100%; }
     };
   }
 
+  const AI_NAME = 'ai玩家';
+
   function createGame(options = {}) {
     const seed = options.seed ?? ((Date.now() ^ Math.floor(Math.random() * 0xFFFFFF)) >>> 0);
     const rng = createRng(seed);
     const names = options.names || ['玩家一', '玩家二'];
+    const mode = options.mode || 'pvp';
+    const aiSeat = options.aiSeat ?? 1;
     const startSeat = options.startSeat === 1 ? 1 : 0;
 
     // Shuffle 12 wonders -> take 8 for 2 draft rounds of 4
@@ -3399,9 +3392,9 @@ button.res-row-prod { width: 100%; height: 100%; }
     const state = {
       version: 1,
       seed,
-      mode: options.mode || 'pvp',       // 'pvp' | 'ai'
+      mode,                               // 'pvp' | 'ai'
       aiLevel: 'neural',
-      aiSeat: options.aiSeat ?? 1,
+      aiSeat,
       phase: 'draft',                     // 'draft' | 'play' | 'choose_token' | 'destroy_card' | 'mausoleum' | 'great_library' | 'choose_starter' | 'over'
       startSeat,
       turn: startSeat,
@@ -3412,7 +3405,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       draftStep: 0,                       // 0, 1, 2 (0: first picks 1, 1: second picks 1, 2: second picks 2nd -> auto-assign last)
       draftOffers: draftPool,             // [[4 ids], [4 ids]]
       draftTaken: [[false, false, false, false], [false, false, false, false]],
-      players: [createPlayer(0, names[0]), createPlayer(1, names[1])],
+      players: [0, 1].map(seat => createPlayer(seat, mode === 'ai' && seat === aiSeat ? AI_NAME : names[seat])),
       boardTokens,                        // up to 5 token IDs on the board
       boxTokens,                          // 5 unused token IDs (Great Library draws 3 from here)
       decks: { 1: age1Deck, 2: age2Deck, 3: age3Deck },
@@ -4383,6 +4376,7 @@ button.res-row-prod { width: 100%; height: 100%; }
   }
 
   root.DuelEngine = Object.freeze({
+    AI_NAME,
     createGame,
     cloneState,
     applyAction,
@@ -5694,6 +5688,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       <details name="duel-rule-section" class="rule-sec">
         <summary>贸易、连锁与时代交替</summary>
         <ul>
+          <li>牌边按科技（绿）、免费（蓝）、付费可建（金）的顺序显示一种颜色。绿色提示分为「成对」「即胜」「待配」。「待配」表示此牌还被压住，或当前金币不足。</li>
           <li>单份资源贸易价 = <b>2 + 对手棕/灰牌固定产出</b>（黄牌与奇迹自选产出不计入）；行栈/海关降至固定 1 金。</li>
           <li>插画左上角是<b>连锁前置</b>，满足时显示绿色对勾。右上角的金签是<b>建成后提供的连锁</b>。右下角显示本次建造需付的金币。城市规划在连锁免费建造时额外 +4 金。</li>
           <li>时代交替时由军事劣势方（平手则最后行动方）决定下一时代先手；时代末牌触发的再行动不顺延至下时代。</li>
@@ -5713,8 +5708,10 @@ button.res-row-prod { width: 100%; height: 100%; }
   }
 
   function showSettings(layer, { state, prefs, onSave, onNewGame, onReturnCover, onAudioPreview }) {
-    const p0 = state ? state.players[0].name : prefs.names[0];
-    const p1 = state ? state.players[1].name : prefs.names[1];
+    const humanNames = prefs.humanNames.map((name, seat) =>
+      state && !(state.mode === 'ai' && state.aiSeat === seat) ? state.players[seat].name : name
+    );
+    const aiSeat = state?.mode === 'ai' ? state.aiSeat : 1;
     const mode = prefs.mode || 'pvp';
     const firstOrder = prefs.firstOrder || 'p0';
     const volPct = Math.round((prefs.musicVolume ?? 0.36) * 100);
@@ -5724,9 +5721,9 @@ button.res-row-prod { width: 100%; height: 100%; }
         <div class="field-group">
           <h3 class="book-section-title">对局与席位</h3>
           <label for="set-p0">一号城邦（蓝方）</label>
-          <input id="set-p0" type="text" maxlength="12" value="${esc(p0)}">
+          <input id="set-p0" type="text" maxlength="12">
           <label for="set-p1" style="margin-top:.32rem">二号城邦（红方）</label>
-          <input id="set-p1" type="text" maxlength="12" value="${esc(p1)}">
+          <input id="set-p1" type="text" maxlength="12">
 
           <label style="margin-top:.45rem">对战模式（新局生效）</label>
           <div class="mode-tabs" id="set-mode-tabs">
@@ -5793,10 +5790,22 @@ button.res-row-prod { width: 100%; height: 100%; }
 
     let selMode = mode;
     let selFirst = firstOrder;
+    const nameFields = [layer.querySelector('#set-p0'), layer.querySelector('#set-p1')];
+    function syncNames() {
+      nameFields.forEach((input, seat) => {
+        input.disabled = selMode === 'ai' && seat === aiSeat;
+        input.value = input.disabled ? Engine.AI_NAME : humanNames[seat];
+      });
+    }
+    nameFields.forEach((input, seat) => {
+      input.oninput = () => { humanNames[seat] = input.value; };
+    });
+    syncNames();
 
     layer.querySelectorAll('#set-mode-tabs button').forEach(b => {
       b.addEventListener('click', () => {
         selMode = b.dataset.mode;
+        syncNames();
         layer.querySelectorAll('#set-mode-tabs button').forEach(x => x.classList.toggle('is-on', x === b));
       });
     });
@@ -5823,10 +5832,8 @@ button.res-row-prod { width: 100%; height: 100%; }
     volInput.addEventListener('input', syncAudioLive);
 
     function readSettings() {
-      const n0 = layer.querySelector('#set-p0').value.trim() || '玩家一';
-      const n1 = layer.querySelector('#set-p1').value.trim() || (selMode === 'ai' ? '电脑执政官' : '玩家二');
       return {
-        names: [n0, n1],
+        humanNames: [humanNames[0].trim() || '玩家一', humanNames[1].trim() || '玩家二'],
         mode: selMode,
         firstOrder: selFirst,
         music: musicInput.checked,
@@ -7598,7 +7605,7 @@ SOFTWARE.
   const DEFAULT_PREFS = {
     mode: 'pvp',
     firstOrder: 'p0', // 'p0' | 'p1' | 'random'
-    names: ['玩家一', '玩家二'],
+    humanNames: ['玩家一', '玩家二'],
     music: false,
     musicVolume: 0.36,
     sound: true,
@@ -7606,8 +7613,8 @@ SOFTWARE.
     faceToFace: false,
   };
 
-  let prefs = loadPrefs();
   let state = loadSavedGame();
+  let prefs = loadPrefs();
   let undoStack = [];
   let selectedSlot = null;
   let pickingWonder = false;
@@ -7633,12 +7640,15 @@ SOFTWARE.
     try {
       const raw = localStorage.getItem(PREFS_KEY);
       if (raw) {
-        const stored = JSON.parse(raw);
-        delete stored.aiLevel;
+        const { names, aiLevel, ...stored } = JSON.parse(raw);
+        if (!stored.humanNames && Array.isArray(names)) {
+          stored.humanNames = names;
+          if (stored.mode === 'ai' && names[1] === '电脑执政官') names[1] = '玩家二';
+        }
         return { ...DEFAULT_PREFS, ...stored };
       }
     } catch (_) {}
-    return { ...DEFAULT_PREFS };
+    return { ...DEFAULT_PREFS, mode: state?.mode || DEFAULT_PREFS.mode };
   }
 
   function savePrefs() {
@@ -7664,6 +7674,21 @@ SOFTWARE.
               const name = Data.WONDER_BY_ID[wonder.id]?.name;
               const entry = parsed.log?.find(item => item.text?.includes(` 建成奇迹【${name}】`));
               if (entry && Number.isFinite(entry.t)) wonder.builtOnTurn = entry.t;
+            }
+          }
+          if (parsed.mode === 'ai') {
+            parsed.aiSeat ??= 1;
+            const ai = parsed.players[parsed.aiSeat];
+            const oldName = ai.name;
+            ai.name = Engine.AI_NAME;
+            if (oldName && oldName !== ai.name && oldName !== parsed.players[1 - parsed.aiSeat].name) {
+              for (const entry of parsed.log || []) {
+                // Old chronicles stored prose. Only replace an identifiable actor, never a card or a city mentioned later.
+                const prefix = entry.text.match(/^(?:[^，]+，由 |军事劫掠：|军事重创：|军事压制！|科技霸权！|终局结算：)/)?.[0] || '';
+                if (entry.text.startsWith(oldName + ' ', prefix.length)) {
+                  entry.text = prefix + ai.name + entry.text.slice(prefix.length + oldName.length);
+                }
+              }
             }
           }
           return parsed;
@@ -7901,15 +7926,13 @@ SOFTWARE.
     modeBox.querySelectorAll('[data-cover-mode]').forEach(btn => {
       btn.addEventListener('click', () => {
         prefs.mode = btn.dataset.coverMode;
-        if (prefs.mode === 'ai' && prefs.names[1] === '玩家二') prefs.names[1] = '电脑执政官';
-        if (prefs.mode === 'pvp' && prefs.names[1] === '电脑执政官') prefs.names[1] = '玩家二';
         savePrefs();
         sfx('select');
         renderCover();
       });
     });
 
-    const hasOngoing = Boolean(state);
+    const hasOngoing = state?.mode === prefs.mode;
     const prog = $('cover-progress');
     const primaryBtn = $('cover-primary');
     const newBtn = $('cover-new');
@@ -7976,13 +7999,10 @@ SOFTWARE.
 
   function startNewGame() {
     cancelComputerTurn();
-    const names = prefs.mode === 'ai'
-      ? [prefs.names[0] || '玩家一', prefs.names[1] === '玩家二' ? '电脑执政官' : (prefs.names[1] || '电脑执政官')]
-      : [prefs.names[0] || '玩家一', prefs.names[1] || '玩家二'];
     state = Engine.createGame({
       mode: prefs.mode,
       aiSeat: 1,
-      names,
+      names: prefs.humanNames,
       startSeat: resolveStartSeat(),
     });
     undoStack = [];
@@ -8326,8 +8346,9 @@ SOFTWARE.
         prefs = { ...prefs, ...next };
         savePrefs();
         if (state) {
-          state.players[0].name = prefs.names[0];
-          state.players[1].name = prefs.names[1];
+          for (const player of state.players) {
+            player.name = state.mode === 'ai' && player.seat === state.aiSeat ? Engine.AI_NAME : prefs.humanNames[player.seat];
+          }
           persistGame();
           renderAll();
           maybeTriggerPendingModalOrAI();
@@ -8691,6 +8712,10 @@ SOFTWARE.
       const revealedNow = justRevealedSlots.has(node.slot);
       const pairs = state.phase === 'play' && myScience[card.science] === 1;
       const pendingPair = pairs && (!avail || !pay.affordable);
+      const scienceVictory = state.phase === 'play' && pay?.affordable && card.science && !myScience[card.science] && myUniqueSci === 5;
+      let borderHint = '';
+      if (pairs || scienceVictory) borderHint = 'science';
+      else if (state.phase === 'play' && pay?.affordable) borderHint = pay.totalCoins === 0 ? 'free' : 'purchase';
 
       let priceTag = '';
       if (avail && pay && state.phase === 'play') {
@@ -8699,26 +8724,19 @@ SOFTWARE.
         } else if (pay.totalCoins > 0) {
           priceTag = `<span class="dcard-trade-pip is-ok">${Icons.ui('coin')}${pay.totalCoins}</span>`;
         }
-        if (card.science) {
-          if (!myScience[card.science] && myUniqueSci === 5) {
-            priceTag += `<span class="dcard-sci-combo">即胜</span>`;
-          } else if (pairs && !pendingPair) {
-            priceTag += `<span class="dcard-sci-combo">成对</span>`;
-          }
-        }
+        if (scienceVictory) priceTag += '<span class="dcard-sci-combo">即胜</span>';
+        else if (pairs && !pendingPair) priceTag += '<span class="dcard-sci-combo">成对</span>';
       }
 
       const cls = [
         'pcard',
         avail ? 'is-available' : 'is-covered',
-        avail && pay?.affordable ? 'is-affordable' : '',
-        avail && pay?.freeByChain ? 'is-free-chain' : '',
         isSel ? 'is-selected' : '',
         revealedNow ? 'just-revealed' : '',
       ].filter(Boolean).join(' ');
 
       return `
-        <button type="button" class="${cls}" style="${style}" data-slot="${node.slot}" aria-label="${Dialogs.esc(card.name)}${pendingPair ? ' · 待配' : ''}">
+        <button type="button" class="${cls}" style="${style}" data-slot="${node.slot}" ${borderHint ? `data-border-hint="${borderHint}"` : ''} aria-label="${Dialogs.esc(card.name)}${pendingPair ? ' · 待配' : ''}">
           ${renderCardFaceHtml(card, avail ? ownedChains : null, priceTag, pendingPair)}
         </button>
       `;
@@ -8888,12 +8906,12 @@ SOFTWARE.
 
   document.querySelector('[data-lobby="start"]')?.addEventListener('click', () => {
     Music?.unlock();
-    if (state) {
+    if (state?.mode === prefs.mode) {
       if (state.phase === 'over') victoryShown = false;
       sfx('paper');
       showSurface();
     } else {
-      startNewGame();
+      requestNewGame();
     }
   });
   document.querySelector('[data-lobby="new"]')?.addEventListener('click', () => {
