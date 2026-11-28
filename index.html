@@ -1857,6 +1857,8 @@ button.res-row-prod { width: 100%; height: 100%; }
 .settings-links { display: flex; flex-wrap: wrap; gap: 1.15rem; }
 .settings-link { align-self: start; min-height: 26px; padding: .2rem 0; border: 0; background: transparent; font: 600 max(10px,.9rem)/1.2 var(--serif); color: var(--ink-body); text-decoration: underline; text-underline-offset: .27em; text-decoration-color: var(--paper-rule); }
 .settings-book .mode-tabs { display: flex; width: 100%; }
+.settings-book .mode-tabs[hidden] { display: none; }
+.settings-book .mode-tabs.is-tier { margin-top: -.04rem; padding: .14rem .32rem; }
 .settings-book .mode-tabs button { flex: 1; text-align: center; }
 .settings-book .mode-tabs button::before { inset: -1px -2px; }
 
@@ -2141,7 +2143,10 @@ button.res-row-prod { width: 100%; height: 100%; }
   width: min(100%, 21rem);
   display: grid; grid-template-columns: 1fr 1fr; gap: .56rem .5rem; align-items: center;
 }
-#cover-mode { grid-column: 1 / -1; margin-bottom: .18rem; }
+#cover-mode {
+  grid-column: 1 / -1; margin-bottom: .18rem;
+  display: flex; flex-direction: column; align-items: center; gap: .32rem;
+}
 
 /* A thin pigment mark picks out one option on the paper. */
 .mode-tabs {
@@ -2182,6 +2187,21 @@ button.res-row-prod { width: 100%; height: 100%; }
 .mode-tabs button.is-on { color: var(--indigo-deep); }
 .mode-tabs button.is-on::before { opacity: .15; transform: scaleX(1); }
 .mode-tabs button.is-on::after { opacity: .94; transform: scaleX(1); }
+
+/* Nested AI difficulty pigment mark: softer paper wash + terracotta brush stroke */
+.mode-tabs.is-tier {
+  gap: .16rem; padding: .18rem .38rem;
+}
+.mode-tabs.is-tier::before {
+  background: rgba(154, 134, 98, .07);
+}
+.mode-tabs.is-tier button {
+  padding: .28rem .82rem; font-size: .8rem;
+}
+.mode-tabs.is-tier button::before { background: var(--terracotta); }
+.mode-tabs.is-tier button::after { background: var(--terracotta); }
+.mode-tabs.is-tier button.is-on { color: var(--terracotta-deep); }
+.mode-tabs.is-tier button.is-on::before { opacity: .13; }
 
 #cover-progress {
   grid-column: 1 / -1; margin: 0 0 .12rem; font: 600 .8rem/1.35 var(--sans); color: var(--ink-muted);
@@ -2236,6 +2256,8 @@ button.res-row-prod { width: 100%; height: 100%; }
   .cover-sub { font-size: clamp(12px, 4vh, 18px); padding: .14rem .95rem; padding-left: 1.25rem; }
   .cover-lettering { font-size: clamp(11px, 3.6vh, 16px); margin-top: .18rem; }
   .cover-menu { width: min(100%, 20rem); gap: .32rem; }
+  #cover-mode { gap: .2rem; margin-bottom: .08rem; }
+  .mode-tabs.is-tier button { padding: .2rem .68rem; font-size: .78rem; }
   .cover-primary { min-height: 3.1rem; font-size: 1.24rem; padding: .38rem 1.3rem; }
   .cover-secondary, .cover-packs { min-height: 2.2rem; font-size: .96rem; }
 }
@@ -2657,6 +2679,7 @@ button.res-row-prod { width: 100%; height: 100%; }
 .settings-book .field-group label { font-size: .82rem; }
 .settings-book .field-group input[type="text"] { min-width: 0; font-size: .92rem; padding: .34rem .5rem; }
 .settings-book .mode-tabs button { min-height: max(26px, 2.15rem); font-size: .86rem; }
+.settings-book .mode-tabs.is-tier button { min-height: max(24px, 1.82rem); padding: .2rem .45rem; font-size: .8rem; }
 .settings-book .dial-pair { gap: .55rem; margin: .15rem 0 .45rem; }
 .settings-book .dial-switch { padding: .38rem .52rem; row-gap: .28rem; }
 .settings-book .brass-slider-wrap { margin: .1rem 0 .42rem; }
@@ -3371,12 +3394,29 @@ button.res-row-prod { width: 100%; height: 100%; }
   }
 
   const AI_NAME = 'ai玩家';
+  const AI_LEVELS = Object.freeze({
+    easy: Object.freeze({ id: 'easy', label: '简单', name: 'AI · 简单' }),
+    advanced: Object.freeze({ id: 'advanced', label: '进阶', name: 'AI · 进阶' }),
+    master: Object.freeze({ id: 'master', label: '大师', name: 'AI · 大师' }),
+  });
+
+  function normalizeAiLevel(level, fallback = 'master') {
+    if (level === 'easy') return 'easy';
+    if (level === 'advanced' || level === 'smart') return 'advanced';
+    if (level === 'master' || level === 'neural') return 'master';
+    return AI_LEVELS[fallback] ? fallback : 'master';
+  }
+
+  function getAiName(level) {
+    return AI_LEVELS[normalizeAiLevel(level, 'master')].name;
+  }
 
   function createGame(options = {}) {
     const seed = options.seed ?? ((Date.now() ^ Math.floor(Math.random() * 0xFFFFFF)) >>> 0);
     const rng = createRng(seed);
     const names = options.names || ['玩家一', '玩家二'];
     const mode = options.mode || 'pvp';
+    const aiLevel = normalizeAiLevel(options.aiLevel, 'master');
     const aiSeat = options.aiSeat ?? 1;
     const startSeat = options.startSeat === 1 ? 1 : 0;
 
@@ -3400,7 +3440,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       version: 1,
       seed,
       mode,                               // 'pvp' | 'ai'
-      aiLevel: 'neural',
+      aiLevel,                            // 'easy' | 'advanced' | 'master'
       aiSeat,
       phase: 'draft',                     // 'draft' | 'play' | 'choose_token' | 'destroy_card' | 'mausoleum' | 'great_library' | 'choose_starter' | 'over'
       startSeat,
@@ -3412,7 +3452,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       draftStep: 0,                       // 0, 1, 2 (0: first picks 1, 1: second picks 1, 2: second picks 2nd -> auto-assign last)
       draftOffers: draftPool,             // [[4 ids], [4 ids]]
       draftTaken: [[false, false, false, false], [false, false, false, false]],
-      players: [0, 1].map(seat => createPlayer(seat, mode === 'ai' && seat === aiSeat ? AI_NAME : names[seat])),
+      players: [0, 1].map(seat => createPlayer(seat, mode === 'ai' && seat === aiSeat ? getAiName(aiLevel) : names[seat])),
       boardTokens,                        // up to 5 token IDs on the board
       boxTokens,                          // 5 unused token IDs (Great Library draws 3 from here)
       decks: { 1: age1Deck, 2: age2Deck, 3: age3Deck },
@@ -4384,6 +4424,9 @@ button.res-row-prod { width: 100%; height: 100%; }
 
   root.DuelEngine = Object.freeze({
     AI_NAME,
+    AI_LEVELS,
+    normalizeAiLevel,
+    getAiName,
     createGame,
     cloneState,
     applyAction,
@@ -5720,6 +5763,7 @@ button.res-row-prod { width: 100%; height: 100%; }
     );
     const aiSeat = state?.mode === 'ai' ? state.aiSeat : 1;
     const mode = prefs.mode || 'pvp';
+    const aiLevel = Engine.normalizeAiLevel(prefs.aiLevel, state?.mode === 'ai' ? Engine.normalizeAiLevel(state.aiLevel, 'master') : 'advanced');
     const firstOrder = prefs.firstOrder || 'p0';
     const volPct = Math.round((prefs.musicVolume ?? 0.36) * 100);
 
@@ -5729,16 +5773,21 @@ button.res-row-prod { width: 100%; height: 100%; }
           <h3 class="book-section-title">对局与席位</h3>
           <label for="set-p0">一号城邦（蓝方）</label>
           <input id="set-p0" type="text" maxlength="12">
-          <label for="set-p1" style="margin-top:.32rem">二号城邦（红方）</label>
+          <label for="set-p1" style="margin-top:.16rem">二号城邦（红方）</label>
           <input id="set-p1" type="text" maxlength="12">
 
-          <label style="margin-top:.45rem">对战模式（新局生效）</label>
+          <label style="margin-top:.22rem">对战模式（新局生效）</label>
           <div class="mode-tabs" id="set-mode-tabs">
             <button type="button" data-mode="pvp" class="${mode === 'pvp' ? 'is-on' : ''}">同机双人</button>
-            <button type="button" data-mode="ai" class="${mode === 'ai' ? 'is-on' : ''}">单人挑战大师</button>
+            <button type="button" data-mode="ai" class="${mode === 'ai' ? 'is-on' : ''}">单人挑战</button>
+          </div>
+          <div class="mode-tabs is-tier" id="set-level-tabs" role="group" aria-label="对手难度" ${mode === 'ai' ? '' : 'hidden'}>
+            ${Object.values(Engine.AI_LEVELS).map(item => `
+              <button type="button" data-level="${item.id}" aria-pressed="${aiLevel === item.id}" class="${aiLevel === item.id ? 'is-on' : ''}">${item.label}</button>
+            `).join('')}
           </div>
 
-          <label style="margin-top:.38rem">新局先手</label>
+          <label style="margin-top:.2rem">新局先手</label>
           <div class="mode-tabs" id="set-first-tabs">
             <button type="button" data-first="p0" class="${firstOrder === 'p0' ? 'is-on' : ''}">蓝方</button>
             <button type="button" data-first="p1" class="${firstOrder === 'p1' ? 'is-on' : ''}">红方</button>
@@ -5796,12 +5845,14 @@ button.res-row-prod { width: 100%; height: 100%; }
     root.DuelFullscreen?.syncButtons();
 
     let selMode = mode;
+    let selLevel = aiLevel;
     let selFirst = firstOrder;
     const nameFields = [layer.querySelector('#set-p0'), layer.querySelector('#set-p1')];
+    const levelTabs = layer.querySelector('#set-level-tabs');
     function syncNames() {
       nameFields.forEach((input, seat) => {
         input.disabled = selMode === 'ai' && seat === aiSeat;
-        input.value = input.disabled ? Engine.AI_NAME : humanNames[seat];
+        input.value = input.disabled ? Engine.getAiName(selLevel) : humanNames[seat];
       });
     }
     nameFields.forEach((input, seat) => {
@@ -5812,8 +5863,20 @@ button.res-row-prod { width: 100%; height: 100%; }
     layer.querySelectorAll('#set-mode-tabs button').forEach(b => {
       b.addEventListener('click', () => {
         selMode = b.dataset.mode;
+        if (levelTabs) levelTabs.hidden = selMode !== 'ai';
         syncNames();
         layer.querySelectorAll('#set-mode-tabs button').forEach(x => x.classList.toggle('is-on', x === b));
+      });
+    });
+    layer.querySelectorAll('#set-level-tabs button').forEach(b => {
+      b.addEventListener('click', () => {
+        selLevel = Engine.normalizeAiLevel(b.dataset.level, 'advanced');
+        syncNames();
+        layer.querySelectorAll('#set-level-tabs button').forEach(x => {
+          const on = x === b;
+          x.classList.toggle('is-on', on);
+          x.setAttribute('aria-pressed', String(on));
+        });
       });
     });
     layer.querySelectorAll('#set-first-tabs button').forEach(b => {
@@ -5842,6 +5905,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       return {
         humanNames: [humanNames[0].trim() || '玩家一', humanNames[1].trim() || '玩家二'],
         mode: selMode,
+        aiLevel: selLevel,
         firstOrder: selFirst,
         music: musicInput.checked,
         musicVolume: Number(volInput.value) / 100,
@@ -7404,11 +7468,28 @@ SOFTWARE.
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : window);
 </script>
-<script id="neural-player">/* Direct neural policy chooser shared by Web Worker and main-thread fallback. */
+<script id="neural-player">/* Direct neural policy chooser shared by Web Worker and main-thread fallback.
+   Supports three difficulty tiers over the single bundled champion weights:
+     - easy     (简单): Guarded Softmax T=3.5, maxGap=13.5 (~72% vs classic, natural human mistakes without fatal blunders)
+     - advanced (进阶): Guarded Softmax T=3.2, maxGap=10.0, topK=4 (~86% vs classic, sharp play with rare tactical openings)
+     - master   (大师): Full deterministic policy-argmax via DuelNeuralPolicy.bestIndex */
 (function (root) {
   'use strict';
 
+  const LEVELS = Object.freeze({
+    easy: Object.freeze({ mode: 'guarded_softmax', temp: 3.5, maxGap: 13.5, topK: 0 }),
+    advanced: Object.freeze({ mode: 'guarded_softmax', temp: 3.2, maxGap: 10.0, topK: 4 }),
+    master: Object.freeze({ mode: 'argmax' }),
+  });
+
   let session = null;
+
+  function normalizeLevel(level) {
+    if (level && typeof level === 'object') level = level.level;
+    if (level === 'easy') return 'easy';
+    if (level === 'advanced' || level === 'smart') return 'advanced';
+    return 'master';
+  }
 
   function load(getAssets) {
     if (!session) {
@@ -7418,13 +7499,53 @@ SOFTWARE.
     return session;
   }
 
-  function choose(view, getAssets) {
+  function chooseIndex(logits, legalCount, level = 'master', rng = Math.random) {
+    const key = normalizeLevel(level);
+    const best = root.DuelNeuralPolicy.bestIndex(logits, legalCount);
+    const spec = LEVELS[key];
+    if (!spec || spec.mode === 'argmax' || legalCount <= 1) return best;
+
+    const order = [];
+    for (let i = 0; i < legalCount; i++) {
+      if (Number.isFinite(logits[i])) order.push(i);
+    }
+    if (order.length <= 1) return best;
+    order.sort((a, b) => (logits[b] - logits[a]) || (a - b));
+
+    const bestLogit = logits[order[0]];
+    const limit = spec.topK > 0 ? Math.min(spec.topK, order.length) : order.length;
+    const cands = [];
+    for (let i = 0; i < limit; i++) {
+      const idx = order[i];
+      if (bestLogit - logits[idx] <= spec.maxGap) cands.push(idx);
+      else break;
+    }
+    if (cands.length <= 1) return order[0];
+
+    const weights = new Array(cands.length);
+    let total = 0;
+    for (let i = 0; i < cands.length; i++) {
+      const w = Math.exp((logits[cands[i]] - bestLogit) / spec.temp);
+      weights[i] = w;
+      total += w;
+    }
+    if (!Number.isFinite(total) || total <= 0) return order[0];
+
+    let target = rng() * total;
+    for (let i = 0; i < cands.length - 1; i++) {
+      target -= weights[i];
+      if (target <= 0) return cands[i];
+    }
+    return cands[cands.length - 1];
+  }
+
+  function choose(view, getAssets, options) {
     const input = root.DuelNeuralBoard.encode(view);
     if (!input.moves.length) return null;
     if (input.moves.length === 1) return input.moves[0];
     const evaluator = load(getAssets);
     const pred = evaluator.predict(input);
-    const idx = root.DuelNeuralPolicy.bestIndex(pred.logits, input.moves.length);
+    const idx = chooseIndex(pred.logits, input.moves.length, options);
     return input.moves[idx];
   }
 
@@ -7432,7 +7553,7 @@ SOFTWARE.
     session = null;
   }
 
-  const api = Object.freeze({ choose, load, reset });
+  const api = Object.freeze({ choose, chooseIndex, normalizeLevel, LEVELS, load, reset });
   root.DuelNeuralPlayer = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof globalThis !== 'undefined' ? globalThis : window);
@@ -7494,7 +7615,7 @@ SOFTWARE.
       self.onmessage = ({ data }) => {
         if (data.assets) { assets = data.assets; return; }
         try {
-          const action = globalThis.DuelNeuralPlayer.choose(data.view, () => assets);
+          const action = globalThis.DuelNeuralPlayer.choose(data.view, () => assets, data.level);
           self.postMessage({ id: data.id, action });
         } catch (err) {
           self.postMessage({ id: data.id, error: String(err && err.message || err) });
@@ -7519,7 +7640,7 @@ SOFTWARE.
         console.warn('Neural worker fallback:', ev.data.error);
         stopWorker();
         workerDisabled = true;
-        runLocal(cur.view, cur.resolve, cur.reject);
+        runLocal(cur.view, cur.level, cur.resolve, cur.reject);
         return;
       }
       cur.resolve(ev.data.action);
@@ -7532,17 +7653,17 @@ SOFTWARE.
       if (cur) {
         clearTimeout(cur.timer);
         pending = null;
-        runLocal(cur.view, cur.resolve, cur.reject);
+        runLocal(cur.view, cur.level, cur.resolve, cur.reject);
       }
     };
     worker.postMessage({ assets: getAssets() });
     return worker;
   }
 
-  function runLocal(view, resolve, reject) {
+  function runLocal(view, level, resolve, reject) {
     setTimeout(() => {
       try {
-        const action = root.DuelNeuralPlayer.choose(view, getAssets);
+        const action = root.DuelNeuralPlayer.choose(view, getAssets, level);
         resolve(action);
       } catch (err) {
         reject(err);
@@ -7550,12 +7671,13 @@ SOFTWARE.
     }, 0);
   }
 
-  function chooseAsync(state) {
+  function chooseAsync(state, levelOverride) {
     cancel();
     if (!assetEl || !root.DuelNeuralBoard) {
       return Promise.reject(new Error('Missing master model'));
     }
     const view = root.DuelNeuralBoard.observe(state, state.turn);
+    const level = levelOverride || state.aiLevel || 'master';
     return new Promise((resolve, reject) => {
       const id = ++reqSeq;
       if (!workerDisabled && typeof Worker === 'function') {
@@ -7566,10 +7688,10 @@ SOFTWARE.
             pending = null;
             stopWorker();
             workerDisabled = true;
-            runLocal(view, resolve, reject);
+            runLocal(view, level, resolve, reject);
           }, 15000);
-          pending = { id, view, timer, inWorker: true, resolve, reject };
-          w.postMessage({ id, view });
+          pending = { id, view, level, timer, inWorker: true, resolve, reject };
+          w.postMessage({ id, view, level });
           return;
         } catch {
           clearTimeout(pending?.timer);
@@ -7578,7 +7700,7 @@ SOFTWARE.
           stopWorker();
         }
       }
-      runLocal(view, resolve, reject);
+      runLocal(view, level, resolve, reject);
     });
   }
 
@@ -7611,6 +7733,7 @@ SOFTWARE.
 
   const DEFAULT_PREFS = {
     mode: 'pvp',
+    aiLevel: 'advanced', // 'easy' | 'advanced' | 'master'
     firstOrder: 'p0', // 'p0' | 'p1' | 'random'
     humanNames: ['玩家一', '玩家二'],
     music: false,
@@ -7644,18 +7767,22 @@ SOFTWARE.
   const toastLayer = $('toast-layer');
 
   function loadPrefs() {
+    const fallbackLevel = state?.mode === 'ai'
+      ? Engine.normalizeAiLevel(state.aiLevel, 'master')
+      : DEFAULT_PREFS.aiLevel;
     try {
       const raw = localStorage.getItem(PREFS_KEY);
       if (raw) {
         const { names, aiLevel, ...stored } = JSON.parse(raw);
         if (!stored.humanNames && Array.isArray(names)) {
           stored.humanNames = names;
-          if (stored.mode === 'ai' && names[1] === '电脑执政官') names[1] = '玩家二';
+          if (stored.mode === 'ai' && (names[1] === '电脑执政官' || names[1] === 'ai玩家')) names[1] = '玩家二';
         }
+        stored.aiLevel = Engine.normalizeAiLevel(aiLevel, fallbackLevel);
         return { ...DEFAULT_PREFS, ...stored };
       }
     } catch (_) {}
-    return { ...DEFAULT_PREFS, mode: state?.mode || DEFAULT_PREFS.mode };
+    return { ...DEFAULT_PREFS, mode: state?.mode || DEFAULT_PREFS.mode, aiLevel: fallbackLevel };
   }
 
   function savePrefs() {
@@ -7674,7 +7801,7 @@ SOFTWARE.
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && parsed.version === 1 && Array.isArray(parsed.players)) {
-          parsed.aiLevel = 'neural';
+          parsed.aiLevel = Engine.normalizeAiLevel(parsed.aiLevel, 'master');
           for (const player of parsed.players) {
             for (const wonder of player.wonders || []) {
               if (!wonder.built || Number.isFinite(wonder.builtOnTurn)) continue;
@@ -7687,7 +7814,7 @@ SOFTWARE.
             parsed.aiSeat ??= 1;
             const ai = parsed.players[parsed.aiSeat];
             const oldName = ai.name;
-            ai.name = Engine.AI_NAME;
+            ai.name = Engine.getAiName(parsed.aiLevel);
             if (oldName && oldName !== ai.name && oldName !== parsed.players[1 - parsed.aiSeat].name) {
               for (const entry of parsed.log || []) {
                 // Old chronicles stored prose. Only replace an identifiable actor, never a card or a city mentioned later.
@@ -7920,15 +8047,32 @@ SOFTWARE.
     renderActionDock();
   }
 
+  function hasMatchingOngoingGame() {
+    if (!state || state.mode !== prefs.mode) return false;
+    if (prefs.mode !== 'ai') return true;
+    return Engine.normalizeAiLevel(state.aiLevel, 'master') === Engine.normalizeAiLevel(prefs.aiLevel, DEFAULT_PREFS.aiLevel);
+  }
+
   // ---- Cover / Lobby Rendering ----
 
   function renderCover() {
     const modeBox = $('cover-mode');
+    const curLevel = Engine.normalizeAiLevel(prefs.aiLevel, DEFAULT_PREFS.aiLevel);
+    const tierHtml = prefs.mode === 'ai'
+      ? `
+        <div class="mode-tabs is-tier" role="group" aria-label="对手难度">
+          ${Object.values(Engine.AI_LEVELS).map(item => `
+            <button type="button" data-cover-level="${item.id}" aria-pressed="${curLevel === item.id}" class="${curLevel === item.id ? 'is-on' : ''}">${item.label}</button>
+          `).join('')}
+        </div>
+      `
+      : '';
     modeBox.innerHTML = `
       <div class="mode-tabs" role="group" aria-label="对战模式">
         <button type="button" data-cover-mode="pvp" aria-pressed="${prefs.mode === 'pvp'}" class="${prefs.mode === 'pvp' ? 'is-on' : ''}">同机双人</button>
-        <button type="button" data-cover-mode="ai" aria-pressed="${prefs.mode === 'ai'}" class="${prefs.mode === 'ai' ? 'is-on' : ''}">单人挑战大师</button>
+        <button type="button" data-cover-mode="ai" aria-pressed="${prefs.mode === 'ai'}" class="${prefs.mode === 'ai' ? 'is-on' : ''}">单人挑战</button>
       </div>
+      ${tierHtml}
     `;
     modeBox.querySelectorAll('[data-cover-mode]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -7938,8 +8082,16 @@ SOFTWARE.
         renderCover();
       });
     });
+    modeBox.querySelectorAll('[data-cover-level]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        prefs.aiLevel = Engine.normalizeAiLevel(btn.dataset.coverLevel, DEFAULT_PREFS.aiLevel);
+        savePrefs();
+        sfx('select');
+        renderCover();
+      });
+    });
 
-    const hasOngoing = state?.mode === prefs.mode;
+    const hasOngoing = hasMatchingOngoingGame();
     const prog = $('cover-progress');
     const primaryBtn = $('cover-primary');
     const newBtn = $('cover-new');
@@ -8008,6 +8160,7 @@ SOFTWARE.
     cancelComputerTurn();
     state = Engine.createGame({
       mode: prefs.mode,
+      aiLevel: prefs.aiLevel,
       aiSeat: 1,
       names: prefs.humanNames,
       startSeat: resolveStartSeat(),
@@ -8243,8 +8396,8 @@ SOFTWARE.
         }, Math.max(0, delay - (performance.now() - started)));
       }).catch(err => {
         if (!current()) return;
-        console.error('Master inference failed', err);
-        dockEl.innerHTML = '<span class="dock-hint">大师未能完成推演</span><button type="button" class="act-btn primary" data-retry-master>重试</button>';
+        console.error('AI inference failed', err);
+        dockEl.innerHTML = `<span class="dock-hint">${Dialogs.esc(state.players[state.aiSeat].name)} 未能完成推演</span><button type="button" class="act-btn primary" data-retry-master>重试</button>`;
         dockEl.querySelector('[data-retry-master]').onclick = () => {
           renderActionDock();
           maybeTriggerPendingModalOrAI();
@@ -8353,8 +8506,13 @@ SOFTWARE.
         prefs = { ...prefs, ...next };
         savePrefs();
         if (state) {
+          if (state.mode === 'ai') {
+            state.aiLevel = Engine.normalizeAiLevel(prefs.aiLevel, 'master');
+          }
           for (const player of state.players) {
-            player.name = state.mode === 'ai' && player.seat === state.aiSeat ? Engine.AI_NAME : prefs.humanNames[player.seat];
+            player.name = state.mode === 'ai' && player.seat === state.aiSeat
+              ? Engine.getAiName(state.aiLevel)
+              : prefs.humanNames[player.seat];
           }
           persistGame();
           renderAll();
@@ -8912,7 +9070,7 @@ SOFTWARE.
 
   document.querySelector('[data-lobby="start"]')?.addEventListener('click', () => {
     Music?.unlock();
-    if (state?.mode === prefs.mode) {
+    if (hasMatchingOngoingGame()) {
       if (state.phase === 'over') victoryShown = false;
       sfx('paper');
       showSurface();
