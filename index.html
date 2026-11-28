@@ -5892,7 +5892,7 @@ button.res-row-prod { width: 100%; height: 100%; }
       <div class="detail-kv archive-fact"><b>当前估算总分</b><span><b>${score.total}</b> 分（${Icons.ui('coin')} ${p.coins} · 建筑 ${p.cards.length} 座）</span></div>
       <div class="detail-kv archive-fact"><b>固定产出 / 买价</b><div class="draft-cost-pills">${tradeRow}</div></div>
       ${wildSources.map(source => `<div class="detail-kv archive-fact"><b>${esc(source.name)}</b><div class="draft-cost-pills"><span class="draft-pill">${source.wild.map(r => Icons.resource(r)).join(' / ')} 任选 1 份</span></div></div>`).join('')}
-      <div class="detail-kv archive-fact"><b>科技符号</b><div class="draft-cost-pills">${Object.entries(Engine.getScienceCounts(p)).map(([id, n]) => `<span class="draft-pill">${Icons.science(id)} ${esc(Data.SCIENCE_META[id]?.name || '律法')} ×${n}</span>`).join('') || '0 / 6'}</div></div>
+      <div class="detail-kv archive-fact"><b>科技符号</b><div class="draft-cost-pills">${Object.entries(Engine.getScienceCounts(p)).map(([id, n]) => `<span class="draft-pill">${Icons.science(id)} ${esc(Data.SCIENCE_META[id]?.name || '律法')} ×${n}</span>`).join('') || '—'}</div></div>
       ${p.tokens.length ? `<div class="detail-kv archive-fact"><b>发展标记</b><div class="draft-cost-pills">${p.tokens.map(id => `<span class="draft-pill">${Icons.token(id)} ${esc(Data.TOKEN_BY_ID[id].name)}</span>`).join('')}</div></div>` : ''}
       <div class="detail-kv archive-fact"><b>已解锁连锁</b><div class="draft-cost-pills">${chainRow}</div></div>
     `;
