@@ -9,8 +9,5 @@ SIL Open Font License 1.1 typefaces:
 2. Noto Serif SC (Source Han Serif SC) — Copyright 2014-2024 Adobe & Google LLC.
    https://github.com/notofonts/noto-cjk
 
-3. Noto Sans SC (Source Han Sans SC) — Copyright 2014-2024 Adobe & Google LLC.
-   https://github.com/notofonts/noto-cjk
-
 All embedded fonts are distributed under the SIL Open Font License 1.1:
 https://openfontlicense.org/
